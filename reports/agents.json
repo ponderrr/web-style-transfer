@@ -1,0 +1,128 @@
+{
+  "agents": {
+    "style-extractor": {
+      "hasPurpose": true,
+      "hasInputs": false,
+      "hasOutputs": true,
+      "refsSchemas": false,
+      "refsValidation": false,
+      "errors": [
+        "Missing INPUTS section",
+        "Missing NON-GOALS section",
+        "Does not reference /extractors/schemas/*.ts",
+        "Does not use expected folder paths (/extractors/*, /specs/*)"
+      ]
+    },
+    "brand-extractor": {
+      "hasPurpose": true,
+      "hasInputs": false,
+      "hasOutputs": true,
+      "refsSchemas": false,
+      "refsValidation": false,
+      "errors": [
+        "Missing INPUTS section",
+        "Missing NON-GOALS section",
+        "Does not reference /extractors/schemas/*.ts",
+        "Does not use expected folder paths (/extractors/*, /specs/*)"
+      ]
+    },
+    "spec-composer": {
+      "hasPurpose": true,
+      "hasInputs": false,
+      "hasOutputs": true,
+      "refsSchemas": false,
+      "refsValidation": false,
+      "errors": [
+        "Missing INPUTS section",
+        "Missing NON-GOALS section",
+        "Does not reference /extractors/schemas/*.ts",
+        "Does not use expected folder paths (/extractors/*, /specs/*)"
+      ]
+    },
+    "design-reviewer": {
+      "hasPurpose": true,
+      "hasInputs": false,
+      "hasOutputs": false,
+      "refsSchemas": false,
+      "refsValidation": false,
+      "errors": [
+        "Missing INPUTS section",
+        "Missing OUTPUTS section",
+        "Missing NON-GOALS section",
+        "Does not reference /extractors/schemas/*.ts",
+        "Does not explicitly read from /validation/*.json",
+        "Does not use expected folder paths (/extractors/*, /specs/*)"
+      ]
+    },
+    "accessibility-auditor": {
+      "hasPurpose": true,
+      "hasInputs": false,
+      "hasOutputs": true,
+      "refsSchemas": false,
+      "refsValidation": false,
+      "errors": [
+        "Missing INPUTS section",
+        "Missing NON-GOALS section",
+        "Does not reference /extractors/schemas/*.ts",
+        "Does not explicitly read from /validation/*.json",
+        "Does not use expected folder paths (/extractors/*, /specs/*)"
+      ]
+    },
+    "builder-orchestrator": {
+      "hasPurpose": true,
+      "hasInputs": false,
+      "hasOutputs": false,
+      "refsSchemas": false,
+      "refsValidation": false,
+      "errors": [
+        "Missing INPUTS section",
+        "Missing OUTPUTS section",
+        "Missing NON-GOALS section",
+        "Does not reference /extractors/schemas/*.ts",
+        "Does not depend on /specs/composed/build-spec.json",
+        "Does not depend on /docs/CLAUDE.md",
+        "Does not use expected folder paths (/extractors/*, /specs/*)"
+      ]
+    },
+    "component-generator": {
+      "hasPurpose": true,
+      "hasInputs": false,
+      "hasOutputs": false,
+      "refsSchemas": false,
+      "refsValidation": false,
+      "errors": [
+        "Missing INPUTS section",
+        "Missing OUTPUTS section",
+        "Missing NON-GOALS section",
+        "Does not reference /extractors/schemas/*.ts",
+        "Does not use expected folder paths (/extractors/*, /specs/*)"
+      ]
+    },
+    "performance-optimizer": {
+      "hasPurpose": true,
+      "hasInputs": false,
+      "hasOutputs": false,
+      "refsSchemas": false,
+      "refsValidation": false,
+      "errors": [
+        "Missing INPUTS section",
+        "Missing OUTPUTS section",
+        "Missing NON-GOALS section",
+        "Does not reference /extractors/schemas/*.ts",
+        "Does not use expected folder paths (/extractors/*, /specs/*)"
+      ]
+    }
+  },
+  "summary": {
+    "totalAgents": 8,
+    "agentsWithAllSections": 0,
+    "agentsWithPurpose": 8,
+    "agentsWithInputs": 0,
+    "agentsWithOutputs": 3,
+    "agentsWithNonGoals": 0,
+    "agentsWithErrorHandling": 8,
+    "agentsRefSchemas": 0,
+    "agentsRefValidation": 0,
+    "agentsUseCorrectPaths": 0
+  }
+}

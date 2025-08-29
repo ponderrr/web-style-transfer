@@ -1,0 +1,314 @@
+{
+  "version": "1.0.0",
+  "description": "Design lint rules for S-tier quality standards (Stripe/Linear level)",
+  "lastUpdated": "2024-01-01",
+
+  "spacing": {
+    "description": "Spacing and layout rules for consistent visual hierarchy",
+    "rules": {
+      "baseUnit": {
+        "value": 4,
+        "unit": "px",
+        "description": "Base spacing unit for consistent spacing scale",
+        "scale": [4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 80, 96, 128]
+      },
+      "componentSpacing": {
+        "minPadding": {
+          "value": 16,
+          "unit": "px",
+          "description": "Minimum padding for interactive components",
+          "target": "good"
+        },
+        "contentSpacing": {
+          "value": 24,
+          "unit": "px",
+          "description": "Standard spacing between content sections",
+          "target": "good"
+        },
+        "marginConsistency": {
+          "enabled": true,
+          "description": "Use consistent margin values from spacing scale",
+          "target": "good"
+        }
+      },
+      "gridSystem": {
+        "columns": 12,
+        "gutter": {
+          "value": 24,
+          "unit": "px",
+          "description": "Grid gutter width"
+        },
+        "maxWidth": {
+          "value": 1200,
+          "unit": "px",
+          "description": "Maximum container width"
+        },
+        "breakpoints": {
+          "mobile": { "value": 768, "unit": "px" },
+          "tablet": { "value": 1024, "unit": "px" },
+          "desktop": { "value": 1440, "unit": "px" }
+        }
+      }
+    }
+  },
+
+  "typography": {
+    "description": "Typography rules for readability and visual hierarchy",
+    "rules": {
+      "fontFamilies": {
+        "primary": ["Inter", "system-ui", "sans-serif"],
+        "secondary": ["JetBrains Mono", "monospace"],
+        "description": "Approved font families for consistent branding"
+      },
+      "fontSizes": {
+        "scale": {
+          "xs": { "value": 12, "unit": "px", "lineHeight": 1.5 },
+          "sm": { "value": 14, "unit": "px", "lineHeight": 1.5 },
+          "base": { "value": 16, "unit": "px", "lineHeight": 1.6 },
+          "lg": { "value": 18, "unit": "px", "lineHeight": 1.6 },
+          "xl": { "value": 20, "unit": "px", "lineHeight": 1.5 },
+          "2xl": { "value": 24, "unit": "px", "lineHeight": 1.4 },
+          "3xl": { "value": 30, "unit": "px", "lineHeight": 1.3 },
+          "4xl": { "value": 36, "unit": "px", "lineHeight": 1.2 }
+        },
+        "minSize": {
+          "value": 14,
+          "unit": "px",
+          "description": "Minimum readable font size"
+        }
+      },
+      "fontWeights": {
+        "light": 300,
+        "normal": 400,
+        "medium": 500,
+        "semibold": 600,
+        "bold": 700,
+        "description": "Standard font weight scale"
+      },
+      "lineHeights": {
+        "tight": 1.2,
+        "normal": 1.5,
+        "relaxed": 1.6,
+        "loose": 1.8,
+        "description": "Standard line height ratios"
+      },
+      "letterSpacing": {
+        "tight": "-0.025em",
+        "normal": "0em",
+        "wide": "0.025em",
+        "description": "Letter spacing for different text styles"
+      },
+      "textAlignment": {
+        "preferLeft": true,
+        "description": "Prefer left-aligned text for better readability",
+        "exceptions": ["headings", "centered-content"]
+      }
+    }
+  },
+
+  "color": {
+    "description": "Color system rules for accessibility and consistency",
+    "rules": {
+      "primaryPalette": {
+        "description": "Primary brand colors",
+        "colors": {
+          "50": "#f8fafc",
+          "100": "#f1f5f9",
+          "200": "#e2e8f0",
+          "300": "#cbd5e1",
+          "400": "#94a3b8",
+          "500": "#64748b",
+          "600": "#475569",
+          "700": "#334155",
+          "800": "#1e293b",
+          "900": "#0f172a",
+          "950": "#020617"
+        }
+      },
+      "semanticColors": {
+        "success": {
+          "50": "#f0fdf4",
+          "500": "#22c55e",
+          "700": "#15803d"
+        },
+        "warning": {
+          "50": "#fffbeb",
+          "500": "#f59e0b",
+          "700": "#b45309"
+        },
+        "error": {
+          "50": "#fef2f2",
+          "500": "#ef4444",
+          "700": "#b91c1c"
+        },
+        "info": {
+          "50": "#eff6ff",
+          "500": "#3b82f6",
+          "700": "#1d4ed8"
+        }
+      },
+      "contrastRequirements": {
+        "normalText": {
+          "ratio": 4.5,
+          "description": "Minimum contrast for normal text"
+        },
+        "largeText": {
+          "ratio": 3.0,
+          "description": "Minimum contrast for large text (18pt+ or 14pt+ bold)"
+        },
+        "uiComponents": {
+          "ratio": 3.0,
+          "description": "Minimum contrast for UI components"
+        },
+        "interactiveStates": {
+          "ratio": 3.0,
+          "description": "Minimum contrast for hover/focus states"
+        }
+      },
+      "colorUsage": {
+        "maxColors": 8,
+        "description": "Limit palette to maintain consistency",
+        "exceptions": ["data-visualization", "illustrations"]
+      },
+      "darkMode": {
+        "supported": true,
+        "description": "Dark mode color variants required",
+        "contrastMaintained": true
+      }
+    }
+  },
+
+  "components": {
+    "description": "Component-specific design rules",
+    "rules": {
+      "buttons": {
+        "minHeight": {
+          "value": 44,
+          "unit": "px",
+          "description": "Minimum touch target height"
+        },
+        "minWidth": {
+          "value": 44,
+          "unit": "px",
+          "description": "Minimum touch target width"
+        },
+        "borderRadius": {
+          "value": 6,
+          "unit": "px",
+          "description": "Standard border radius for buttons"
+        },
+        "states": {
+          "required": ["default", "hover", "focus", "disabled"],
+          "description": "Required interaction states"
+        }
+      },
+      "inputs": {
+        "height": {
+          "value": 44,
+          "unit": "px",
+          "description": "Standard input field height"
+        },
+        "borderRadius": {
+          "value": 6,
+          "unit": "px",
+          "description": "Standard border radius for inputs"
+        },
+        "padding": {
+          "value": 12,
+          "unit": "px",
+          "description": "Standard input padding"
+        },
+        "focusIndicator": {
+          "width": { "value": 2, "unit": "px" },
+          "style": "solid",
+          "color": "currentColor"
+        }
+      },
+      "cards": {
+        "borderRadius": {
+          "value": 8,
+          "unit": "px",
+          "description": "Standard card border radius"
+        },
+        "shadow": {
+          "default": "0 1px 3px 0 rgb(0 0 0 / 0.1)",
+          "hover": "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+        },
+        "padding": {
+          "value": 24,
+          "unit": "px",
+          "description": "Standard card padding"
+        }
+      }
+    }
+  },
+
+  "responsive": {
+    "description": "Responsive design rules",
+    "rules": {
+      "mobileFirst": {
+        "enabled": true,
+        "description": "Design mobile-first, enhance for larger screens"
+      },
+      "breakpoints": {
+        "sm": { "value": 640, "unit": "px" },
+        "md": { "value": 768, "unit": "px" },
+        "lg": { "value": 1024, "unit": "px" },
+        "xl": { "value": 1280, "unit": "px" },
+        "2xl": { "value": 1536, "unit": "px" }
+      },
+      "fluidTypography": {
+        "enabled": true,
+        "minSize": { "value": 14, "unit": "px" },
+        "maxSize": { "value": 18, "unit": "px" },
+        "description": "Use fluid typography for better readability"
+      }
+    }
+  },
+
+  "accessibility": {
+    "description": "Design rules for accessibility compliance",
+    "rules": {
+      "touchTargets": {
+        "minSize": { "value": 44, "unit": "px" },
+        "spacing": { "value": 8, "unit": "px" },
+        "description": "Minimum touch target requirements"
+      },
+      "focusIndicators": {
+        "required": true,
+        "minWidth": { "value": 2, "unit": "px" },
+        "contrastRatio": 3.0,
+        "description": "Visible focus indicators required"
+      },
+      "colorBlindness": {
+        "tested": true,
+        "description": "Design tested for color blindness accessibility"
+      },
+      "reducedMotion": {
+        "respected": true,
+        "description": "Respect user's motion preferences"
+      }
+    }
+  },
+
+  "performance": {
+    "description": "Performance-related design constraints",
+    "rules": {
+      "imageOptimization": {
+        "modernFormats": ["webp", "avif"],
+        "responsiveImages": true,
+        "lazyLoading": true,
+        "description": "Optimize images for web delivery"
+      },
+      "animationPerformance": {
+        "preferTransform": true,
+        "avoidLayout": true,
+        "description": "Use performant animation properties"
+      },
+      "bundleSize": {
+        "cssLimit": { "value": 20, "unit": "kb" },
+        "description": "Keep CSS bundle size optimized"
+      }
+    }
+  }
+}

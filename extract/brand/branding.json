@@ -1,0 +1,348 @@
+{
+  "url": "https://example.com",
+  "timestamp": "2025-08-29T01:13:07.280Z",
+  "brand": {
+    "name": "Example Company",
+    "tagline": "Building amazing digital experiences",
+    "logo": {
+      "src": "/logo.svg",
+      "alt": "Example Company Logo"
+    },
+    "themeColor": "#3b82f6",
+    "socialLinks": {
+      "twitter": "https://twitter.com/example",
+      "linkedin": "https://linkedin.com/company/example"
+    },
+    "contact": {
+      "email": "hello@example.com",
+      "phone": "+1 (555) 123-4567"
+    },
+    "voice": {
+      "primary": "professional",
+      "attributes": [
+        "helpful",
+        "innovative",
+        "reliable"
+      ],
+      "formality": "neutral",
+      "personality": "friendly and approachable",
+      "indicators": [
+        "we",
+        "our customers",
+        "together"
+      ]
+    },
+    "mission": "To empower businesses with cutting-edge technology solutions",
+    "values": [
+      "Innovation",
+      "Quality",
+      "Customer Focus"
+    ],
+    "targetAudience": "Small to medium-sized businesses",
+    "uniqueValueProposition": "End-to-end digital transformation with proven results"
+  },
+  "contentInventory": {
+    "pages": [
+      {
+        "url": "https://example.com",
+        "title": "Home - Example Company",
+        "content": {
+          "title": "Welcome to Example Company",
+          "headings": {
+            "h1": [
+              "Welcome to Example Company"
+            ],
+            "h2": [
+              "Our Services",
+              "Why Choose Us",
+              "Contact Us"
+            ],
+            "h3": []
+          },
+          "paragraphs": [
+            "We provide comprehensive digital solutions for modern businesses.",
+            "Our team of experts is dedicated to delivering exceptional results."
+          ],
+          "lists": [
+            [
+              "Service 1",
+              "Service 2",
+              "Service 3"
+            ]
+          ],
+          "buttons": [
+            {
+              "text": "Get Started",
+              "type": "primary"
+            },
+            {
+              "text": "Learn More",
+              "type": "secondary"
+            }
+          ],
+          "images": [
+            {
+              "alt": "Team collaboration",
+              "src": "/team.jpg"
+            },
+            {
+              "alt": "Office workspace",
+              "src": "/office.jpg"
+            }
+          ],
+          "seo": {
+            "description": "Leading provider of digital solutions for businesses worldwide.",
+            "keywords": [
+              "digital solutions",
+              "technology",
+              "business"
+            ],
+            "author": "Example Company"
+          }
+        },
+        "wordCount": 250,
+        "readingTime": 1.2
+      }
+    ],
+    "contentTypes": {
+      "landing": 1,
+      "service": 0,
+      "about": 0,
+      "contact": 0
+    },
+    "topics": [
+      {
+        "topic": "Digital Solutions",
+        "frequency": 3,
+        "pages": [
+          "https://example.com"
+        ]
+      },
+      {
+        "topic": "Business Technology",
+        "frequency": 2,
+        "pages": [
+          "https://example.com"
+        ]
+      }
+    ],
+    "keywords": [
+      {
+        "word": "digital",
+        "frequency": 5,
+        "relevance": 0.9
+      },
+      {
+        "word": "solutions",
+        "frequency": 4,
+        "relevance": 0.8
+      },
+      {
+        "word": "business",
+        "frequency": 3,
+        "relevance": 0.7
+      }
+    ],
+    "totalWordCount": 250,
+    "readability": {
+      "averageWordsPerPage": 250,
+      "averageSentencesPerParagraph": 2,
+      "averageSyllablesPerWord": 1.5,
+      "fleschKincaidGrade": 8.5
+    }
+  },
+  "informationArchitecture": {
+    "structure": {
+      "primaryNavigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "children": []
+        },
+        {
+          "label": "Services",
+          "href": "/services",
+          "children": []
+        },
+        {
+          "label": "About",
+          "href": "/about",
+          "children": []
+        },
+        {
+          "label": "Contact",
+          "href": "/contact",
+          "children": []
+        }
+      ],
+      "footerNavigation": [
+        {
+          "label": "Privacy Policy",
+          "href": "/privacy"
+        },
+        {
+          "label": "Terms of Service",
+          "href": "/terms"
+        }
+      ],
+      "breadcrumbs": [],
+      "sitemap": {
+        "https://example.com": {
+          "url": "https://example.com",
+          "title": "Home - Example Company",
+          "content": {
+            "title": "Welcome to Example Company",
+            "headings": {
+              "h1": [
+                "Welcome"
+              ],
+              "h2": [],
+              "h3": []
+            },
+            "paragraphs": [
+              "Welcome content"
+            ],
+            "lists": [],
+            "buttons": [],
+            "images": [],
+            "seo": {
+              "description": "Welcome page"
+            }
+          },
+          "wordCount": 100
+        }
+      }
+    },
+    "depth": {
+      "overall": {
+        "averageDepth": 1.2,
+        "maxDepth": 3,
+        "minDepth": 1,
+        "medianDepth": 1
+      },
+      "navigation": {
+        "primaryNavDepth": 1,
+        "secondaryNavDepth": 0,
+        "breadcrumbDepth": 0
+      },
+      "content": {
+        "averageContentDepth": 2.5,
+        "contentVariability": 0.8
+      },
+      "userJourney": {
+        "averagePathLength": 2.3,
+        "conversionFunnelDepth": 3,
+        "dropOffPoints": []
+      }
+    },
+    "quality": {
+      "structure": {
+        "score": 85,
+        "issues": [],
+        "recommendations": [
+          "Consider adding breadcrumb navigation"
+        ]
+      },
+      "navigation": {
+        "score": 90,
+        "usability": 88,
+        "discoverability": 92
+      },
+      "content": {
+        "score": 82,
+        "organization": 85,
+        "accessibility": 80
+      },
+      "seo": {
+        "score": 88,
+        "internalLinking": 85,
+        "contentDepth": 90
+      }
+    }
+  },
+  "seoMetadata": {
+    "title": "Example Company - Digital Solutions",
+    "description": "Leading provider of digital solutions for businesses worldwide.",
+    "keywords": [
+      "digital solutions",
+      "technology",
+      "business"
+    ],
+    "canonical": "https://example.com",
+    "language": "en",
+    "openGraph": {
+      "title": "Example Company",
+      "description": "Digital solutions for modern businesses",
+      "image": "/og-image.jpg",
+      "url": "https://example.com"
+    },
+    "twitter": {
+      "card": "summary_large_image",
+      "title": "Example Company",
+      "description": "Digital solutions for modern businesses",
+      "image": "/twitter-image.jpg"
+    },
+    "structuredData": [
+      {
+        "type": "Organization",
+        "data": {
+          "name": "Example Company",
+          "url": "https://example.com",
+          "logo": "/logo.svg"
+        }
+      }
+    ]
+  },
+  "messaging": {
+    "keyMessages": [
+      {
+        "message": "We deliver exceptional digital solutions",
+        "audience": "business owners",
+        "context": "homepage hero",
+        "proofPoints": [
+          "10+ years experience",
+          "500+ projects completed"
+        ]
+      }
+    ],
+    "valuePropositions": [
+      {
+        "headline": "Transform Your Business",
+        "subheadline": "With cutting-edge digital solutions",
+        "benefits": [
+          "Increased efficiency",
+          "Better customer experience",
+          "Competitive advantage"
+        ],
+        "socialProof": "Trusted by 500+ companies"
+      }
+    ],
+    "objectionHandling": {
+      "too expensive": "Our solutions provide ROI within 6 months",
+      "not sure": "We offer free consultations and pilot projects"
+    },
+    "callsToAction": [
+      {
+        "primary": "Get Started Today",
+        "secondary": "Schedule a Demo",
+        "context": "homepage"
+      }
+    ]
+  },
+  "qualityScore": {
+    "brandClarity": 0.9,
+    "contentQuality": 0.85,
+    "informationArchitecture": 0.88,
+    "seoOptimization": 0.92,
+    "messagingConsistency": 0.87,
+    "overall": 0.88
+  },
+  "metadata": {
+    "extractionDuration": 3500,
+    "pagesCrawled": 1,
+    "contentTypesDetected": [
+      "landing"
+    ],
+    "extractorVersion": "1.0.0"
+  }
+}

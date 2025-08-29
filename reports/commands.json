@@ -1,0 +1,78 @@
+{
+  "commands": {
+    "extract-style": {
+      "mapsToScript": "scripts/extract-style.ts",
+      "scriptExists": true,
+      "commandExists": true,
+      "argsDocumented": true,
+      "outputsDocumented": true
+    },
+    "extract-brand": {
+      "mapsToScript": "scripts/extract-brand.ts",
+      "scriptExists": true,
+      "commandExists": true,
+      "argsDocumented": true,
+      "outputsDocumented": true
+    },
+    "compose-spec": {
+      "mapsToScript": "scripts/compose-spec.ts",
+      "scriptExists": true,
+      "commandExists": true,
+      "argsDocumented": true,
+      "outputsDocumented": true
+    },
+    "build-site": {
+      "mapsToScript": "scripts/build-site.ts",
+      "scriptExists": true,
+      "commandExists": true,
+      "argsDocumented": true,
+      "outputsDocumented": true
+    },
+    "design-review": {
+      "mapsToScript": null,
+      "scriptExists": false,
+      "commandExists": true,
+      "argsDocumented": true,
+      "outputsDocumented": true
+    },
+    "accessibility-check": {
+      "mapsToScript": null,
+      "scriptExists": false,
+      "commandExists": true,
+      "argsDocumented": true,
+      "outputsDocumented": true
+    },
+    "style-transfer": {
+      "mapsToScript": "scripts/style-transfer.ts",
+      "scriptExists": true,
+      "commandExists": true,
+      "argsDocumented": true,
+      "outputsDocumented": true
+    }
+  },
+  "summary": {
+    "totalCommands": 7,
+    "commandsWithScripts": 4,
+    "commandsWithProcedures": 2,
+    "commandsWithoutScripts": 1,
+    "allCommandsExist": true,
+    "allScriptsExistWhereExpected": true,
+    "allOutputsDocumented": true,
+    "allArgsDocumented": true
+  },
+  "expectedOutputs": {
+    "extract-style": "specs/tokens/design-tokens.json",
+    "extract-brand": "specs/content/site-content.json",
+    "compose-spec": "specs/composed/build-spec.json",
+    "build-site": "./output/generated-site/",
+    "design-review": "./reports/design-review.json",
+    "accessibility-check": "./reports/accessibility-report.json",
+    "style-transfer": "./output/style-transfer-site/"
+  },
+  "actualOutputsExist": {
+    "specs/tokens/design-tokens.json": true,
+    "specs/content/site-content.json": true,
+    "specs/composed/build-spec.json": true,
+    "output/directory": true
+  }
+}

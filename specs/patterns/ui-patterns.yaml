@@ -1,0 +1,599 @@
+# UI Patterns Library
+# Comprehensive pattern definitions for web style transfer system
+
+patterns:
+  # Navigation Patterns
+  navigation.primary:
+    name: 'Primary Navigation'
+    type: 'navigation'
+    category: 'navigation'
+    intent: 'Provide main site navigation with consistent structure and accessibility'
+    props:
+      layout:
+        type: 'string'
+        enum: ['horizontal', 'vertical']
+        default: 'horizontal'
+      position:
+        type: 'string'
+        enum: ['top', 'left', 'bottom']
+        default: 'top'
+      items:
+        type: 'array'
+        items:
+          type: 'object'
+          properties:
+            label:
+              type: 'string'
+            href:
+              type: 'string'
+            icon:
+              type: 'string'
+            children:
+              type: 'array'
+            active:
+              type: 'boolean'
+            disabled:
+              type: 'boolean'
+      responsive:
+        type: 'object'
+        properties:
+          mobile:
+            type: 'string'
+            enum: ['hamburger', 'bottom-tabs']
+          tablet:
+            type: 'string'
+            enum: ['horizontal', 'vertical']
+          desktop:
+            type: 'string'
+            enum: ['horizontal']
+    variants:
+      - 'horizontal'
+      - 'vertical'
+      - 'mobile-overlay'
+    layoutConstraints:
+      maxItems: 8
+      maxDepth: 2
+    accessibilityRequirements:
+      - 'Semantic nav element with aria-label'
+      - 'Keyboard navigation with Tab/Arrow keys'
+      - 'Focus management for submenus'
+      - 'Screen reader announcements for state changes'
+      - 'Skip links for main content'
+    implementation:
+      semanticHTML: 'nav'
+      ariaLabel: 'Main navigation'
+      keyboardSupport: true
+      screenReaderSupport: true
+
+  navigation.breadcrumb:
+    name: 'Breadcrumb Navigation'
+    type: 'navigation'
+    category: 'navigation'
+    intent: 'Show current page location within site hierarchy'
+    props:
+      items:
+        type: 'array'
+        items:
+          type: 'object'
+          properties:
+            label:
+              type: 'string'
+            href:
+              type: 'string'
+            icon:
+              type: 'string'
+      separator:
+        type: 'string'
+        default: '/'
+      maxItems:
+        type: 'number'
+      collapsedText:
+        type: 'string'
+        default: '...'
+    variants:
+      - 'horizontal'
+      - 'vertical'
+    layoutConstraints:
+      maxItems: 5
+    accessibilityRequirements:
+      - 'ARIA breadcrumb role'
+      - 'Ordered list structure'
+      - "Current page marked with aria-current='page'"
+    implementation:
+      semanticHTML: "nav[aria-label='Breadcrumb']"
+      orderedList: true
+      currentPageIndicator: true
+
+  navigation.footer:
+    name: 'Footer Navigation'
+    type: 'navigation'
+    category: 'navigation'
+    intent: 'Provide secondary navigation and site information in footer'
+    props:
+      sections:
+        type: 'array'
+        items:
+          type: 'object'
+          properties:
+            title:
+              type: 'string'
+            links:
+              type: 'array'
+              items:
+                type: 'object'
+                properties:
+                  label:
+                    type: 'string'
+                  href:
+                    type: 'string'
+                  icon:
+                    type: 'string'
+      layout:
+        type: 'string'
+        enum: ['grid', 'columns']
+        default: 'grid'
+      columns:
+        type: 'number'
+        default: 4
+    variants:
+      - 'grid'
+      - 'columns'
+      - 'minimal'
+    layoutConstraints:
+      maxSections: 6
+    accessibilityRequirements:
+      - 'Semantic footer element'
+      - 'Proper heading hierarchy'
+      - 'Descriptive link text'
+    implementation:
+      semanticHTML: 'footer'
+      headingHierarchy: true
+      descriptiveLinks: true
+
+  # Hero Patterns
+  hero.full-width:
+    name: 'Full-Width Hero'
+    type: 'hero'
+    category: 'hero'
+    intent: 'Create impactful first impression with background media and prominent call-to-action'
+    props:
+      background:
+        type: 'object'
+        properties:
+          type:
+            type: 'string'
+            enum: ['image', 'video', 'gradient', 'color']
+          src:
+            type: 'string'
+          overlay:
+            type: 'string'
+      content:
+        type: 'object'
+        properties:
+          headline:
+            type: 'string'
+          subheadline:
+            type: 'string'
+          cta:
+            type: 'object'
+            properties:
+              label:
+                type: 'string'
+              href:
+                type: 'string'
+              variant:
+                type: 'string'
+                enum: ['primary', 'secondary', 'ghost']
+          alignment:
+            type: 'string'
+            enum: ['left', 'center', 'right']
+            default: 'center'
+      height:
+        type: 'string'
+        enum: ['viewport', 'auto', 'fixed']
+        default: 'viewport'
+    variants:
+      - 'image-background'
+      - 'video-background'
+      - 'gradient-background'
+      - 'color-background'
+    layoutConstraints:
+      maxHeadlineLength: 100
+      maxSubheadlineLength: 200
+      recommendedActions: 2
+    accessibilityRequirements:
+      - 'High contrast text over background'
+      - 'Alt text for background images'
+      - 'Video controls and captions for video backgrounds'
+      - 'Skip links for screen readers'
+      - 'Reduced motion support for animations'
+    implementation:
+      semanticHTML: 'section'
+      ariaLabelledBy: 'hero-title'
+      highContrast: true
+      reducedMotion: true
+
+  hero.centered:
+    name: 'Centered Hero'
+    type: 'hero'
+    category: 'hero'
+    intent: 'Present content in a clean, centered layout with balanced visual hierarchy'
+    props:
+      background:
+        type: 'string'
+      content:
+        type: 'object'
+        properties:
+          badge:
+            type: 'string'
+          headline:
+            type: 'string'
+          description:
+            type: 'string'
+          primaryCTA:
+            type: 'object'
+            properties:
+              label:
+                type: 'string'
+              href:
+                type: 'string'
+              variant:
+                type: 'string'
+                enum: ['primary', 'secondary', 'ghost']
+          secondaryCTA:
+            type: 'object'
+            properties:
+              label:
+                type: 'string'
+              href:
+                type: 'string'
+              variant:
+                type: 'string'
+                enum: ['primary', 'secondary', 'ghost']
+      layout:
+        type: 'string'
+        enum: ['stacked', 'inline']
+        default: 'stacked'
+    variants:
+      - 'stacked'
+      - 'inline'
+      - 'with-badge'
+    layoutConstraints:
+      maxHeadlineLength: 80
+      maxDescriptionLength: 300
+    accessibilityRequirements:
+      - 'Proper heading hierarchy'
+      - 'Descriptive button labels'
+      - 'Focus management for CTAs'
+      - 'Screen reader friendly content structure'
+    implementation:
+      semanticHTML: 'section'
+      ariaLabelledBy: 'hero-title'
+      headingHierarchy: true
+      focusManagement: true
+
+  # Content Patterns
+  content.article:
+    name: 'Article Layout'
+    type: 'content'
+    category: 'content'
+    intent: 'Structure long-form content with proper typography hierarchy and metadata'
+    props:
+      header:
+        type: 'object'
+        properties:
+          title:
+            type: 'string'
+          subtitle:
+            type: 'string'
+          meta:
+            type: 'object'
+            properties:
+              author:
+                type: 'string'
+              date:
+                type: 'string'
+              readingTime:
+                type: 'string'
+              category:
+                type: 'string'
+      content:
+        type: 'object'
+        properties:
+          sections:
+            type: 'array'
+            items:
+              type: 'object'
+              properties:
+                title:
+                  type: 'string'
+                content:
+                  type: 'string'
+                level:
+                  type: 'number'
+                  enum: [2, 3, 4, 5, 6]
+          toc:
+            type: 'object'
+            properties:
+              enabled:
+                type: 'boolean'
+                default: true
+              position:
+                type: 'string'
+                enum: ['left', 'right']
+                default: 'right'
+      sidebar:
+        type: 'object'
+        properties:
+          content:
+            type: 'string'
+          position:
+            type: 'string'
+            enum: ['left', 'right']
+            default: 'right'
+          width:
+            type: 'string'
+            default: '300px'
+    variants:
+      - 'with-sidebar'
+      - 'with-toc'
+      - 'minimal'
+    layoutConstraints:
+      maxContentWidth: '800px'
+      recommendedReadingTime: '5-15 minutes'
+    accessibilityRequirements:
+      - 'Proper heading hierarchy (H1-H6)'
+      - 'Semantic article element'
+      - 'Skip links for navigation'
+      - 'Table of contents with anchor links'
+      - 'Alt text for images'
+    implementation:
+      semanticHTML: 'article'
+      headingHierarchy: true
+      skipLinks: true
+      anchorLinks: true
+
+  content.card-grid:
+    name: 'Card Grid'
+    type: 'content'
+    category: 'content'
+    intent: 'Display collection of items in organized grid layout with consistent presentation'
+    props:
+      layout:
+        type: 'string'
+        enum: ['grid', 'masonry', 'flex']
+        default: 'grid'
+      columns:
+        type: 'object'
+        properties:
+          mobile:
+            type: 'number'
+            default: 1
+          tablet:
+            type: 'number'
+            default: 2
+          desktop:
+            type: 'number'
+            default: 3
+          wide:
+            type: 'number'
+            default: 4
+      gap:
+        type: 'string'
+        default: '1rem'
+      cards:
+        type: 'array'
+        items:
+          type: 'object'
+          properties:
+            image:
+              type: 'object'
+              properties:
+                src:
+                  type: 'string'
+                alt:
+                  type: 'string'
+            title:
+              type: 'string'
+            description:
+              type: 'string'
+            meta:
+              type: 'array'
+              items:
+                type: 'string'
+            actions:
+              type: 'array'
+              items:
+                type: 'object'
+                properties:
+                  label:
+                    type: 'string'
+                  href:
+                    type: 'string'
+                  variant:
+                    type: 'string'
+                  icon:
+                    type: 'string'
+    variants:
+      - 'grid'
+      - 'masonry'
+      - 'flex'
+      - 'featured-first'
+    layoutConstraints:
+      maxCardsPerPage: 12
+      minCardWidth: '250px'
+    accessibilityRequirements:
+      - 'Semantic article elements for cards'
+      - 'Descriptive alt text for images'
+      - 'Keyboard navigation support'
+      - 'Focus management for card actions'
+      - 'Screen reader friendly grid structure'
+    implementation:
+      semanticHTML: 'article'
+      gridCSS: true
+      keyboardNavigation: true
+      focusManagement: true
+
+  # Form Patterns
+  form.contact:
+    name: 'Contact Form'
+    type: 'form'
+    category: 'form'
+    intent: 'Collect user contact information and messages with proper validation and feedback'
+    props:
+      fields:
+        type: 'array'
+        items:
+          type: 'object'
+          properties:
+            type:
+              type: 'string'
+              enum: ['text', 'email', 'tel', 'textarea', 'select']
+            name:
+              type: 'string'
+            label:
+              type: 'string'
+            placeholder:
+              type: 'string'
+            required:
+              type: 'boolean'
+              default: false
+            validation:
+              type: 'array'
+              items:
+                type: 'object'
+                properties:
+                  rule:
+                    type: 'string'
+                    enum: ['required', 'email', 'minLength', 'maxLength', 'pattern']
+                  value:
+                    type: 'string'
+                  message:
+                    type: 'string'
+      validation:
+        type: 'object'
+        properties:
+          mode:
+            type: 'string'
+            enum: ['onChange', 'onBlur', 'onSubmit']
+            default: 'onBlur'
+          showErrors:
+            type: 'boolean'
+            default: true
+      submit:
+        type: 'object'
+        properties:
+          text:
+            type: 'string'
+            default: 'Send Message'
+          loadingText:
+            type: 'string'
+            default: 'Sending...'
+          successMessage:
+            type: 'string'
+          errorMessage:
+            type: 'string'
+      layout:
+        type: 'string'
+        enum: ['stacked', 'inline']
+        default: 'stacked'
+    variants:
+      - 'stacked'
+      - 'inline'
+      - 'with-captcha'
+    layoutConstraints:
+      maxFields: 10
+      recommendedFields: ['name', 'email', 'message']
+    accessibilityRequirements:
+      - 'Associated labels with for attribute'
+      - 'ARIA describedby for error messages'
+      - 'Form validation with screen reader announcements'
+      - 'Keyboard navigation support'
+      - 'Focus management after submission'
+    implementation:
+      semanticHTML: 'form'
+      ariaDescribedBy: true
+      screenReaderAnnouncements: true
+      keyboardNavigation: true
+      focusManagement: true
+
+  form.search:
+    name: 'Search Form'
+    type: 'form'
+    category: 'form'
+    intent: 'Provide search functionality with suggestions and filters'
+    props:
+      input:
+        type: 'object'
+        properties:
+          placeholder:
+            type: 'string'
+            default: 'Search...'
+          autocomplete:
+            type: 'boolean'
+            default: true
+          suggestions:
+            type: 'array'
+            items:
+              type: 'string'
+      filters:
+        type: 'array'
+        items:
+          type: 'object'
+          properties:
+            name:
+              type: 'string'
+            label:
+              type: 'string'
+            type:
+              type: 'string'
+              enum: ['select', 'checkbox', 'radio']
+            options:
+              type: 'array'
+              items:
+                type: 'object'
+                properties:
+                  value:
+                    type: 'string'
+                  label:
+                    type: 'string'
+      results:
+        type: 'object'
+        properties:
+          layout:
+            type: 'string'
+            enum: ['list', 'grid']
+            default: 'list'
+          pagination:
+            type: 'boolean'
+            default: true
+          sorting:
+            type: 'array'
+            items:
+              type: 'object'
+              properties:
+                field:
+                  type: 'string'
+                label:
+                  type: 'string'
+                direction:
+                  type: 'string'
+                  enum: ['asc', 'desc']
+    variants:
+      - 'simple'
+      - 'with-filters'
+      - 'with-suggestions'
+    layoutConstraints:
+      maxFilters: 5
+      debounceDelay: 300
+    accessibilityRequirements:
+      - "Search landmark with role='search'"
+      - 'ARIA live region for search results'
+      - 'Descriptive labels for filters'
+      - 'Keyboard shortcuts support'
+      - 'Screen reader friendly suggestions'
+    implementation:
+      semanticHTML: "form[role='search']"
+      ariaLive: true
+      keyboardShortcuts: true
+      screenReaderFriendly: true

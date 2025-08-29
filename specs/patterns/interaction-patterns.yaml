@@ -1,0 +1,566 @@
+# Interaction Patterns Library
+# Comprehensive pattern definitions for interactive components, layouts, and animations
+
+patterns:
+  # Component Patterns
+  component.button:
+    name: 'Button System'
+    type: 'component'
+    category: 'component'
+    intent: 'Provide consistent, accessible button components with multiple variants and states'
+    props:
+      variants:
+        type: 'object'
+        properties:
+          primary:
+            type: 'object'
+            properties:
+              background:
+                type: 'string'
+              color:
+                type: 'string'
+              border:
+                type: 'string'
+              hover:
+                type: 'object'
+                properties:
+                  background:
+                    type: 'string'
+                  color:
+                    type: 'string'
+                  transform:
+                    type: 'string'
+              focus:
+                type: 'object'
+                properties:
+                  outline:
+                    type: 'string'
+                  outlineOffset:
+                    type: 'string'
+              disabled:
+                type: 'object'
+                properties:
+                  opacity:
+                    type: 'number'
+                  cursor:
+                    type: 'string'
+          secondary:
+            type: 'object'
+            properties:
+              background:
+                type: 'string'
+              color:
+                type: 'string'
+              border:
+                type: 'string'
+              hover:
+                type: 'object'
+                properties:
+                  background:
+                    type: 'string'
+                  color:
+                    type: 'string'
+                  transform:
+                    type: 'string'
+              focus:
+                type: 'object'
+                properties:
+                  outline:
+                    type: 'string'
+                  outlineOffset:
+                    type: 'string'
+              disabled:
+                type: 'object'
+                properties:
+                  opacity:
+                    type: 'number'
+                  cursor:
+                    type: 'string'
+          outline:
+            type: 'object'
+            properties:
+              background:
+                type: 'string'
+              color:
+                type: 'string'
+              border:
+                type: 'string'
+              hover:
+                type: 'object'
+                properties:
+                  background:
+                    type: 'string'
+                  color:
+                    type: 'string'
+                  transform:
+                    type: 'string'
+              focus:
+                type: 'object'
+                properties:
+                  outline:
+                    type: 'string'
+                  outlineOffset:
+                    type: 'string'
+              disabled:
+                type: 'object'
+                properties:
+                  opacity:
+                    type: 'number'
+                  cursor:
+                    type: 'string'
+          ghost:
+            type: 'object'
+            properties:
+              background:
+                type: 'string'
+              color:
+                type: 'string'
+              border:
+                type: 'string'
+              hover:
+                type: 'object'
+                properties:
+                  background:
+                    type: 'string'
+                  color:
+                    type: 'string'
+                  transform:
+                    type: 'string'
+              focus:
+                type: 'object'
+                properties:
+                  outline:
+                    type: 'string'
+                  outlineOffset:
+                    type: 'string'
+              disabled:
+                type: 'object'
+                properties:
+                  opacity:
+                    type: 'number'
+                  cursor:
+                    type: 'string'
+      sizes:
+        type: 'object'
+        properties:
+          sm:
+            type: 'object'
+            properties:
+              padding:
+                type: 'string'
+              fontSize:
+                type: 'string'
+              minHeight:
+                type: 'string'
+          md:
+            type: 'object'
+            properties:
+              padding:
+                type: 'string'
+              fontSize:
+                type: 'string'
+              minHeight:
+                type: 'string'
+          lg:
+            type: 'object'
+            properties:
+              padding:
+                type: 'string'
+              fontSize:
+                type: 'string'
+              minHeight:
+                type: 'string'
+    variants:
+      - 'primary'
+      - 'secondary'
+      - 'outline'
+      - 'ghost'
+      - 'destructive'
+    layoutConstraints:
+      minTouchTarget: '44px'
+      maxWidth: 'none'
+    accessibilityRequirements:
+      - 'Minimum touch target size of 44px'
+      - 'Proper button semantics'
+      - 'Focus management with visible focus indicators'
+      - 'Screen reader support for all states'
+      - 'Keyboard navigation support'
+    implementation:
+      semanticHTML: 'button'
+      touchTargetSize: '44px'
+      focusManagement: true
+      keyboardNavigation: true
+      screenReaderSupport: true
+
+  component.modal:
+    name: 'Modal/Dialog'
+    type: 'component'
+    category: 'component'
+    intent: 'Display content in an overlay that requires user interaction'
+    props:
+      trigger:
+        type: 'object'
+        description: 'Element that opens the modal'
+      content:
+        type: 'object'
+        properties:
+          title:
+            type: 'string'
+          body:
+            type: 'string'
+          footer:
+            type: 'object'
+            properties:
+              actions:
+                type: 'array'
+                items:
+                  type: 'object'
+                  properties:
+                    label:
+                      type: 'string'
+                    variant:
+                      type: 'string'
+                      enum: ['primary', 'secondary', 'ghost']
+                    action:
+                      type: 'string'
+                      enum: ['confirm', 'cancel', 'close']
+      behavior:
+        type: 'object'
+        properties:
+          backdrop:
+            type: 'string'
+            enum: ['blur', 'darken', 'none']
+            default: 'darken'
+          closeOnBackdrop:
+            type: 'boolean'
+            default: true
+          closeOnEscape:
+            type: 'boolean'
+            default: true
+          preventScroll:
+            type: 'boolean'
+            default: true
+      animations:
+        type: 'object'
+        properties:
+          enter:
+            type: 'string'
+            default: 'fade-in'
+          exit:
+            type: 'string'
+            default: 'fade-out'
+          duration:
+            type: 'number'
+            default: 200
+    variants:
+      - 'default'
+      - 'fullscreen'
+      - 'slide-in'
+    layoutConstraints:
+      maxWidth: '90vw'
+      maxHeight: '90vh'
+    accessibilityRequirements:
+      - "ARIA dialog role with aria-modal='true'"
+      - 'Proper focus management and trapping'
+      - 'Screen reader announcements'
+      - 'Keyboard navigation (Escape to close)'
+      - 'Proper heading hierarchy'
+    implementation:
+      semanticHTML: "div[role='dialog']"
+      ariaModal: true
+      focusTrapping: true
+      screenReaderAnnouncements: true
+      keyboardNavigation: true
+
+  component.tabs:
+    name: 'Tabs Component'
+    type: 'component'
+    category: 'component'
+    intent: 'Organize content into tabbed sections for better navigation'
+    props:
+      tabs:
+        type: 'array'
+        items:
+          type: 'object'
+          properties:
+            id:
+              type: 'string'
+            label:
+              type: 'string'
+            content:
+              type: 'string'
+            disabled:
+              type: 'boolean'
+              default: false
+            icon:
+              type: 'string'
+      orientation:
+        type: 'string'
+        enum: ['horizontal', 'vertical']
+        default: 'horizontal'
+      behavior:
+        type: 'object'
+        properties:
+          activation:
+            type: 'string'
+            enum: ['onClick', 'onHover']
+            default: 'onClick'
+          automatic:
+            type: 'boolean'
+            default: false
+    variants:
+      - 'horizontal'
+      - 'vertical'
+      - 'pills'
+    layoutConstraints:
+      maxTabs: 7
+      minTabWidth: '60px'
+    accessibilityRequirements:
+      - 'ARIA tablist, tab, and tabpanel roles'
+      - 'Proper focus management'
+      - 'Keyboard navigation (arrow keys)'
+      - 'Screen reader announcements'
+      - 'Selected state indicators'
+    implementation:
+      semanticHTML: "div[role='tablist']"
+      ariaTabs: true
+      keyboardNavigation: true
+      focusManagement: true
+      screenReaderSupport: true
+
+  # Layout Patterns
+  layout.sidebar:
+    name: 'Sidebar Layout'
+    type: 'layout'
+    category: 'layout'
+    intent: 'Create flexible layouts with side navigation or content areas'
+    props:
+      sidebar:
+        type: 'object'
+        properties:
+          width:
+            type: 'string'
+            default: '280px'
+          position:
+            type: 'string'
+            enum: ['left', 'right']
+            default: 'left'
+          collapsible:
+            type: 'boolean'
+            default: true
+          overlay:
+            type: 'boolean'
+            default: false
+      main:
+        type: 'object'
+        properties:
+          padding:
+            type: 'string'
+            default: '2rem'
+          maxWidth:
+            type: 'string'
+      breakpoints:
+        type: 'object'
+        properties:
+          mobile:
+            type: 'string'
+            enum: ['overlay', 'hidden']
+            default: 'overlay'
+          tablet:
+            type: 'string'
+            enum: ['collapsed', 'expanded']
+            default: 'expanded'
+          desktop:
+            type: 'string'
+            enum: ['expanded']
+            default: 'expanded'
+    variants:
+      - 'fixed-sidebar'
+      - 'collapsible-sidebar'
+      - 'overlay-sidebar'
+    layoutConstraints:
+      minSidebarWidth: '200px'
+      maxSidebarWidth: '400px'
+    accessibilityRequirements:
+      - 'Skip links for main content'
+      - 'Proper focus management when sidebar toggles'
+      - 'Screen reader announcements for state changes'
+      - 'Keyboard navigation support'
+      - 'Semantic landmark roles'
+    implementation:
+      semanticHTML: 'aside'
+      skipLinks: true
+      focusManagement: true
+      responsiveBehavior: true
+      screenReaderSupport: true
+
+  layout.grid:
+    name: 'Grid System'
+    type: 'layout'
+    category: 'layout'
+    intent: 'Provide consistent, responsive grid layouts for content organization'
+    props:
+      columns:
+        type: 'number'
+        default: 12
+      gap:
+        type: 'string'
+        default: '1rem'
+      breakpoints:
+        type: 'object'
+        properties:
+          mobile:
+            type: 'object'
+            properties:
+              columns:
+                type: 'number'
+                default: 4
+              gap:
+                type: 'string'
+                default: '1rem'
+          tablet:
+            type: 'object'
+            properties:
+              columns:
+                type: 'number'
+                default: 8
+              gap:
+                type: 'string'
+                default: '1.5rem'
+          desktop:
+            type: 'object'
+            properties:
+              columns:
+                type: 'number'
+                default: 12
+              gap:
+                type: 'string'
+                default: '2rem'
+      container:
+        type: 'object'
+        properties:
+          maxWidth:
+            type: 'string'
+            default: '1200px'
+          padding:
+            type: 'string'
+            default: '1rem'
+    variants:
+      - '12-column'
+      - '8-column'
+      - '4-column'
+    layoutConstraints:
+      maxColumns: 12
+      minColumnWidth: '60px'
+    accessibilityRequirements:
+      - 'Logical content flow in source order'
+      - 'Proper heading hierarchy'
+      - 'Screen reader friendly grid structure'
+      - 'Focus management in grid layouts'
+    implementation:
+      semanticHTML: 'div'
+      cssGrid: true
+      responsiveBreakpoints: true
+      logicalContentFlow: true
+      focusManagement: true
+
+  # Animation Patterns
+  animation.page-transition:
+    name: 'Page Transitions'
+    type: 'animation'
+    category: 'animation'
+    intent: 'Provide smooth transitions between page states for better user experience'
+    props:
+      type:
+        type: 'string'
+        enum: ['fade', 'slide', 'scale', 'wipe']
+        default: 'fade'
+      direction:
+        type: 'string'
+        enum: ['left', 'right', 'up', 'down']
+      duration:
+        type: 'number'
+        default: 300
+      easing:
+        type: 'string'
+        default: 'ease-out'
+      stagger:
+        type: 'object'
+        properties:
+          elements:
+            type: 'string'
+          delay:
+            type: 'number'
+            default: 50
+    variants:
+      - 'fade'
+      - 'slide'
+      - 'scale'
+      - 'wipe'
+    layoutConstraints:
+      maxDuration: 1000
+      minDuration: 150
+    accessibilityRequirements:
+      - 'Respect prefers-reduced-motion'
+      - 'Use transform and opacity for performance'
+      - 'Avoid animating layout properties'
+      - 'Provide will-change for animated elements'
+      - 'Allow users to skip animations'
+    implementation:
+      semanticHTML: 'div'
+      gpuAcceleration: true
+      reducedMotionSupport: true
+      performanceOptimized: true
+      skipAnimationOption: true
+
+  animation.micro-interaction:
+    name: 'Micro-interactions'
+    type: 'animation'
+    category: 'animation'
+    intent: 'Add subtle feedback animations for user interactions and state changes'
+    props:
+      trigger:
+        type: 'string'
+        enum: ['hover', 'focus', 'click', 'scroll']
+        default: 'hover'
+      target:
+        type: 'string'
+      properties:
+        type: 'object'
+        properties:
+          scale:
+            type: 'number'
+          rotate:
+            type: 'number'
+          translate:
+            type: 'array'
+            items:
+              type: 'number'
+          opacity:
+            type: 'number'
+      duration:
+        type: 'number'
+        default: 200
+      easing:
+        type: 'string'
+        default: 'ease-out'
+    variants:
+      - 'hover-lift'
+      - 'click-feedback'
+      - 'focus-glow'
+      - 'loading-pulse'
+    layoutConstraints:
+      maxDuration: 500
+      minDuration: 100
+    accessibilityRequirements:
+      - 'Respect prefers-reduced-motion setting'
+      - "Don't rely solely on animation for important feedback"
+      - 'Use semantic color changes alongside animations'
+      - "Ensure animations don't interfere with functionality"
+      - 'Provide alternative visual feedback'
+    implementation:
+      semanticHTML: 'div'
+      reducedMotionSupport: true
+      semanticFeedback: true
+      functionalAlternative: true
+      performanceOptimized: true

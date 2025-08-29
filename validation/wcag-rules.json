@@ -1,0 +1,308 @@
+{
+  "version": "WCAG 2.1 AA",
+  "description": "Web Content Accessibility Guidelines 2.1 Level AA compliance rules",
+  "lastUpdated": "2024-01-01",
+
+  "colorContrast": {
+    "description": "Color contrast requirements for text and interactive elements",
+    "rules": {
+      "normalText": {
+        "ratio": 4.5,
+        "description": "Contrast ratio of at least 4.5:1 for normal text",
+        "impact": "serious",
+        "guideline": "1.4.3 Contrast (Minimum)"
+      },
+      "largeText": {
+        "ratio": 3.0,
+        "description": "Contrast ratio of at least 3:1 for large text (18pt+ or 14pt+ bold)",
+        "impact": "serious",
+        "guideline": "1.4.3 Contrast (Minimum)"
+      },
+      "uiComponents": {
+        "ratio": 3.0,
+        "description": "Contrast ratio of at least 3:1 for UI components and graphics",
+        "impact": "serious",
+        "guideline": "1.4.11 Non-text Contrast"
+      },
+      "logotypes": {
+        "ratio": 0,
+        "description": "No contrast requirement for logotypes within brand elements",
+        "impact": "minor",
+        "guideline": "1.4.3 Contrast (Minimum)"
+      }
+    }
+  },
+
+  "focusIndicator": {
+    "description": "Requirements for visible focus indicators",
+    "rules": {
+      "minWidth": {
+        "value": 2,
+        "unit": "px",
+        "description": "Focus indicator must be at least 2px thick",
+        "impact": "moderate",
+        "guideline": "2.4.7 Focus Visible"
+      },
+      "contrastRatio": {
+        "value": 3.0,
+        "description": "Focus indicator must have 3:1 contrast ratio against adjacent colors",
+        "impact": "moderate",
+        "guideline": "2.4.7 Focus Visible"
+      },
+      "style": {
+        "values": ["solid", "dotted", "dashed", "double"],
+        "description": "Focus indicator must use visible styling",
+        "impact": "moderate",
+        "guideline": "2.4.7 Focus Visible"
+      }
+    }
+  },
+
+  "touchTargets": {
+    "description": "Requirements for touch target sizes",
+    "rules": {
+      "minSize": {
+        "value": 44,
+        "unit": "px",
+        "description": "Touch targets must be at least 44x44px",
+        "impact": "moderate",
+        "guideline": "2.5.5 Target Size"
+      },
+      "spacing": {
+        "value": 8,
+        "unit": "px",
+        "description": "Touch targets should have at least 8px spacing",
+        "impact": "moderate",
+        "guideline": "2.5.5 Target Size"
+      },
+      "exceptions": {
+        "values": ["inline links", "custom controls"],
+        "description": "Exceptions for inline links and custom controls",
+        "impact": "minor",
+        "guideline": "2.5.5 Target Size"
+      }
+    }
+  },
+
+  "images": {
+    "description": "Requirements for image accessibility",
+    "rules": {
+      "requireAltText": {
+        "value": true,
+        "description": "All images must have descriptive alt text",
+        "impact": "serious",
+        "guideline": "1.1.1 Non-text Content"
+      },
+      "decorativeAltEmpty": {
+        "value": true,
+        "description": "Decorative images should have empty alt text",
+        "impact": "moderate",
+        "guideline": "1.1.1 Non-text Content"
+      },
+      "complexImages": {
+        "value": true,
+        "description": "Complex images need long descriptions",
+        "impact": "serious",
+        "guideline": "1.1.1 Non-text Content"
+      }
+    }
+  },
+
+  "forms": {
+    "description": "Requirements for form accessibility",
+    "rules": {
+      "requireLabels": {
+        "value": true,
+        "description": "All form inputs must have associated labels",
+        "impact": "serious",
+        "guideline": "3.3.2 Labels or Instructions"
+      },
+      "errorIdentification": {
+        "value": true,
+        "description": "Form errors must be identified and described to users",
+        "impact": "serious",
+        "guideline": "3.3.1 Error Identification"
+      },
+      "errorSuggestions": {
+        "value": true,
+        "description": "Suggestions should be provided for correcting input errors",
+        "impact": "moderate",
+        "guideline": "3.3.3 Error Suggestion"
+      },
+      "autocomplete": {
+        "value": "recommended",
+        "description": "Use autocomplete attributes where appropriate",
+        "impact": "moderate",
+        "guideline": "1.3.5 Identify Input Purpose"
+      }
+    }
+  },
+
+  "keyboard": {
+    "description": "Requirements for keyboard accessibility",
+    "rules": {
+      "allInteractive": {
+        "value": true,
+        "description": "All interactive elements must be keyboard accessible",
+        "impact": "serious",
+        "guideline": "2.1.1 Keyboard"
+      },
+      "noKeyboardTrap": {
+        "value": true,
+        "description": "No keyboard traps - users can navigate away from all elements",
+        "impact": "serious",
+        "guideline": "2.1.2 No Keyboard Trap"
+      },
+      "skipLinks": {
+        "value": "recommended",
+        "description": "Skip links should be provided for keyboard navigation",
+        "impact": "moderate",
+        "guideline": "2.4.1 Bypass Blocks"
+      },
+      "tabOrder": {
+        "value": true,
+        "description": "Tab order must be logical and intuitive",
+        "impact": "moderate",
+        "guideline": "2.4.3 Focus Order"
+      }
+    }
+  },
+
+  "navigation": {
+    "description": "Requirements for navigation accessibility",
+    "rules": {
+      "headingStructure": {
+        "value": true,
+        "description": "Headings must have proper hierarchical structure",
+        "impact": "moderate",
+        "guideline": "1.3.1 Info and Relationships"
+      },
+      "landmarks": {
+        "value": "recommended",
+        "description": "Use landmark roles to identify page regions",
+        "impact": "moderate",
+        "guideline": "1.3.1 Info and Relationships"
+      },
+      "currentLocation": {
+        "value": true,
+        "description": "Current location within navigation must be indicated",
+        "impact": "moderate",
+        "guideline": "2.4.8 Location"
+      }
+    }
+  },
+
+  "content": {
+    "description": "Requirements for content accessibility",
+    "rules": {
+      "languageAttribute": {
+        "value": true,
+        "description": "Primary language must be identified",
+        "impact": "serious",
+        "guideline": "3.1.1 Language of Page"
+      },
+      "languageChanges": {
+        "value": true,
+        "description": "Language changes must be identified",
+        "impact": "moderate",
+        "guideline": "3.1.2 Language of Parts"
+      },
+      "readingLevel": {
+        "value": "recommended",
+        "description": "Content should be written at appropriate reading level",
+        "impact": "moderate",
+        "guideline": "3.1.5 Reading Level"
+      },
+      "abbreviations": {
+        "value": true,
+        "description": "Abbreviations should be expanded on first use",
+        "impact": "moderate",
+        "guideline": "3.1.4 Abbreviations"
+      }
+    }
+  },
+
+  "media": {
+    "description": "Requirements for media accessibility",
+    "rules": {
+      "audioDescriptions": {
+        "value": true,
+        "description": "Audio descriptions provided for video content",
+        "impact": "serious",
+        "guideline": "1.2.3 Audio Description or Media Alternative"
+      },
+      "captions": {
+        "value": true,
+        "description": "Captions provided for video content",
+        "impact": "serious",
+        "guideline": "1.2.2 Captions (Prerecorded)"
+      },
+      "transcript": {
+        "value": "recommended",
+        "description": "Transcripts should be provided for audio/video",
+        "impact": "moderate",
+        "guideline": "1.2.1 Audio-only and Video-only"
+      }
+    }
+  },
+
+  "motion": {
+    "description": "Requirements for motion and animation",
+    "rules": {
+      "reduceMotion": {
+        "value": true,
+        "description": "Respect users' motion preferences",
+        "impact": "moderate",
+        "guideline": "2.3.3 Animation from Interactions"
+      },
+      "pauseStopHide": {
+        "value": true,
+        "description": "Auto-moving content can be paused, stopped, or hidden",
+        "impact": "serious",
+        "guideline": "2.2.2 Pause, Stop, Hide"
+      }
+    }
+  },
+
+  "errorPrevention": {
+    "description": "Requirements for error prevention",
+    "rules": {
+      "contextSensitiveHelp": {
+        "value": "recommended",
+        "description": "Context-sensitive help should be available",
+        "impact": "moderate",
+        "guideline": "3.3.5 Help"
+      },
+      "errorPreventionLegal": {
+        "value": true,
+        "description": "Legal commitments require error prevention",
+        "impact": "serious",
+        "guideline": "3.3.4 Error Prevention (Legal, Financial, Data)"
+      },
+      "errorPreventionData": {
+        "value": true,
+        "description": "Data entry errors require prevention or reversal",
+        "impact": "serious",
+        "guideline": "3.3.4 Error Prevention (Legal, Financial, Data)"
+      }
+    }
+  },
+
+  "testing": {
+    "description": "Testing and validation requirements",
+    "rules": {
+      "parsingErrors": {
+        "value": true,
+        "description": "No HTML parsing errors",
+        "impact": "serious",
+        "guideline": "4.1.1 Parsing"
+      },
+      "nameRoleValue": {
+        "value": true,
+        "description": "Name, role, and value properly defined for UI components",
+        "impact": "serious",
+        "guideline": "4.1.2 Name, Role, Value"
+      }
+    }
+  }
+}

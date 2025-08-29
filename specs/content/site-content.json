@@ -1,0 +1,67 @@
+{
+  "pages": {
+    "/": {
+      "meta": {
+        "title": "Home - Example Company",
+        "description": "Building the future, one pixel at a time. Professional web development services and innovative solutions.",
+        "keywords": ["web development", "design", "innovation", "professional services"],
+        "og": {
+          "title": "Home - Example Company",
+          "description": "Building the future, one pixel at a time. Professional web development services and innovative solutions.",
+          "image": "/og-image.jpg",
+          "type": "website",
+          "url": "https://example.com/"
+        },
+        "twitter": {
+          "card": "summary_large_image",
+          "title": "Home - Example Company",
+          "description": "Building the future, one pixel at a time. Professional web development services and innovative solutions.",
+          "image": "/og-image.jpg"
+        }
+      },
+      "components": {
+        "Button": {
+          "primary": {
+            "text": "Get Started",
+            "ariaLabel": "Start using our professional web development services",
+            "href": "#services"
+          }
+        }
+      },
+      "sections": {
+        "hero": {
+          "heading": "Welcome to Example Company",
+          "subheading": "Building the future, one pixel at a time",
+          "description": "We provide innovative web development solutions that help businesses grow and succeed in the digital world."
+        },
+        "navigation": {
+          "heading": "Main Navigation",
+          "links": [
+            { "text": "Home", "href": "#home", "active": true },
+            { "text": "About", "href": "#about" },
+            { "text": "Services", "href": "#services" },
+            { "text": "Contact", "href": "#contact" }
+          ]
+        }
+      }
+    }
+  },
+  "global": {
+    "brand": {
+      "name": "Example Company",
+      "tagline": "Building the future, one pixel at a time",
+      "logo": {
+        "src": "/logo.svg",
+        "alt": "Example Company Logo"
+      }
+    },
+    "footer": {
+      "copyright": "© 2024 Example Company. All rights reserved.",
+      "links": [
+        { "text": "Privacy Policy", "href": "/privacy" },
+        { "text": "Terms of Service", "href": "/terms" },
+        { "text": "Contact", "href": "/contact" }
+      ]
+    }
+  }
+}

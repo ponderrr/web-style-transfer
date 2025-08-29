@@ -1,0 +1,23 @@
+# Node
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build & IDE junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Playwright/browser cache
+.playwright/
+
+# Project generated outputs
+extract/
+reports/
+validation-report.json
+
+# Recovery scratch
+.recovery/

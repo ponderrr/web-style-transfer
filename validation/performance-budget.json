@@ -1,0 +1,340 @@
+{
+  "version": "1.0.0",
+  "description": "Performance budget thresholds for Core Web Vitals and other metrics",
+  "lastUpdated": "2024-01-01",
+
+  "coreWebVitals": {
+    "description": "Google Core Web Vitals - essential for user experience",
+    "metrics": {
+      "firstContentfulPaint": {
+        "value": 1800,
+        "unit": "ms",
+        "target": "good",
+        "description": "Time until first content is painted",
+        "thresholds": {
+          "good": 1800,
+          "needs-improvement": 3000,
+          "poor": 3000
+        }
+      },
+      "largestContentfulPaint": {
+        "value": 2500,
+        "unit": "ms",
+        "target": "good",
+        "description": "Time until largest content element is painted",
+        "thresholds": {
+          "good": 2500,
+          "needs-improvement": 4000,
+          "poor": 4000
+        }
+      },
+      "timeToInteractive": {
+        "value": 3800,
+        "unit": "ms",
+        "target": "good",
+        "description": "Time until page becomes fully interactive",
+        "thresholds": {
+          "good": 3800,
+          "needs-improvement": 7300,
+          "poor": 7300
+        }
+      },
+      "totalBlockingTime": {
+        "value": 300,
+        "unit": "ms",
+        "target": "good",
+        "description": "Total time main thread is blocked",
+        "thresholds": {
+          "good": 300,
+          "needs-improvement": 600,
+          "poor": 600
+        }
+      },
+      "cumulativeLayoutShift": {
+        "value": 0.1,
+        "unit": "score",
+        "target": "good",
+        "description": "Cumulative layout shift score",
+        "thresholds": {
+          "good": 0.1,
+          "needs-improvement": 0.25,
+          "poor": 0.25
+        }
+      },
+      "speedIndex": {
+        "value": 3400,
+        "unit": "ms",
+        "target": "good",
+        "description": "Speed Index - how quickly content is visually displayed",
+        "thresholds": {
+          "good": 3400,
+          "needs-improvement": 5800,
+          "poor": 5800
+        }
+      }
+    }
+  },
+
+  "bundleSizes": {
+    "description": "JavaScript and CSS bundle size limits",
+    "metrics": {
+      "javascript": {
+        "initial": {
+          "value": 100,
+          "unit": "kb",
+          "description": "Initial JavaScript bundle size",
+          "target": "good"
+        },
+        "lazy": {
+          "value": 200,
+          "unit": "kb",
+          "description": "Lazy-loaded JavaScript size",
+          "target": "good"
+        },
+        "total": {
+          "value": 500,
+          "unit": "kb",
+          "description": "Total JavaScript size",
+          "target": "good"
+        }
+      },
+      "css": {
+        "initial": {
+          "value": 20,
+          "unit": "kb",
+          "description": "Initial CSS size",
+          "target": "good"
+        },
+        "lazy": {
+          "value": 50,
+          "unit": "kb",
+          "description": "Lazy-loaded CSS size",
+          "target": "good"
+        }
+      },
+      "fonts": {
+        "total": {
+          "value": 100,
+          "unit": "kb",
+          "description": "Total font file size",
+          "target": "good"
+        }
+      }
+    }
+  },
+
+  "networkRequests": {
+    "description": "Network request limits and optimization targets",
+    "metrics": {
+      "totalRequests": {
+        "value": 50,
+        "unit": "requests",
+        "description": "Total number of network requests",
+        "target": "good"
+      },
+      "imageRequests": {
+        "value": 20,
+        "unit": "requests",
+        "description": "Number of image requests",
+        "target": "good"
+      },
+      "scriptRequests": {
+        "value": 10,
+        "unit": "requests",
+        "description": "Number of JavaScript requests",
+        "target": "good"
+      },
+      "cssRequests": {
+        "value": 5,
+        "unit": "requests",
+        "description": "Number of CSS requests",
+        "target": "good"
+      }
+    }
+  },
+
+  "imageOptimization": {
+    "description": "Image optimization requirements",
+    "requirements": {
+      "modernFormats": {
+        "enabled": true,
+        "formats": ["webp", "avif"],
+        "description": "Use modern image formats when supported"
+      },
+      "responsiveImages": {
+        "enabled": true,
+        "description": "Use responsive images with srcset"
+      },
+      "lazyLoading": {
+        "enabled": true,
+        "description": "Implement lazy loading for images"
+      },
+      "compression": {
+        "enabled": true,
+        "quality": 85,
+        "description": "Compress images without quality loss"
+      }
+    }
+  },
+
+  "lighthouse": {
+    "description": "Lighthouse performance audit scores",
+    "categories": {
+      "performance": {
+        "value": 90,
+        "unit": "score",
+        "target": "good",
+        "description": "Overall performance score"
+      },
+      "accessibility": {
+        "value": 95,
+        "unit": "score",
+        "target": "good",
+        "description": "Accessibility score"
+      },
+      "bestPractices": {
+        "value": 90,
+        "unit": "score",
+        "target": "good",
+        "description": "Best practices score"
+      },
+      "seo": {
+        "value": 90,
+        "unit": "score",
+        "target": "good",
+        "description": "SEO score"
+      },
+      "pwa": {
+        "value": 50,
+        "unit": "score",
+        "target": "optional",
+        "description": "Progressive Web App score"
+      }
+    }
+  },
+
+  "serverResponse": {
+    "description": "Server response time requirements",
+    "metrics": {
+      "timeToFirstByte": {
+        "value": 600,
+        "unit": "ms",
+        "description": "Time to first byte from server",
+        "target": "good"
+      },
+      "dnsLookup": {
+        "value": 100,
+        "unit": "ms",
+        "description": "DNS lookup time",
+        "target": "good"
+      },
+      "tcpConnection": {
+        "value": 100,
+        "unit": "ms",
+        "description": "TCP connection time",
+        "target": "good"
+      },
+      "tlsHandshake": {
+        "value": 100,
+        "unit": "ms",
+        "description": "TLS handshake time",
+        "target": "good"
+      }
+    }
+  },
+
+  "resourceOptimization": {
+    "description": "Resource optimization requirements",
+    "requirements": {
+      "minification": {
+        "enabled": true,
+        "types": ["javascript", "css", "html"],
+        "description": "Minify text resources"
+      },
+      "compression": {
+        "enabled": true,
+        "algorithms": ["gzip", "brotli"],
+        "description": "Compress resources with gzip or brotli"
+      },
+      "caching": {
+        "enabled": true,
+        "staticAssets": "1 year",
+        "html": "no-cache",
+        "description": "Implement proper cache headers"
+      },
+      "cdn": {
+        "recommended": true,
+        "description": "Use CDN for static assets"
+      }
+    }
+  },
+
+  "thirdParty": {
+    "description": "Third-party resource limits",
+    "metrics": {
+      "blockingScripts": {
+        "value": 3,
+        "unit": "scripts",
+        "description": "Maximum render-blocking scripts",
+        "target": "good"
+      },
+      "totalThirdParty": {
+        "value": 10,
+        "unit": "requests",
+        "description": "Maximum third-party requests",
+        "target": "good"
+      },
+      "thirdPartySize": {
+        "value": 200,
+        "unit": "kb",
+        "description": "Maximum third-party content size",
+        "target": "good"
+      }
+    }
+  },
+
+  "mobileOptimization": {
+    "description": "Mobile-specific performance requirements",
+    "requirements": {
+      "viewportMeta": {
+        "enabled": true,
+        "description": "Proper viewport meta tag"
+      },
+      "touchTargets": {
+        "enabled": true,
+        "minSize": 44,
+        "description": "Touch targets are appropriately sized"
+      },
+      "fontLoading": {
+        "enabled": true,
+        "strategy": "preload critical fonts",
+        "description": "Optimize font loading for mobile"
+      },
+      "mobileBundle": {
+        "enabled": true,
+        "maxSize": 150,
+        "unit": "kb",
+        "description": "Mobile-specific bundle size limit"
+      }
+    }
+  },
+
+  "monitoring": {
+    "description": "Continuous monitoring requirements",
+    "metrics": {
+      "realUserMonitoring": {
+        "recommended": true,
+        "description": "Implement real user monitoring"
+      },
+      "coreWebVitalsTracking": {
+        "recommended": true,
+        "description": "Track Core Web Vitals over time"
+      },
+      "performanceRegression": {
+        "enabled": true,
+        "threshold": 0.05,
+        "description": "Alert on 5% performance regression"
+      }
+    }
+  }
+}
