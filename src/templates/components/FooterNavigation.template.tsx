@@ -51,7 +51,6 @@ export function FooterNavigation({
   copyright,
   layout = 'grid',
   columns = 4,
-  variant = 'comprehensive',
   className,
   sectionClassName,
   linkClassName,
@@ -306,12 +305,6 @@ export function NewsletterFooter({ newsletter, ...props }: NewsletterFooterProps
   if (!newsletter) {
     return <FooterNavigation {...props} />;
   }
-
-  const newsletterSection: FooterSection = {
-    title: newsletter.title,
-    description: newsletter.description,
-    links: [], // Newsletter form will be added separately
-  };
 
   return (
     <footer className={cn('bg-gray-900 text-white', props.className)} role="contentinfo">

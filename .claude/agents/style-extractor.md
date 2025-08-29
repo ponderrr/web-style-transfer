@@ -53,7 +53,7 @@ const context = await browser.newContext({
 });
 
 // 2. Navigate and wait for full load
-await page.goto(url, { waitUntil: "networkidle" });
+await page.goto(url, { waitUntil: 'networkidle' });
 await page.waitForTimeout(1000); // Allow animations
 
 // 3. Extract across viewports

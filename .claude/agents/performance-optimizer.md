@@ -84,15 +84,11 @@ Optimize static assets for web delivery:
 
 ```javascript
 // Optimize LCP by preloading critical resources
-const criticalResources = [
-  "/fonts/inter.woff2",
-  "/css/critical.css",
-  "/images/hero.webp",
-];
+const criticalResources = ['/fonts/inter.woff2', '/css/critical.css', '/images/hero.webp'];
 
-criticalResources.forEach((resource) => {
-  const link = document.createElement("link");
-  link.rel = "preload";
+criticalResources.forEach(resource => {
+  const link = document.createElement('link');
+  link.rel = 'preload';
   link.href = resource;
   link.as = getResourceType(resource);
   document.head.appendChild(link);
@@ -117,16 +113,16 @@ export async function getServerSideProps() {
 
 ```javascript
 // Break up long tasks with scheduler API
-import { unstable_scheduleCallback } from "scheduler";
+import { unstable_scheduleCallback } from 'scheduler';
 
 function processData(data) {
   // Break heavy computation into smaller chunks
-  unstable_scheduleCallback("low", () => {
+  unstable_scheduleCallback('low', () => {
     // Process first chunk
     processChunk(data.slice(0, 100));
   });
 
-  unstable_scheduleCallback("low", () => {
+  unstable_scheduleCallback('low', () => {
     // Process second chunk
     processChunk(data.slice(100, 200));
   });
@@ -145,7 +141,7 @@ function VirtualizedList({ items, itemHeight }) {
   return (
     <div
       style={{ height: items.length * itemHeight }}
-      onScroll={(e) => setScrollTop(e.target.scrollTop)}
+      onScroll={e => setScrollTop(e.target.scrollTop)}
     >
       {visibleItems.map((item, index) => (
         <div key={index} style={{ height: itemHeight }}>
@@ -197,11 +193,11 @@ function ImageWithPlaceholder({ src, alt, width, height }) {
 
 ```javascript
 // Route-based code splitting
-import { lazy, Suspense } from "react";
+import { lazy, Suspense } from 'react';
 
-const HomePage = lazy(() => import("./pages/HomePage"));
-const AboutPage = lazy(() => import("./pages/AboutPage"));
-const ContactPage = lazy(() => import("./pages/ContactPage"));
+const HomePage = lazy(() => import('./pages/HomePage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
 
 function App() {
   return (
@@ -226,7 +222,7 @@ function loadComponent(componentName) {
 
 // On-demand loading
 async function handleUserAction() {
-  const { Modal } = await loadComponent("Modal");
+  const { Modal } = await loadComponent('Modal');
   // Use Modal component
 }
 ```
@@ -235,13 +231,12 @@ async function handleUserAction() {
 
 ```javascript
 // webpack bundle analyzer configuration
-const BundleAnalyzerPlugin =
-  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   plugins: [
     new BundleAnalyzerPlugin({
-      analyzerMode: "static",
+      analyzerMode: 'static',
       openAnalyzer: false,
       generateStatsFile: true,
     }),
@@ -255,7 +250,7 @@ module.exports = {
 
 ```javascript
 // Next.js Image component with optimization
-import Image from "next/image";
+import Image from 'next/image';
 
 export default function OptimizedImage({ src, alt, width, height }) {
   return (
@@ -294,13 +289,13 @@ export default function OptimizedImage({ src, alt, width, height }) {
 
 ```javascript
 // Critical CSS extraction
-const critical = require("critical");
+const critical = require('critical');
 
 critical.generate({
   inline: true,
-  base: "dist/",
-  src: "index.html",
-  target: "index.html",
+  base: 'dist/',
+  src: 'index.html',
+  target: 'index.html',
   width: 1300,
   height: 900,
 });
@@ -374,17 +369,17 @@ function VirtualList({ items, itemHeight, containerHeight }) {
 
 ```javascript
 // Service worker for runtime caching
-self.addEventListener("install", (event) => {
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open("v1").then((cache) => {
-      return cache.addAll(["/", "/styles.css", "/script.js", "/offline.html"]);
+    caches.open('v1').then(cache => {
+      return cache.addAll(['/', '/styles.css', '/script.js', '/offline.html']);
     })
   );
 });
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
+    caches.match(event.request).then(response => {
       return response || fetch(event.request);
     })
   );
@@ -398,19 +393,19 @@ self.addEventListener("fetch", (event) => {
 const cdnConfig = {
   origins: [
     {
-      domainName: "assets.example.com",
-      originPath: "/assets",
+      domainName: 'assets.example.com',
+      originPath: '/assets',
     },
   ],
   behaviors: [
     {
-      pathPattern: "/images/*",
-      cachePolicy: "CacheOptimized",
+      pathPattern: '/images/*',
+      cachePolicy: 'CacheOptimized',
       compress: true,
     },
     {
-      pathPattern: "/js/*",
-      cachePolicy: "CachingOptimized",
+      pathPattern: '/js/*',
+      cachePolicy: 'CachingOptimized',
       compress: true,
     },
   ],
@@ -423,7 +418,7 @@ const cdnConfig = {
 
 ```javascript
 // Real user monitoring
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from "web-vitals";
+import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
 
 function reportWebVitals(metric) {
   // Send to analytics service
@@ -451,7 +446,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: '16'
       - run: npm install
       - run: npm run build
       - run: npx lhci autorun
@@ -461,14 +456,14 @@ jobs:
 
 ```javascript
 // Bundle size monitoring
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
   plugins: [
     new BundleAnalyzerPlugin({
-      analyzerMode: "static",
+      analyzerMode: 'static',
       openAnalyzer: false,
-      reportFilename: "bundle-report.html",
+      reportFilename: 'bundle-report.html',
     }),
   ],
 };

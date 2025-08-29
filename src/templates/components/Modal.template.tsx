@@ -106,7 +106,6 @@ export function Modal({
   closeOnEscape = true,
   preventScroll = true,
   enterAnimation = 'fade-in',
-  exitAnimation = 'fade-out',
   animationDuration = 200,
   size = 'md',
   className,

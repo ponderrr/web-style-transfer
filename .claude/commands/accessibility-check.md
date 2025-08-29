@@ -286,12 +286,12 @@ Content must be robust enough to be interpreted by a wide variety of user agents
 ```javascript
 function handleKeyDown(event) {
   switch (event.key) {
-    case "Enter":
-    case " ":
+    case 'Enter':
+    case ' ':
       event.preventDefault();
       handleClick();
       break;
-    case "ArrowDown":
+    case 'ArrowDown':
       event.preventDefault();
       openDropdown();
       break;

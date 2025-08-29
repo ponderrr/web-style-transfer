@@ -1,12 +1,12 @@
-import { Page } from "playwright";
+import { Page } from 'playwright';
 
 export interface WCAGViolation {
   rule: string;
-  impact: "minor" | "moderate" | "serious" | "critical";
+  impact: 'minor' | 'moderate' | 'serious' | 'critical';
   description: string;
   element: string;
   guideline: string;
-  wcagLevel: "A" | "AA" | "AAA";
+  wcagLevel: 'A' | 'AA' | 'AAA';
 }
 
 export interface AccessibilityReport {
@@ -26,7 +26,7 @@ export class AccessibilityChecker {
     const violations: WCAGViolation[] = [];
 
     // Check color contrast
-    const colorIssues = await this.checkColorContrast(page);
+    const colorIssues = await this.checkColorContrast();
     violations.push(...colorIssues);
 
     // Check images without alt text
@@ -45,47 +45,33 @@ export class AccessibilityChecker {
     };
   }
 
-  private async checkColorContrast(page: Page): Promise<WCAGViolation[]> {
+  private async checkColorContrast(): Promise<WCAGViolation[]> {
     const violations: WCAGViolation[] = [];
 
     // Simple check for very low contrast (would need more sophisticated analysis)
-    const lowContrastElements = await page.$$eval("*", (elements) => {
-      return elements
-        .filter((el) => {
-          const text = el.textContent?.trim();
-          return text && text.length > 0;
-        })
-        .map((el) => ({
-          tagName: el.tagName,
-          text: el.textContent?.trim(),
-        }));
-    });
-
     // For now, return empty array - would need color analysis
+    // TODO: Implement actual color contrast analysis
     return violations;
   }
 
   private async checkMissingAltText(page: Page): Promise<WCAGViolation[]> {
     const violations: WCAGViolation[] = [];
 
-    const imagesWithoutAlt = await page.$$eval(
-      'img:not([alt]), img[alt=""]',
-      (images) => {
-        return images.map((img) => ({
-          src: img.getAttribute("src"),
-          tagName: img.tagName,
-        }));
-      }
-    );
+    const imagesWithoutAlt = await page.$$eval('img:not([alt]), img[alt=""]', images => {
+      return images.map(img => ({
+        src: img.getAttribute('src'),
+        tagName: img.tagName,
+      }));
+    });
 
     for (const img of imagesWithoutAlt) {
       violations.push({
-        rule: "image-alt",
-        impact: "serious",
-        description: "Image missing alt text",
+        rule: 'image-alt',
+        impact: 'serious',
+        description: 'Image missing alt text',
         element: `img[src="${img.src}"]`,
-        guideline: "1.1.1 Non-text Content",
-        wcagLevel: "A",
+        guideline: '1.1.1 Non-text Content',
+        wcagLevel: 'A',
       });
     }
 
@@ -99,9 +85,7 @@ export class AccessibilityChecker {
     return Math.max(0, 100 - penalty);
   }
 
-  private summarizeViolations(
-    violations: WCAGViolation[]
-  ): AccessibilityReport["summary"] {
+  private summarizeViolations(violations: WCAGViolation[]): AccessibilityReport['summary'] {
     return violations.reduce(
       (summary, violation) => {
         summary[violation.impact]++;
@@ -113,10 +97,10 @@ export class AccessibilityChecker {
 
   private generateRecommendations(violations: WCAGViolation[]): string[] {
     const recommendations: string[] = [];
-    const violationTypes = new Set(violations.map((v) => v.rule));
+    const violationTypes = new Set(violations.map(v => v.rule));
 
-    if (violationTypes.has("image-alt")) {
-      recommendations.push("Add descriptive alt text to all images");
+    if (violationTypes.has('image-alt')) {
+      recommendations.push('Add descriptive alt text to all images');
     }
 
     return recommendations;

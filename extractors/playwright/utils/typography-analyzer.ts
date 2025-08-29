@@ -1,9 +1,5 @@
-import { Page } from "playwright";
-import {
-  Typography,
-  TypographyScale,
-  FontFamily,
-} from "../../schemas/style.schema";
+import { Page } from 'playwright';
+import { TypographyScale, FontFamily } from '../../schemas/style.schema';
 
 export interface TypographyAnalysis {
   scale: TypographyScale;
@@ -30,19 +26,17 @@ export interface TypographyAnalysis {
 }
 
 export class TypographyAnalyzer {
-  private readonly MODULAR_SCALE_RATIOS = [
-    1.125, 1.2, 1.25, 1.333, 1.414, 1.5, 1.618,
-  ];
+  private readonly MODULAR_SCALE_RATIOS = [1.125, 1.2, 1.25, 1.333, 1.414, 1.5, 1.618];
   private readonly MIN_FONT_SIZE = 14;
   private readonly MAX_FONT_FAMILIES = 3;
 
   async analyzeTypography(page: Page): Promise<TypographyAnalysis> {
     // Extract typography data from the page
     const typographyData = await page.evaluate(() => {
-      const elements = document.querySelectorAll("*");
+      const elements = document.querySelectorAll('*');
       const typographyMap = new Map();
 
-      elements.forEach((el) => {
+      elements.forEach(el => {
         const style = window.getComputedStyle(el);
         const fontSize = parseFloat(style.fontSize);
         const fontFamily = style.fontFamily;
@@ -106,7 +100,7 @@ export class TypographyAnalyzer {
   private extractFontFamilies(data: any[]): FontFamily[] {
     const fontMap = new Map<string, any>();
 
-    data.forEach((item) => {
+    data.forEach(item => {
       const fonts = this.parseFontStack(item.fontFamily);
 
       fonts.forEach((font, index) => {
@@ -130,19 +124,13 @@ export class TypographyAnalyzer {
     // Convert to array and sort by usage
     const families = Array.from(fontMap.values())
       .sort((a, b) => {
-        const aUsage = a.usage.reduce(
-          (sum: number, u: any) => sum + u.elements,
-          0
-        );
-        const bUsage = b.usage.reduce(
-          (sum: number, u: any) => sum + u.elements,
-          0
-        );
+        const aUsage = a.usage.reduce((sum: number, u: any) => sum + u.elements, 0);
+        const bUsage = b.usage.reduce((sum: number, u: any) => sum + u.elements, 0);
         return bUsage - aUsage;
       })
       .slice(0, this.MAX_FONT_FAMILIES);
 
-    return families.map((family) => ({
+    return families.map(family => ({
       name: family.name,
       stack: family.stack,
       fallback: family.fallback,
@@ -152,44 +140,36 @@ export class TypographyAnalyzer {
   private parseFontStack(fontFamily: string): string[] {
     // Split font stack and clean up
     return fontFamily
-      .split(",")
-      .map((font) => font.trim().replace(/['"]/g, ""))
-      .filter(
-        (font) =>
-          font &&
-          font !== "serif" &&
-          font !== "sans-serif" &&
-          font !== "monospace"
-      );
+      .split(',')
+      .map(font => font.trim().replace(/['"]/g, ''))
+      .filter(font => font && font !== 'serif' && font !== 'sans-serif' && font !== 'monospace');
   }
 
   private detectSizeScale(data: any[]): number[] {
-    const sizes = data
-      .map((item) => item.fontSize)
-      .filter((size) => size >= this.MIN_FONT_SIZE);
+    const sizes = data.map(item => item.fontSize).filter(size => size >= this.MIN_FONT_SIZE);
 
     // Remove duplicates and sort
     const uniqueSizes = [...new Set(sizes)].sort((a, b) => b - a);
 
     // Round to nearest pixel for consistency
-    return uniqueSizes.map((size) => Math.round(size)).slice(0, 8); // Limit to 8 sizes
+    return uniqueSizes.map(size => Math.round(size)).slice(0, 8); // Limit to 8 sizes
   }
 
-  private createHierarchy(data: any[]): TypographyAnalysis["hierarchy"] {
+  private createHierarchy(data: any[]): TypographyAnalysis['hierarchy'] {
     const hierarchy: any = {
-      h1: "",
-      h2: "",
-      h3: "",
-      h4: "",
-      h5: "",
-      h6: "",
-      body: "",
-      small: "",
+      h1: '',
+      h2: '',
+      h3: '',
+      h4: '',
+      h5: '',
+      h6: '',
+      body: '',
+      small: '',
     };
 
     // Group by tag names
     const byTag = new Map();
-    data.forEach((item) => {
+    data.forEach(item => {
       item.elements.forEach((el: any) => {
         const tag = el.tagName.toLowerCase();
         if (!byTag.has(tag)) {
@@ -203,15 +183,14 @@ export class TypographyAnalyzer {
     });
 
     // Assign sizes to hierarchy levels
-    const headingTags = ["h1", "h2", "h3", "h4", "h5", "h6"];
+    const headingTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
     const sizes = this.detectSizeScale(data).sort((a, b) => b - a);
 
     headingTags.forEach((tag, index) => {
       if (byTag.has(tag)) {
         const tagData = byTag.get(tag);
         const avgSize =
-          tagData.reduce((sum: number, item: any) => sum + item.fontSize, 0) /
-          tagData.length;
+          tagData.reduce((sum: number, item: any) => sum + item.fontSize, 0) / tagData.length;
         hierarchy[tag] = `${Math.round(avgSize)}px`;
       } else if (sizes[index]) {
         hierarchy[tag] = `${sizes[index]}px`;
@@ -219,19 +198,19 @@ export class TypographyAnalyzer {
     });
 
     // Assign body and small sizes
-    const bodySizes = sizes.filter((size) => size <= 18);
-    hierarchy.body = bodySizes.length > 0 ? `${bodySizes[0]}px` : "16px";
-    hierarchy.small = bodySizes.length > 1 ? `${bodySizes[1]}px` : "14px";
+    const bodySizes = sizes.filter(size => size <= 18);
+    hierarchy.body = bodySizes.length > 0 ? `${bodySizes[0]}px` : '16px';
+    hierarchy.small = bodySizes.length > 1 ? `${bodySizes[1]}px` : '14px';
 
     return hierarchy;
   }
 
-  private calculateMetrics(data: any[]): TypographyAnalysis["metrics"] {
+  private calculateMetrics(data: any[]): TypographyAnalysis['metrics'] {
     const lineHeights: Record<string, number> = {};
     const letterSpacing: Record<string, string> = {};
     const fontWeights: number[] = [];
 
-    data.forEach((item) => {
+    data.forEach(item => {
       const sizeKey = `${item.fontSize}px`;
 
       // Line heights
@@ -240,7 +219,7 @@ export class TypographyAnalyzer {
       }
 
       // Letter spacing
-      if (item.letterSpacing && item.letterSpacing !== "normal") {
+      if (item.letterSpacing && item.letterSpacing !== 'normal') {
         letterSpacing[sizeKey] = item.letterSpacing;
       }
 
@@ -257,15 +236,15 @@ export class TypographyAnalyzer {
     };
   }
 
-  private detectModularScale(
-    sizes: number[]
-  ): TypographyAnalysis["modularScale"] {
+  private detectModularScale(sizes: number[]): TypographyAnalysis['modularScale'] {
     if (sizes.length < 3) return undefined;
 
     // Try different ratios to find the best fit
     for (const ratio of this.MODULAR_SCALE_RATIOS) {
       if (sizes.length === 0) continue;
       const baseSize = sizes[sizes.length - 1]; // Smallest size as base
+      if (baseSize === undefined) continue;
+
       const generated = this.generateScale(baseSize, ratio, sizes.length);
 
       const similarity = this.calculateScaleSimilarity(sizes, generated);
@@ -280,31 +259,31 @@ export class TypographyAnalyzer {
     return undefined;
   }
 
-  private generateScale(
-    baseSize: number,
-    ratio: number,
-    length: number
-  ): number[] {
+  private generateScale(baseSize: number, ratio: number, length: number): number[] {
     const scale: number[] = [baseSize];
 
     for (let i = 1; i < length; i++) {
-      scale.push(Math.round(scale[i - 1] * ratio));
+      const prevValue = scale[i - 1];
+      if (prevValue !== undefined) {
+        scale.push(Math.round(prevValue * ratio));
+      }
     }
 
     return scale;
   }
 
-  private calculateScaleSimilarity(
-    actual: number[],
-    generated: number[]
-  ): number {
+  private calculateScaleSimilarity(actual: number[], generated: number[]): number {
     if (actual.length !== generated.length) return 0;
 
     let totalDifference = 0;
     for (let i = 0; i < actual.length; i++) {
-      if (actual[i] === undefined || generated[i] === undefined) continue;
-      const difference = Math.abs(actual[i] - generated[i]);
-      const maxValue = Math.max(actual[i], generated[i]);
+      const actualValue = actual[i];
+      const generatedValue = generated[i];
+
+      if (actualValue === undefined || generatedValue === undefined) continue;
+
+      const difference = Math.abs(actualValue - generatedValue);
+      const maxValue = Math.max(actualValue, generatedValue);
       if (maxValue > 0) {
         totalDifference += difference / maxValue;
       }
@@ -313,15 +292,12 @@ export class TypographyAnalyzer {
     return 1 - totalDifference / actual.length;
   }
 
-  private createTypographyScale(
-    sizes: number[],
-    fonts: FontFamily[]
-  ): TypographyScale {
+  private createTypographyScale(sizes: number[], fonts: FontFamily[]): TypographyScale {
     const scale: TypographyScale = {};
-    const primaryFont = fonts[0]?.stack[0] || "system-ui";
+    const primaryFont = fonts[0]?.stack[0] || 'system-ui';
 
     // Create scale entries
-    const sizeNames = ["xs", "sm", "base", "lg", "xl", "2xl", "3xl", "4xl"];
+    const sizeNames = ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl'];
 
     sizes
       .slice()

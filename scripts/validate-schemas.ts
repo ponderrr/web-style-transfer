@@ -2,20 +2,16 @@
 
 import { z } from 'zod';
 import * as fs from 'fs/promises';
-import * as path from 'path';
 import chalk from 'chalk';
-
-// Import schema types
-import type { STierPrinciples } from '../extractors/schemas/s-tier-principles';
 
 // Zod schemas for validation
 
-// Basic token validation
-const DesignTokenSchema = z.object({
-  $value: z.union([z.string(), z.number()]),
-  $type: z.string(),
-  $description: z.string().optional(),
-});
+// Basic token validation - commented out as not currently used
+// const BasicTokenSchema = z.object({
+//   $value: z.union([z.string(), z.number()]),
+//   $type: z.string(),
+//   $description: z.string().optional(),
+// });
 
 // Color contrast requirements
 const ColorContrastSchema = z.object({
@@ -418,7 +414,7 @@ async function main() {
   const command = process.argv[2];
 
   switch (command) {
-    case 'unified-spec':
+    case 'unified-spec': {
       console.log(chalk.blue('🔍 Validating UnifiedSpec...'));
       const unifiedResult = await SchemaValidator.validateUnifiedSpec(
         './specs/composed/build-spec.json'
@@ -430,8 +426,9 @@ async function main() {
         unifiedResult.errors?.forEach(error => console.log(chalk.red(`   ${error}`)));
       }
       break;
+    }
 
-    case 's-tier-principles':
+    case 's-tier-principles': {
       console.log(chalk.blue('🔍 Validating S-Tier Principles...'));
       const principlesResult = await SchemaValidator.validateSTierPrinciples(
         './extractors/schemas/s-tier-principles.ts'
@@ -443,9 +440,10 @@ async function main() {
         principlesResult.errors?.forEach(error => console.log(chalk.red(`   ${error}`)));
       }
       break;
+    }
 
     case 'all':
-    default:
+    default: {
       console.log(chalk.blue('🔍 Validating all schemas...'));
       const allResults = await SchemaValidator.validateAllSchemas();
 
@@ -473,6 +471,7 @@ async function main() {
         process.exit(1);
       }
       break;
+    }
   }
 }
 

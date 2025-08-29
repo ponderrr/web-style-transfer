@@ -38,24 +38,28 @@ Apply intelligent design enhancements:
 ## Process Steps
 
 ### Phase 1: Input Analysis
+
 1. **Load Style Tokens**: Import design tokens from extraction results
 2. **Load Brand Content**: Import brand identity and content structure
 3. **Validate Compatibility**: Check for conflicts and missing elements
 4. **Assess Quality**: Evaluate extraction quality and completeness
 
 ### Phase 2: Intelligent Merging
+
 1. **Color System Creation**: Merge brand colors with design tokens
 2. **Typography System**: Combine brand voice with typographic scale
 3. **Component Mapping**: Map content types to appropriate UI patterns
 4. **Layout Structure**: Define page layouts based on content architecture
 
 ### Phase 3: Quality Enhancement
+
 1. **Accessibility Compliance**: Ensure all colors meet WCAG AA standards
 2. **Performance Optimization**: Add lazy loading and optimization patterns
 3. **Responsive Design**: Create mobile-first responsive specifications
 4. **Modern Standards**: Apply current design system best practices
 
 ### Phase 4: Validation & Output
+
 1. **Specification Validation**: Validate complete specification structure
 2. **Quality Scoring**: Calculate overall quality and provide recommendations
 3. **Documentation Generation**: Create implementation documentation
@@ -64,18 +68,21 @@ Apply intelligent design enhancements:
 ## Enhancement Rules
 
 ### Color Enhancement
+
 - If brand colors don't meet contrast ratios, generate accessible alternatives
 - Create semantic color system (primary, secondary, success, error, warning)
 - Generate complete neutral scale if missing
 - Ensure 4.5:1 minimum contrast for text
 
 ### Typography Enhancement
+
 - Standardize to modular scale (1.25 ratio preferred)
 - Ensure minimum sizes (14px body, 12px small text)
 - Optimize line heights (1.4-1.6 for optimal readability)
 - Create consistent weight scale
 
 ### Spacing Enhancement
+
 - Establish 8px base grid system
 - Create consistent spacing scale (2, 4, 6, 8, 12, 16, 24, 32, 48, 64, 80, 96)
 - Apply spacing rules to all components
@@ -98,14 +105,14 @@ Apply intelligent design enhancements:
         "secondary": "#6B7280",
         "neutral": {
           "50": "#F9FAFB",
-          "100": "#F3F4F6",
+          "100": "#F3F4F6"
           // ... complete scale
         }
       },
       "typography": {
         "fontFamily": "Inter, system-ui, sans-serif",
         "scale": {
-          "h1": { "size": "2.25rem", "lineHeight": "2.5rem", "weight": "700" },
+          "h1": { "size": "2.25rem", "lineHeight": "2.5rem", "weight": "700" }
           // ... complete scale
         }
       },
@@ -119,7 +126,7 @@ Apply intelligent design enhancements:
         "variants": ["primary", "secondary", "ghost"],
         "sizes": ["sm", "md", "lg"],
         "states": ["default", "hover", "active", "disabled"]
-      },
+      }
       // ... component specifications
     }
   },
@@ -143,7 +150,9 @@ Apply intelligent design enhancements:
           "path": "/",
           "title": "Home",
           "layout": "hero-centered",
-          "content": { /* page content */ }
+          "content": {
+            /* page content */
+          }
         }
       ]
     }
@@ -162,16 +171,19 @@ Apply intelligent design enhancements:
 ## Conflict Resolution Rules
 
 ### Color Conflicts
+
 1. **Brand vs Design**: Prioritize brand colors but ensure accessibility
 2. **Missing Colors**: Generate from existing palette using color theory
 3. **Poor Contrast**: Automatically adjust to meet WCAG standards
 
 ### Typography Conflicts
+
 1. **Brand Fonts**: Preserve brand fonts when web-safe alternatives exist
 2. **Size Inconsistencies**: Apply modular scale to standardize
 3. **Readability Issues**: Adjust sizes to meet minimum requirements
 
 ### Layout Conflicts
+
 1. **Content Density**: Balance brand's content needs with design aesthetics
 2. **Mobile Optimization**: Ensure all layouts work on mobile devices
 3. **Performance Impact**: Optimize layouts for loading performance
@@ -179,6 +191,7 @@ Apply intelligent design enhancements:
 ## Quality Enhancement Features
 
 ### Automatic Improvements
+
 - **Color Contrast**: Ensure all text meets WCAG AA standards
 - **Touch Targets**: Guarantee minimum 44px touch targets
 - **Focus Indicators**: Add visible focus states for keyboard navigation
@@ -186,12 +199,14 @@ Apply intelligent design enhancements:
 - **Error States**: Provide clear error messaging and recovery options
 
 ### Performance Optimizations
+
 - **Lazy Loading**: Add lazy loading for images and components
 - **Bundle Splitting**: Optimize code splitting strategies
 - **Critical Path**: Optimize critical rendering path
 - **Caching Strategy**: Implement appropriate caching headers
 
 ### Modern Standards
+
 - **CSS Grid/Flexbox**: Use modern layout techniques
 - **Custom Properties**: Leverage CSS custom properties for theming
 - **Modern CSS**: Apply current CSS best practices
@@ -200,11 +215,13 @@ Apply intelligent design enhancements:
 ## Error Handling
 
 ### Input Validation Errors
+
 - **Missing Style Tokens**: Provide fallback design system
 - **Incomplete Brand Data**: Generate reasonable defaults
 - **Format Errors**: Attempt to repair or provide clear error messages
 
 ### Enhancement Conflicts
+
 - **Accessibility vs Aesthetics**: Always prioritize accessibility
 - **Performance vs Features**: Balance based on use case requirements
 - **Brand vs Standards**: Preserve brand when possible, enhance when necessary
@@ -217,4 +234,4 @@ Apply intelligent design enhancements:
 4. **Future-Proof**: Apply standards that will remain relevant
 5. **Documentation**: Provide clear rationale for all modifications
 6. **Transparency**: Make all enhancements visible in output specifications</contents>
-</xai:function_call">
+   </xai:function_call">

@@ -5,13 +5,9 @@ import * as path from 'path';
 
 // DTCG Token interfaces
 interface DTCGToken {
-  $value: any;
+  $value: string | number;
   $type: string;
   $description?: string;
-}
-
-interface TokenGroup {
-  [key: string]: DTCGToken | TokenGroup;
 }
 
 // Validation result interfaces
@@ -33,7 +29,7 @@ interface ValidationIssue {
 // Color utilities for contrast calculation
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
+  return result && result[1] && result[2] && result[3]
     ? {
         r: parseInt(result[1], 16),
         g: parseInt(result[2], 16),
@@ -43,11 +39,15 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
 }
 
 function calculateLuminance(r: number, g: number, b: number): number {
-  const [rs, gs, bs] = [r, g, b].map(c => {
-    c = c / 255;
-    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  });
-  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+  const rs = r / 255;
+  const gs = g / 255;
+  const bs = b / 255;
+
+  const rsProcessed = rs <= 0.03928 ? rs / 12.92 : Math.pow((rs + 0.055) / 1.055, 2.4);
+  const gsProcessed = gs <= 0.03928 ? gs / 12.92 : Math.pow((gs + 0.055) / 1.055, 2.4);
+  const bsProcessed = bs <= 0.03928 ? bs / 12.92 : Math.pow((bs + 0.055) / 1.055, 2.4);
+
+  return 0.2126 * rsProcessed + 0.7152 * gsProcessed + 0.0722 * bsProcessed;
 }
 
 function calculateContrastRatio(color1: string, color2: string): number {

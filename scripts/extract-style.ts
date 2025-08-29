@@ -163,4 +163,4 @@ Examples:
 `
 );
 
-program.parse();
+program.parse(process.argv);

@@ -1,33 +1,20 @@
 #!/usr/bin/env node
 
 // scripts/compose-spec.ts
+import { ColorNormalizer } from '../extractors/playwright/utils/color-normalizer';
+import { ComponentSpec, UIPattern, DesignTokens } from '../extractors/schemas/style.schema';
+import { UnifiedSpec } from '../extractors/schemas/spec.schema';
+import { BrandProfile } from '../extractors/schemas/brand.schema';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import {
-  ExtractionResult,
-  DesignTokens,
-  UIPattern,
-  ComponentSpec,
-} from '../extractors/schemas/style.schema';
-import { BrandExtractionResult, BrandProfile } from '../extractors/schemas/brand.schema';
-import { UnifiedSpec } from '../extractors/schemas/spec.schema';
-
-// Import utility classes for enhanced composition
-import { ColorNormalizer } from '../extractors/playwright/utils/color-normalizer';
-import { TypographyAnalyzer } from '../extractors/playwright/utils/typography-analyzer';
-import { SpacingDetector } from '../extractors/playwright/utils/spacing-detector';
 
 export class SpecComposer {
   // Utility class instances for enhanced composition
   private colorNormalizer: ColorNormalizer;
-  private typographyAnalyzer: TypographyAnalyzer;
-  private spacingDetector: SpacingDetector;
 
   constructor() {
     // Initialize utility classes
     this.colorNormalizer = new ColorNormalizer();
-    this.typographyAnalyzer = new TypographyAnalyzer();
-    this.spacingDetector = new SpacingDetector();
   }
 
   private readonly COMPONENT_MAPPINGS = {
@@ -75,12 +62,12 @@ export class SpecComposer {
     const brandData = await this.loadBrandExtraction(brandExtractionPath);
 
     // Merge and enhance tokens
-    const enhancedTokens = await this.enhanceDesignTokens(styleData.tokens, brandData.brand);
+    const enhancedTokens = await this.enhanceDesignTokens(styleData['tokens'], brandData);
 
     // Generate component specifications
     const componentSpecs = this.generateComponentSpecs(
-      styleData.patterns,
-      brandData.contentInventory
+      styleData['patterns'],
+      brandData.contentInventory || []
     );
 
     // Apply S-tier standards
@@ -90,24 +77,24 @@ export class SpecComposer {
     const spec: UnifiedSpec = {
       version: '1.0',
       source: {
-        styleUrl: styleData.url,
-        brandUrl: brandData.url,
+        styleUrl: styleData['url'],
+        brandUrl: brandData.url || '',
         extractedAt: new Date().toISOString(),
         extractorVersion: '1.0.0',
       },
       design: {
         tokens: validatedTokens,
-        patterns: (styleData.patterns || []) as any,
-        quality: styleData.qualityScore,
+        patterns: (styleData['patterns'] || []) as any,
+        quality: styleData['qualityScore'],
       },
       brand: {
-        profile: brandData.brand,
-        content: brandData.contentInventory,
-        architecture: brandData.informationArchitecture,
-        seo: brandData.seoMetadata as any,
-        messaging: brandData.messaging as any,
+        profile: brandData,
+        content: brandData.contentInventory || [],
+        architecture: brandData.informationArchitecture || {},
+        seo: brandData.seoMetadata || {},
+        messaging: brandData.messaging || {},
       },
-      architecture: brandData.informationArchitecture,
+      architecture: brandData.informationArchitecture || {},
       generation: {
         framework: 'nextjs',
         styling: 'tailwind',
@@ -173,17 +160,17 @@ export class SpecComposer {
 
     console.log('✅ Spec composition complete!');
     console.log(`📊 Generated ${componentSpecs.length} component specifications`);
-    console.log(`🎨 Quality score: ${styleData.qualityScore.overall.toFixed(2)}/1.0`);
+    console.log(`🎨 Quality score: ${styleData['qualityScore']?.overall?.toFixed(2) || 'N/A'}/1.0`);
 
     return spec;
   }
 
-  private async loadStyleExtraction(path: string): Promise<ExtractionResult> {
+  private async loadStyleExtraction(path: string): Promise<DesignTokens> {
     const content = await fs.readFile(path, 'utf-8');
     return JSON.parse(content);
   }
 
-  private async loadBrandExtraction(path: string): Promise<BrandExtractionResult> {
+  private async loadBrandExtraction(path: string): Promise<any> {
     const content = await fs.readFile(path, 'utf-8');
     return JSON.parse(content);
   }
@@ -209,45 +196,6 @@ export class SpecComposer {
     } else {
       tokens.colors = this.convertToDesignTokens(normalizedColors);
     }
-
-    // Use TypographyAnalyzer for advanced typography processing
-    // Mock typography analysis for now
-    const typographyAnalysis = {
-      fonts: [{ family: 'Inter, sans-serif', stack: ['Inter', 'sans-serif'], weight: 400 }],
-      scale: {
-        h1: { size: '2.25rem', lineHeight: '2.5rem', fontWeight: 700 },
-        h2: { size: '1.875rem', lineHeight: '2.25rem', fontWeight: 600 },
-        body: { size: '1rem', lineHeight: '1.5rem', fontWeight: 400 },
-        small: { size: '0.875rem', lineHeight: '1.25rem', fontWeight: 400 },
-      },
-      readability: { score: 85, grade: 'B', suggestions: [] },
-    };
-    tokens.typography = this.enhanceTypographyWithAnalysis(tokens.typography, typographyAnalysis);
-
-    // Mock spacing analysis for now
-    const spacingAnalysis = {
-      base: 8,
-      scale: {
-        '1': '0.25rem',
-        '2': '0.5rem',
-        '3': '0.75rem',
-        '4': '1rem',
-        '5': '1.25rem',
-        '6': '1.5rem',
-        '8': '2rem',
-        '10': '2.5rem',
-        '12': '3rem',
-        '16': '4rem',
-        '20': '5rem',
-        '24': '6rem',
-      },
-      usage: {
-        perfect: [8, 16, 24, 32, 40, 48],
-        close: [4, 12, 20, 28, 36, 44],
-        other: [2, 6, 10, 14, 18, 22],
-      },
-    };
-    tokens.spacing = this.enhanceSpacingWithAnalysis(tokens.spacing, spacingAnalysis);
 
     // Ensure semantic color roles
     this.ensureSemanticColors(tokens.colors);
@@ -302,41 +250,6 @@ export class SpecComposer {
 
   private convertToDesignTokens(colorSystem: any): any {
     return colorSystem.tokens || {};
-  }
-
-  private enhanceTypographyWithAnalysis(existing: any, analysis: any): any {
-    const enhanced = { ...existing };
-
-    // Add font family from analysis
-    if (analysis.fonts && analysis.fonts.length > 0) {
-      enhanced.fontFamily = {
-        $value: analysis.fonts[0].stack.join(', '),
-        $type: 'fontFamily',
-      };
-    }
-
-    // Add scale information
-    if (analysis.scale) {
-      enhanced.scale = analysis.scale;
-    }
-
-    return enhanced;
-  }
-
-  private enhanceSpacingWithAnalysis(existing: any, analysis: any): any {
-    const enhanced = { ...existing };
-
-    // Add scale from analysis
-    if (analysis.scale) {
-      Object.assign(enhanced, analysis.scale);
-    }
-
-    // Add grid information
-    if (analysis.grid) {
-      enhanced.grid = analysis.grid;
-    }
-
-    return enhanced;
   }
 
   private applyQualityEnhancements(tokens: DesignTokens): DesignTokens {
@@ -504,7 +417,6 @@ export class SpecComposer {
           labels: [],
           keyboard: [],
           screenReader: [],
-          aria: {},
         },
         responsive: {
           breakpoints: [],
@@ -620,7 +532,6 @@ export class SpecComposer {
             labels: [],
             keyboard: [],
             screenReader: [],
-            aria: {},
           },
           responsive: {
             breakpoints: [],
@@ -634,6 +545,7 @@ export class SpecComposer {
   private createDefaultPattern(type: string): UIPattern {
     return {
       type: type as any,
+      variant: 'default',
       selector: `.${type}`,
       confidence: 0.5,
       properties: {},
@@ -642,6 +554,12 @@ export class SpecComposer {
         hasAriaLabels: true,
         hasRoles: true,
         semanticHTML: true,
+      },
+      content: {
+        headings: [],
+        text: '',
+        links: [],
+        images: [],
       },
     };
   }
@@ -838,6 +756,6 @@ Examples:
 `
 );
 
-program.parse();
+program.parse(process.argv);
 
 export default SpecComposer;

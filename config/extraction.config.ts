@@ -50,51 +50,51 @@ export interface ExtractionConfig {
 const extractionConfig: ExtractionConfig = {
   // Viewport configurations for responsive testing
   viewports: {
-    mobile: 375,    // iPhone SE
-    tablet: 768,    // iPad
-    desktop: 1440,  // Standard desktop
-    wide: 1920      // Wide screens
+    mobile: 375, // iPhone SE
+    tablet: 768, // iPad
+    desktop: 1440, // Standard desktop
+    wide: 1920, // Wide screens
   },
 
   // Quality control settings
   quality: {
-    minScore: 0.7,              // Minimum quality score to pass
+    minScore: 0.7, // Minimum quality score to pass
     requireAccessibility: true, // Always check accessibility
-    maxExtractionTime: 60000,   // 60 seconds max per page
-    screenshotQuality: 80,      // JPEG quality for screenshots
-    enableAnimations: true,     // Wait for animations to complete
-    waitForNetworkIdle: true    // Wait for network to be idle
+    maxExtractionTime: 60000, // 60 seconds max per page
+    screenshotQuality: 80, // JPEG quality for screenshots
+    enableAnimations: true, // Wait for animations to complete
+    waitForNetworkIdle: true, // Wait for network to be idle
   },
 
   // Crawling behavior
   crawling: {
-    maxPages: 50,               // Maximum pages to crawl
-    maxDepth: 3,                // Maximum crawl depth
-    rateLimit: 500,             // Delay between requests (ms)
-    timeout: 30000,             // Page load timeout
-    respectRobotsTxt: true,     // Respect robots.txt
+    maxPages: 50, // Maximum pages to crawl
+    maxDepth: 3, // Maximum crawl depth
+    rateLimit: 500, // Delay between requests (ms)
+    timeout: 30000, // Page load timeout
+    respectRobotsTxt: true, // Respect robots.txt
     userAgent: 'WebStyleTransfer/1.0 (https://github.com/web-style-transfer)',
     followExternalLinks: false, // Stay within same domain
-    includeImages: true,        // Extract image information
-    includeStylesheets: true    // Extract stylesheet information
+    includeImages: true, // Extract image information
+    includeStylesheets: true, // Extract stylesheet information
   },
 
   // Pattern detection settings
   patterns: {
-    minConfidence: 0.7,         // Minimum confidence to include pattern
-    detectVariants: true,       // Detect pattern variants
-    maxPatternsPerType: 10,     // Maximum patterns per type
+    minConfidence: 0.7, // Minimum confidence to include pattern
+    detectVariants: true, // Detect pattern variants
+    maxPatternsPerType: 10, // Maximum patterns per type
     enableSemanticDetection: true, // Use semantic HTML detection
-    detectAccessibilityFeatures: true // Check for accessibility features
+    detectAccessibilityFeatures: true, // Check for accessibility features
   },
 
   // Output configuration
   output: {
-    format: 'json',             // Output format
-    includeScreenshots: false,  // Include screenshots in output
-    compressAssets: true,       // Compress extracted assets
-    generateReport: true        // Generate HTML report
-  }
+    format: 'json', // Output format
+    includeScreenshots: false, // Include screenshots in output
+    compressAssets: true, // Compress extracted assets
+    generateReport: true, // Generate HTML report
+  },
 };
 
 export default extractionConfig;
@@ -135,7 +135,7 @@ export function validateConfig(config: ExtractionConfig): { valid: boolean; erro
 
   return {
     valid: errors.length === 0,
-    errors
+    errors,
   };
 }
 
@@ -146,13 +146,13 @@ export function getProductionConfig(): ExtractionConfig {
     quality: {
       ...extractionConfig.quality,
       minScore: 0.8,
-      screenshotQuality: 90
+      screenshotQuality: 90,
     },
     crawling: {
       ...extractionConfig.crawling,
       maxPages: 100,
-      rateLimit: 1000
-    }
+      rateLimit: 1000,
+    },
   };
 }
 
@@ -162,13 +162,13 @@ export function getDevelopmentConfig(): ExtractionConfig {
     quality: {
       ...extractionConfig.quality,
       minScore: 0.5,
-      screenshotQuality: 60
+      screenshotQuality: 60,
     },
     crawling: {
       ...extractionConfig.crawling,
       maxPages: 10,
-      rateLimit: 100
-    }
+      rateLimit: 100,
+    },
   };
 }
 
@@ -177,18 +177,18 @@ export const CONFIG_PRESETS = {
   fast: {
     ...extractionConfig,
     crawling: { ...extractionConfig.crawling, maxPages: 5, rateLimit: 100 },
-    patterns: { ...extractionConfig.patterns, minConfidence: 0.8 }
+    patterns: { ...extractionConfig.patterns, minConfidence: 0.8 },
   },
 
   comprehensive: {
     ...extractionConfig,
     crawling: { ...extractionConfig.crawling, maxPages: 100, maxDepth: 5 },
-    patterns: { ...extractionConfig.patterns, minConfidence: 0.6 }
+    patterns: { ...extractionConfig.patterns, minConfidence: 0.6 },
   },
 
   accessible: {
     ...extractionConfig,
     quality: { ...extractionConfig.quality, requireAccessibility: true },
-    patterns: { ...extractionConfig.patterns, detectAccessibilityFeatures: true }
-  }
+    patterns: { ...extractionConfig.patterns, detectAccessibilityFeatures: true },
+  },
 };

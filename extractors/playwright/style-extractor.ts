@@ -37,6 +37,39 @@ export class StyleExtractor {
   private _respectRobots: boolean = true;
   private _rateLimit: number = 1000; // ms between requests
 
+  // Property getters/setters
+  get baseURL(): string | undefined {
+    return this._baseURL;
+  }
+
+  set baseURL(value: string | undefined) {
+    this._baseURL = value;
+  }
+
+  get maxDepth(): number {
+    return this._maxDepth;
+  }
+
+  set maxDepth(value: number) {
+    this._maxDepth = value;
+  }
+
+  get respectRobots(): boolean {
+    return this._respectRobots;
+  }
+
+  set respectRobots(value: boolean) {
+    this._respectRobots = value;
+  }
+
+  get rateLimit(): number {
+    return this._rateLimit;
+  }
+
+  set rateLimit(value: number) {
+    this._rateLimit = value;
+  }
+
   constructor(
     options: {
       baseURL?: string;
@@ -207,7 +240,10 @@ export class StyleExtractor {
       for (const line of lines) {
         const trimmed = line.trim();
         if (trimmed.startsWith('User-agent:')) {
-          currentUserAgent = trimmed.split(':')[1].trim();
+          const parts = trimmed.split(':');
+          if (parts.length > 1) {
+            currentUserAgent = parts[1]?.trim() || '';
+          }
         } else if (trimmed.startsWith('Disallow:') && currentUserAgent === '*') {
           const path = trimmed.split(':')[1]?.trim();
           if (path) {
@@ -230,10 +266,6 @@ export class StyleExtractor {
       console.warn(`⚠️ Could not check robots.txt for ${url}:`, error);
       return true;
     }
-  }
-
-  private async _delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   private async extractAcrossViewports(page: Page): Promise<Map<string, any>> {
@@ -280,7 +312,7 @@ export class StyleExtractor {
     // Use enhanced utility classes for better extraction
     console.log('🎨 Extracting colors with advanced normalization...');
     const rawColors = await this.extractColors(page);
-    const colorSystem = this.colorNormalizer.normalizeColors(Array.from(rawColors.keys()));
+    const colorSystem = this.colorNormalizer.normalizeColors(Object.keys(rawColors));
 
     console.log('📝 Analyzing typography with modular scale detection...');
     const typographyAnalysis = await this.typographyAnalyzer.analyzeTypography(page);
@@ -299,7 +331,7 @@ export class StyleExtractor {
         base: '8px',
         scale: this.convertToSpacingScale(spacingAnalysis),
       },
-      effects: this.normalizeEffects(effects),
+      effects: effects, // Placeholder - effects normalization removed
       borderRadius: this.normalizeBorderRadius(borderRadius),
       breakpoints: {
         mobile: `${this.S_TIER_STANDARDS.breakpoints.mobile}px`,
@@ -375,7 +407,7 @@ export class StyleExtractor {
     return spacingAnalysis.scale || {};
   }
 
-  private async extractColors(page: Page): Promise<Map<string, any>> {
+  private async extractColors(page: Page): Promise<Record<string, string>> {
     return await page.evaluate(() => {
       const colors = new Map<string, number>();
       const elements = document.querySelectorAll('*');
@@ -471,190 +503,6 @@ export class StyleExtractor {
 
   private async extractMicroInteractions(page: Page): Promise<any> {
     return await page.evaluate(() => {
-      const nav = document.querySelector(
-        'nav, [role="navigation"], header nav, .navbar, .nav-menu'
-      );
-      if (!nav) return null;
-
-      const rect = nav.getBoundingClientRect();
-      const computed = window.getComputedStyle(nav);
-      const links = nav.querySelectorAll('a, [role="link"]');
-
-      return {
-        type: 'navigation',
-        selector: nav.tagName.toLowerCase(),
-        confidence: 0.95,
-        properties: {
-          position: computed.position,
-          layout: computed.display,
-          height: rect.height,
-          itemCount: links.length,
-          hasSearch: !!nav.querySelector('input[type="search"], .search'),
-          hasUserMenu: !!nav.querySelector('.user-menu, .avatar, [aria-label*="user"]'),
-          isSticky: computed.position === 'sticky' || computed.position === 'fixed',
-        },
-        accessibility: {
-          hasAriaLabel: nav.hasAttribute('aria-label'),
-          keyboardNavigable: true,
-          hasSkipLink: !!document.querySelector('a[href="#main"], a[href="#content"]'),
-        },
-      };
-    });
-  }
-
-  private async _detectHeroPattern(page: Page): Promise<UIPattern | null> {
-    return await page.evaluate(() => {
-      const hero = document.querySelector('.hero, [class*="hero"], section:first-of-type h1');
-      if (!hero) return null;
-
-      const section = hero.closest('section') || hero.parentElement;
-      if (!section) return null;
-
-      const hasHeading = !!section.querySelector('h1, h2');
-      const hasSubheading = !!section.querySelector('p, .subtitle, .subheading');
-      const hasCTA = !!section.querySelector('button, a.btn, [class*="button"]');
-      const hasImage = !!section.querySelector('img, video, svg');
-
-      return {
-        type: 'hero',
-        variant: 'standard',
-        selector: '.hero',
-        confidence: 0.85,
-        properties: {
-          layout: hasImage ? 'split' : 'centered',
-          hasHeading,
-          hasSubheading,
-          hasCTA,
-          hasImage,
-          height: section.getBoundingClientRect().height,
-        },
-        accessibility: {
-          headingLevel: section.querySelector('h1') ? 1 : 2,
-          altTexts: hasImage,
-        },
-        content: {
-          headings: hasHeading ? ['Hero heading'] : [],
-          text: hasSubheading ? 'Hero subheading text' : '',
-          links: hasCTA ? ['Call to action'] : [],
-          images: hasImage ? ['Hero image'] : [],
-        },
-      };
-    });
-  }
-
-  private async _detectCardPattern(page: Page): Promise<UIPattern | null> {
-    return await page.evaluate(() => {
-      const cards = document.querySelectorAll('.card, [class*="card"], article');
-      if (cards.length < 2) return null;
-
-      const parent = cards[0].parentElement;
-      if (!parent) return null;
-
-      const computed = window.getComputedStyle(parent);
-
-      return {
-        type: 'cards',
-        variant: 'standard',
-        selector: '.card',
-        confidence: 0.9,
-        properties: {
-          count: cards.length,
-          layout: computed.display,
-          columns: computed.gridTemplateColumns || 'auto',
-          gap: computed.gap,
-          hasImages: !!cards[0]?.querySelector('img'),
-          hasActions: !!cards[0]?.querySelector('button, a'),
-        },
-        accessibility: {
-          semanticHTML: cards[0]?.tagName === 'ARTICLE',
-          hasHeadings: !!cards[0]?.querySelector('h1, h2, h3, h4, h5, h6'),
-        },
-        content: {
-          headings: cards[0]?.querySelector('h1, h2, h3, h4, h5, h6') ? ['Card heading'] : [],
-          text: 'Card content text',
-          links: cards[0]?.querySelector('button, a') ? ['Card action'] : [],
-          images: cards[0]?.querySelector('img') ? ['Card image'] : [],
-        },
-      };
-    });
-  }
-
-  private async _detectFormPattern(page: Page): Promise<UIPattern | null> {
-    return await page.evaluate(() => {
-      const form = document.querySelector('form');
-      if (!form) return null;
-
-      const inputs = form.querySelectorAll('input, textarea, select');
-      const labels = form.querySelectorAll('label');
-      const buttons = form.querySelectorAll('button, input[type="submit"]');
-
-      return {
-        type: 'form',
-        variant: 'standard',
-        selector: 'form',
-        confidence: 0.95,
-        properties: {
-          fieldCount: inputs.length,
-          hasLabels: labels.length > 0,
-          hasValidation: !!form.querySelector('[required], [pattern]'),
-          hasHelperText: !!form.querySelector('.helper-text, .hint, small'),
-          submitButtons: buttons.length,
-          layout: 'vertical', // or 'horizontal' based on analysis
-        },
-        accessibility: {
-          labelsConnected: labels.length === inputs.length,
-          hasFieldsets: !!form.querySelector('fieldset'),
-          hasErrorMessages: !!form.querySelector('[role="alert"], .error-message'),
-        },
-        content: {
-          headings: form.querySelector('h1, h2, h3, h4, h5, h6') ? ['Form heading'] : [],
-          text: 'Form with input fields',
-          links: buttons.length > 0 ? ['Submit button'] : [],
-          images: [],
-        },
-      };
-    });
-  }
-
-  private async _detectTablePattern(page: Page): Promise<UIPattern | null> {
-    return await page.evaluate(() => {
-      const table = document.querySelector('table, [role="table"]');
-      if (!table) return null;
-
-      const headers = table.querySelectorAll('th, [role="columnheader"]');
-      const rows = table.querySelectorAll('tr, [role="row"]');
-
-      return {
-        type: 'table',
-        variant: 'standard',
-        selector: 'table',
-        confidence: 0.95,
-        properties: {
-          columns: headers.length,
-          rows: rows.length,
-          hasHeaders: headers.length > 0,
-          hasSorting: !!table.querySelector('[aria-sort]'),
-          hasFiltering: !!document.querySelector('input[placeholder*="filter"], .filter'),
-          hasPagination: !!document.querySelector('.pagination, [aria-label="pagination"]'),
-          hasActions: !!table.querySelector('button, a'),
-        },
-        accessibility: {
-          hasCaption: !!table.querySelector('caption'),
-          scopeAttributes: !!table.querySelector('th[scope]'),
-          responsive: !!table.closest('.table-responsive, .overflow-x-auto'),
-        },
-        content: {
-          headings: headers.length > 0 ? ['Table headers'] : [],
-          text: 'Tabular data content',
-          links: table.querySelector('button, a') ? ['Table actions'] : [],
-          images: [],
-        },
-      };
-    });
-  }
-
-  private async extractMicroInteractions(page: Page): Promise<any> {
-    return await page.evaluate(() => {
       const interactions: any = {
         hover: [],
         focus: [],
@@ -694,6 +542,14 @@ export class StyleExtractor {
     });
   }
 
+  // Hero pattern detection moved to PatternDetector class
+
+  // Card pattern detection moved to PatternDetector class
+
+  // Form pattern detection moved to PatternDetector class
+
+  // Table pattern detection moved to PatternDetector class
+
   private async calculateQualityScore(
     tokens: DesignTokens,
     patterns: UIPattern[]
@@ -702,118 +558,7 @@ export class StyleExtractor {
     return this.qualityScorer.calculateScore(tokens, patterns);
   }
 
-  private _scoreColorConsistency(_colors: any): number {
-    // Analyze color palette for consistency
-    // Check for semantic color usage
-    // Verify color relationships
-    return 0.88; // Placeholder - implement actual scoring
-  }
-
-  private _scoreTypographyHierarchy(_typography: any): number {
-    // Check for clear hierarchy
-    // Verify modular scale usage
-    // Check line height optimization
-    return 0.92; // Placeholder
-  }
-
-  private _scoreSpacingRegularity(_spacing: any): number {
-    // Check if spacing follows a consistent scale
-    // Verify adherence to base unit (8px)
-    return 0.85; // Placeholder
-  }
-
-  private async _scoreAccessibility(_tokens: DesignTokens): Promise<number> {
-    // Check color contrast ratios
-    // Verify font sizes meet minimums
-    // Check focus states exist
-    return 0.9; // Placeholder
-  }
-
-  private _scorePatternConsistency(_patterns: UIPattern[]): number {
-    // Check if patterns follow consistent structure
-    // Verify accessibility features
-    return 0.87; // Placeholder
-  }
-
-  private _scoreModernity(_tokens: DesignTokens, _patterns: UIPattern[]): number {
-    // Check for modern CSS features
-    // Verify contemporary design patterns
-    // Check animation usage
-    return 0.91; // Placeholder
-  }
-
-  private _normalizeColors(_colors: Map<string, string>): any {
-    // Group colors by similarity
-    // Identify semantic roles
-    // Create normalized palette
-    const normalized: any = {
-      primary: {},
-      neutral: {},
-      semantic: {},
-      accent: {},
-    };
-
-    // Simplified normalization - would use color theory algorithms
-    // This is placeholder logic - real implementation would:
-    // 1. Convert to HSL for better grouping
-    // 2. Identify color relationships
-    // 3. Assign semantic meanings
-
-    return normalized;
-  }
-
-  private _normalizeTypography(typography: any): any {
-    // Normalize to modular scale
-    // Ensure consistent line heights
-    // Standardize font weights
-    return typography; // Placeholder
-  }
-
-  private _normalizeSpacing(spacing: number[]): any {
-    // Find base unit (likely 4px or 8px)
-    // Group into scale
-    const baseUnit = this.findBaseUnit(spacing);
-    const scale = this.createSpacingScale(spacing, baseUnit);
-
-    return {
-      baseUnit,
-      scale,
-    };
-  }
-
-  private findBaseUnit(values: number[]): number {
-    // Find GCD of all spacing values
-    const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
-    const findGCD = (arr: number[]): number => arr.reduce(gcd);
-
-    const commonUnit = findGCD(values.filter(v => v > 0 && v <= 64));
-
-    // Prefer 4px or 8px if they're close
-    if (commonUnit >= 3 && commonUnit <= 5) return 4;
-    if (commonUnit >= 6 && commonUnit <= 10) return 8;
-
-    return commonUnit || 8;
-  }
-
-  private createSpacingScale(values: number[], baseUnit: number): number[] {
-    const scale = new Set<number>();
-
-    values.forEach(value => {
-      const multiple = Math.round(value / baseUnit);
-      if (multiple > 0 && multiple <= 20) {
-        scale.add(multiple * baseUnit);
-      }
-    });
-
-    return Array.from(scale).sort((a, b) => a - b);
-  }
-
-  private normalizeEffects(effects: any): any {
-    // Categorize shadows (sm, md, lg, xl)
-    // Normalize transitions
-    // Standardize transforms
-    return effects; // Placeholder
-  }
+  // Scoring methods moved to QualityScorer class
 
   private normalizeBorderRadius(_radii: Set<string>): any {
     const normalized = {
@@ -829,7 +574,7 @@ export class StyleExtractor {
     return normalized;
   }
 
-  private generateRecommendations(tokens: DesignTokens, quality: QualityScore): string[] {
+  private generateRecommendations(_tokens: DesignTokens, quality: QualityScore): string[] {
     const recommendations: string[] = [];
 
     // Analyze quality scores and generate specific recommendations

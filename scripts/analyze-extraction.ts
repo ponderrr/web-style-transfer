@@ -53,11 +53,10 @@ program
       if (analysis.recommendations.length > 0) {
         console.log('');
         console.log(chalk.bold('💡 Recommendations:'));
-        analysis.recommendations.slice(0, 5).forEach(rec => {
+        analysis.recommendations.slice(0, 5).forEach((rec: string) => {
           console.log(chalk.yellow(`   • ${rec}`));
         });
       }
-
     } catch (error) {
       console.error(chalk.red('❌ Analysis failed:'), error);
       process.exit(1);
@@ -71,7 +70,7 @@ async function analyzeExtraction(extraction: any): Promise<any> {
     quality: extraction.qualityScore || {},
     performance: analyzePerformance(extraction.metadata || {}),
     recommendations: generateAnalysisRecommendations(extraction),
-    insights: generateInsights(extraction)
+    insights: generateInsights(extraction),
   };
 
   return analysis;
@@ -83,15 +82,14 @@ function analyzePatterns(patterns: any[]): any {
     return acc;
   }, {});
 
-  const avgConfidence = patterns.length > 0
-    ? patterns.reduce((sum, p) => sum + p.confidence, 0) / patterns.length
-    : 0;
+  const avgConfidence =
+    patterns.length > 0 ? patterns.reduce((sum, p) => sum + p.confidence, 0) / patterns.length : 0;
 
   return {
     count: patterns.length,
     types: patternTypes,
     averageConfidence: avgConfidence,
-    highConfidencePatterns: patterns.filter(p => p.confidence > 0.8).length
+    highConfidencePatterns: patterns.filter(p => p.confidence > 0.8).length,
   };
 }
 
@@ -99,7 +97,7 @@ function analyzePerformance(metadata: any): any {
   return {
     duration: metadata.extractionDuration || 0,
     viewportsTested: metadata.viewportsTested || [],
-    success: metadata.extractionDuration < 30000 // Under 30 seconds
+    success: metadata.extractionDuration < 30000, // Under 30 seconds
   };
 }
 
@@ -111,7 +109,9 @@ function generateAnalysisRecommendations(extraction: any): string[] {
   }
 
   if (extraction.patterns?.length < 3) {
-    recommendations.push('Limited pattern detection - site may benefit from manual component identification');
+    recommendations.push(
+      'Limited pattern detection - site may benefit from manual component identification'
+    );
   }
 
   const highConfidencePatterns = extraction.patterns?.filter((p: any) => p.confidence > 0.8) || [];
@@ -126,7 +126,7 @@ function generateInsights(extraction: any): any {
   const insights = {
     patternDiversity: calculatePatternDiversity(extraction.patterns || []),
     designComplexity: calculateDesignComplexity(extraction.tokens || {}),
-    accessibilityReadiness: assessAccessibilityReadiness(extraction)
+    accessibilityReadiness: assessAccessibilityReadiness(extraction),
   };
 
   return insights;

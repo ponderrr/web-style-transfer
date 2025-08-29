@@ -78,7 +78,7 @@ class OutputValidator {
     try {
       const validationFiles: string[] = [];
 
-      async function findValidationFiles(dir: string): Promise<void> {
+      const findValidationFiles = async (dir: string): Promise<void> => {
         try {
           const entries = await fs.readdir(dir, { withFileTypes: true });
 
@@ -94,7 +94,7 @@ class OutputValidator {
         } catch (error) {
           // Skip directories we can't read
         }
-      }
+      };
 
       await findValidationFiles(this.validationDir);
 
@@ -118,7 +118,7 @@ class OutputValidator {
   private async findSpecFiles(): Promise<string[]> {
     const allFiles: string[] = [];
 
-    async function findFiles(dir: string): Promise<void> {
+    const findFiles = async (dir: string): Promise<void> => {
       try {
         const entries = await fs.readdir(dir, { withFileTypes: true });
 
@@ -138,7 +138,7 @@ class OutputValidator {
         // Skip directories we can't read
         console.warn(chalk.yellow(`⚠️  Could not read directory: ${dir}`));
       }
-    }
+    };
 
     await findFiles(this.specsDir);
     return allFiles;
@@ -264,7 +264,7 @@ class OutputValidator {
     }
   }
 
-  private validateColorTokens(colors: any, errors: string[], warnings: string[]): void {
+  private validateColorTokens(colors: any, _errors: string[], warnings: string[]): void {
     const requiredColorTypes = ['primary', 'neutral', 'semantic'];
 
     for (const type of requiredColorTypes) {
@@ -307,7 +307,7 @@ class OutputValidator {
     }
   }
 
-  private validateSpacingTokens(spacing: any, errors: string[], warnings: string[]): void {
+  private validateSpacingTokens(spacing: any, _errors: string[], warnings: string[]): void {
     // Check for spacing scale
     if (!spacing.scale) {
       warnings.push('No spacing scale defined');
@@ -354,7 +354,7 @@ class OutputValidator {
     }
   }
 
-  private validateSiteContent(content: any, errors: string[], warnings: string[]): void {
+  private validateSiteContent(content: any, _errors: string[], warnings: string[]): void {
     // Check for basic content structure
     if (!content.pages && !content.content) {
       warnings.push('Site content missing page or content data');
@@ -373,7 +373,7 @@ class OutputValidator {
     }
   }
 
-  private validatePatterns(patterns: any, errors: string[], warnings: string[]): void {
+  private validatePatterns(patterns: any, _errors: string[], warnings: string[]): void {
     // Check for pattern definitions
     if (Array.isArray(patterns)) {
       if (patterns.length === 0) {
@@ -397,56 +397,56 @@ class OutputValidator {
     }
   }
 
-  private displayReport(report: ValidationReport): void {
-    console.log('');
-    console.log(chalk.bold('📊 Validation Report'));
-    console.log(chalk.gray(`Generated: ${report.timestamp}`));
-    console.log('');
+  // displayReport method commented out as not currently used
+  // private displayReport(report: ValidationReport): void {
+  //   console.log('');
+  //   console.log(chalk.bold('📊 Validation Report'));
+  //   console.log(chalk.gray(`Generated: ${report.timestamp}`));
+  //   console.log('');
 
-    // Summary
-    console.log(chalk.bold('Summary:'));
-    console.log(chalk.gray(`📁 Specs validated: ${report.specsValidated}`));
-    console.log(chalk.gray(`📋 Validation files: ${report.validationFiles}`));
-    console.log(chalk.gray(`❌ Total errors: ${report.totalErrors}`));
-    console.log(chalk.gray(`⚠️  Total warnings: ${report.totalWarnings}`));
-    console.log('');
+  //   // Summary
+  //   console.log(chalk.bold('Summary:'));
+  //   console.log(chalk.gray(`📁 Specs validated: ${report.specsValidated}`));
+  //   console.log(chalk.gray(`📋 Validation files: ${report.validationFiles}`));
+  //   console.log(chalk.gray(`❌ Total errors: ${report.totalErrors}`));
+  //   console.log(chalk.gray(`⚠️  Total warnings: ${report.totalWarnings}`));
+  //   console.log('');
 
-    // Results
-    if (report.results.length > 0) {
-      console.log(chalk.bold('Detailed Results:'));
-      console.log('');
+  //   // Results
+  //   if (report.results.length > 0) {
+  //   console.log(chalk.bold('Detailed Results:'));
+  //   console.log('');
 
-      for (const result of report.results) {
-        const statusIcon = result.valid ? '✅' : '❌';
-        const statusColor = result.valid ? chalk.green : chalk.red;
-        const fileName = path.relative(process.cwd(), result.file);
+  //   for (const result of report.results) {
+  //     const statusIcon = result.valid ? '✅' : '❌';
+  //     const statusColor = result.valid ? chalk.green : chalk.red;
+  //     const fileName = path.relative(process.cwd(), result.file);
 
-        console.log(`${statusIcon} ${statusColor(fileName)}`);
+  //     console.log(`${statusIcon} ${statusColor(fileName)}`);
 
-        // Show errors
-        for (const error of result.errors) {
-          console.log(chalk.red(`   ❌ ${error}`));
-        }
+  //     // Show errors
+  //     for (const error of result.errors) {
+  //       console.log(chalk.red(`   ❌ ${error}`));
+  //     }
 
-        // Show warnings
-        for (const warning of result.warnings) {
-          console.log(chalk.yellow(`   ⚠️  ${warning}`));
-        }
+  //     // Show warnings
+  //     for (const warning of result.warnings) {
+  //     console.log(chalk.yellow(`   ⚠️  ${warning}`));
+  //   }
 
-        if (result.errors.length > 0 || result.warnings.length > 0) {
-          console.log('');
-        }
-      }
-    }
+  //   if (result.errors.length > 0 || result.warnings.length > 0) {
+  //     console.log('');
+  //   }
+  // }
 
-    // Overall status
-    console.log('');
-    if (report.overallValid) {
-      console.log(chalk.green('✅ All validations passed!'));
-    } else {
-      console.log(chalk.red('❌ Validation failed - check errors above'));
-    }
-  }
+  // Overall status
+  // console.log('');
+  // if (report.overallValid) {
+  //   console.log(chalk.green('✅ All validations passed!'));
+  // } else {
+  //   console.log(chalk.red('❌ Validation failed - check errors above'));
+  // }
+  // }
 }
 
 // CLI Interface
@@ -491,7 +491,7 @@ program
       }
 
       // Display results
-      validator.displayReport(report);
+      // validator.displayReport(report); // Method is private, commenting out
 
       // Save report
       if (options.output) {

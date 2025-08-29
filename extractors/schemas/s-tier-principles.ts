@@ -340,17 +340,17 @@ export interface STierPrinciples {
 
 // UTILITY FUNCTIONS
 export class STierValidator {
-  static validateColorContrast(fg: string, bg: string, level: 'AA' | 'AAA' = 'AA'): boolean {
+  static validateColorContrast(_fg: string, _bg: string, _level: 'AA' | 'AAA' = 'AA'): boolean {
     // Implementation would calculate actual contrast ratio
     return true; // Placeholder
   }
 
-  static validateTypographyScale(scale: TypographyScale): boolean {
+  static validateTypographyScale(_scale: TypographyScale): boolean {
     // Validate scale ratios and values
     return true; // Placeholder
   }
 
-  static validatePerformanceBudget(metrics: PerformanceBudget): boolean {
+  static validatePerformanceBudget(_metrics: PerformanceBudget): boolean {
     // Validate against defined budgets
     return true; // Placeholder
   }

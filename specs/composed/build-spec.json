@@ -3,7 +3,7 @@
   "source": {
     "styleUrl": "https://example.com",
     "brandUrl": "https://example.com",
-    "extractedAt": "2025-08-29T01:14:51.220Z",
+    "extractedAt": "2025-08-29T02:56:56.246Z",
     "extractorVersion": "1.0.0"
   },
   "design": {
@@ -12,35 +12,11 @@
         "primary": {
           "$value": "#3b82f6",
           "$type": "color",
-          "usage": "primary",
-          "brand": {
-            "$value": "#3b82f6",
-            "$type": "color"
-          }
+          "usage": "primary"
         },
         "neutral": {
           "50": {
             "$value": "#fafafa",
-            "$type": "color",
-            "usage": "neutral"
-          },
-          "100": {
-            "$value": "#f5f5f5",
-            "$type": "color",
-            "usage": "neutral"
-          },
-          "200": {
-            "$value": "#e5e5e5",
-            "$type": "color",
-            "usage": "neutral"
-          },
-          "300": {
-            "$value": "#d4d4d4",
-            "$type": "color",
-            "usage": "neutral"
-          },
-          "400": {
-            "$value": "#a3a3a3",
             "$type": "color",
             "usage": "neutral"
           },
@@ -49,107 +25,10 @@
             "$type": "color",
             "usage": "neutral"
           },
-          "600": {
-            "$value": "#525252",
-            "$type": "color",
-            "usage": "neutral"
-          },
-          "700": {
-            "$value": "#404040",
-            "$type": "color",
-            "usage": "neutral"
-          },
-          "800": {
-            "$value": "#262626",
-            "$type": "color",
-            "usage": "neutral"
-          },
           "900": {
             "$value": "#171717",
             "$type": "color",
             "usage": "neutral"
-          }
-        },
-        "neutral-100": {
-          "$value": "#F3F2F2",
-          "$type": "color"
-        },
-        "neutral-200": {
-          "$value": "#DDDADA",
-          "$type": "color"
-        },
-        "neutral-300": {
-          "$value": "#C7C1C1",
-          "$type": "color"
-        },
-        "neutral-400": {
-          "$value": "#B1A9A9",
-          "$type": "color"
-        },
-        "neutral-500": {
-          "$value": "#9C9191",
-          "$type": "color"
-        },
-        "neutral-600": {
-          "$value": "#867979",
-          "$type": "color"
-        },
-        "neutral-700": {
-          "$value": "#6E6363",
-          "$type": "color"
-        },
-        "neutral-800": {
-          "$value": "#564E4E",
-          "$type": "color"
-        },
-        "neutral-900": {
-          "$value": "#3E3838",
-          "$type": "color"
-        },
-        "neutral-1000": {
-          "$value": "#252222",
-          "$type": "color"
-        },
-        "neutral-1100": {
-          "$value": "#0D0C0C",
-          "$type": "color"
-        },
-        "background": {
-          "$value": "#F3F2F2",
-          "$type": "color"
-        },
-        "background-secondary": {
-          "$value": "#DDDADA",
-          "$type": "color"
-        },
-        "text": {
-          "$value": "#0D0C0C",
-          "$type": "color"
-        },
-        "text-secondary": {
-          "$value": "#252222",
-          "$type": "color"
-        },
-        "semantic": {
-          "success": {
-            "$value": "#10B981",
-            "$type": "color",
-            "usage": "semantic"
-          },
-          "warning": {
-            "$value": "#F59E0B",
-            "$type": "color",
-            "usage": "semantic"
-          },
-          "error": {
-            "$value": "#EF4444",
-            "$type": "color",
-            "usage": "semantic"
-          },
-          "info": {
-            "$value": "#3B82F6",
-            "$type": "color",
-            "usage": "semantic"
           }
         }
       },
@@ -162,542 +41,35 @@
         },
         "scale": {
           "h1": {
-            "size": "14px",
+            "size": "2.25rem",
             "lineHeight": "2.5rem",
             "fontWeight": 700
           },
-          "h2": {
-            "size": "14px",
-            "lineHeight": "2.25rem",
-            "fontWeight": 600
-          },
           "body": {
-            "size": "14px",
+            "size": "1rem",
             "lineHeight": "1.5rem",
             "fontWeight": 400
-          },
-          "small": {
-            "size": "14px",
-            "lineHeight": "1.25rem",
-            "fontWeight": 400
           }
-        },
-        "fontFamily": {
-          "$value": "Inter, sans-serif",
-          "$type": "fontFamily"
-        }
-      },
-      "spacing": {
-        "1": "0.25rem",
-        "2": "0.5rem",
-        "3": "0.75rem",
-        "4": "1rem",
-        "5": "1.25rem",
-        "6": "1.5rem",
-        "8": "2rem",
-        "10": "2.5rem",
-        "12": "3rem",
-        "16": "4rem",
-        "20": "5rem",
-        "24": "6rem",
-        "scale": {
-          "1": "0.25rem",
-          "2": "0.5rem",
-          "4": "1rem",
-          "8": "2rem"
-        }
-      },
-      "effects": {
-        "shadows": {
-          "focus": "0 0 0 3px rgba(59, 130, 246, 0.5)"
-        },
-        "transitions": {
-          "focus": "box-shadow 0.2s ease-in-out"
         }
       }
     },
-    "patterns": [
-      {
-        "type": "navigation",
-        "variant": "header",
-        "confidence": 0.85,
-        "selector": "nav",
-        "properties": {
-          "layout": "flex"
-        },
-        "accessibility": {
-          "hasAriaLabels": true,
-          "hasRoles": true,
-          "keyboardNavigable": true,
-          "semanticHTML": true
-        },
-        "content": {
-          "headings": [],
-          "text": "Navigation content",
-          "links": [
-            "Home",
-            "About",
-            "Contact"
-          ],
-          "images": []
-        }
-      }
-    ],
+    "patterns": [],
     "quality": {
-      "overall": 0.85,
-      "breakdown": {
-        "colorConsistency": 0.9,
-        "typographyHierarchy": 0.8,
-        "spacingRegularity": 0.85,
-        "accessibilityCompliance": 0.9,
-        "patternConsistency": 0.8,
-        "performanceOptimization": 0.8,
-        "modernityScore": 0.9
-      },
-      "recommendations": [
-        "Consider adding more color variations",
-        "Ensure consistent spacing scale usage"
-      ]
+      "overall": 0.85
     }
   },
   "brand": {
     "profile": {
       "name": "Example Company",
       "tagline": "Building amazing digital experiences",
-      "logo": {
-        "src": "/logo.svg",
-        "alt": "Example Company Logo"
-      },
-      "themeColor": "#3b82f6",
-      "socialLinks": {
-        "twitter": "https://twitter.com/example",
-        "linkedin": "https://linkedin.com/company/example"
-      },
-      "contact": {
-        "email": "hello@example.com",
-        "phone": "+1 (555) 123-4567"
-      },
-      "voice": {
-        "primary": "professional",
-        "attributes": [
-          "helpful",
-          "innovative",
-          "reliable"
-        ],
-        "formality": "neutral",
-        "personality": "friendly and approachable",
-        "indicators": [
-          "we",
-          "our customers",
-          "together"
-        ]
-      },
-      "mission": "To empower businesses with cutting-edge technology solutions",
-      "values": [
-        "Innovation",
-        "Quality",
-        "Customer Focus"
-      ],
-      "targetAudience": "Small to medium-sized businesses",
-      "uniqueValueProposition": "End-to-end digital transformation with proven results"
+      "themeColor": "#3b82f6"
     },
     "content": {
-      "pages": [
-        {
-          "url": "https://example.com",
-          "title": "Home - Example Company",
-          "content": {
-            "title": "Welcome to Example Company",
-            "headings": {
-              "h1": [
-                "Welcome to Example Company"
-              ],
-              "h2": [
-                "Our Services",
-                "Why Choose Us",
-                "Contact Us"
-              ],
-              "h3": []
-            },
-            "paragraphs": [
-              "We provide comprehensive digital solutions for modern businesses.",
-              "Our team of experts is dedicated to delivering exceptional results."
-            ],
-            "lists": [
-              [
-                "Service 1",
-                "Service 2",
-                "Service 3"
-              ]
-            ],
-            "buttons": [
-              {
-                "text": "Get Started",
-                "type": "primary"
-              },
-              {
-                "text": "Learn More",
-                "type": "secondary"
-              }
-            ],
-            "images": [
-              {
-                "alt": "Team collaboration",
-                "src": "/team.jpg"
-              },
-              {
-                "alt": "Office workspace",
-                "src": "/office.jpg"
-              }
-            ],
-            "seo": {
-              "description": "Leading provider of digital solutions for businesses worldwide.",
-              "keywords": [
-                "digital solutions",
-                "technology",
-                "business"
-              ],
-              "author": "Example Company"
-            }
-          },
-          "wordCount": 250,
-          "readingTime": 1.2
-        }
-      ],
-      "contentTypes": {
-        "landing": 1,
-        "service": 0,
-        "about": 0,
-        "contact": 0
-      },
-      "topics": [
-        {
-          "topic": "Digital Solutions",
-          "frequency": 3,
-          "pages": [
-            "https://example.com"
-          ]
-        },
-        {
-          "topic": "Business Technology",
-          "frequency": 2,
-          "pages": [
-            "https://example.com"
-          ]
-        }
-      ],
-      "keywords": [
-        {
-          "word": "digital",
-          "frequency": 5,
-          "relevance": 0.9
-        },
-        {
-          "word": "solutions",
-          "frequency": 4,
-          "relevance": 0.8
-        },
-        {
-          "word": "business",
-          "frequency": 3,
-          "relevance": 0.7
-        }
-      ],
-      "totalWordCount": 250,
-      "readability": {
-        "averageWordsPerPage": 250,
-        "averageSentencesPerParagraph": 2,
-        "averageSyllablesPerWord": 1.5,
-        "fleschKincaidGrade": 8.5
-      }
+      "pages": []
     },
-    "architecture": {
-      "structure": {
-        "primaryNavigation": [
-          {
-            "label": "Home",
-            "href": "/",
-            "children": []
-          },
-          {
-            "label": "Services",
-            "href": "/services",
-            "children": []
-          },
-          {
-            "label": "About",
-            "href": "/about",
-            "children": []
-          },
-          {
-            "label": "Contact",
-            "href": "/contact",
-            "children": []
-          }
-        ],
-        "footerNavigation": [
-          {
-            "label": "Privacy Policy",
-            "href": "/privacy"
-          },
-          {
-            "label": "Terms of Service",
-            "href": "/terms"
-          }
-        ],
-        "breadcrumbs": [],
-        "sitemap": {
-          "https://example.com": {
-            "url": "https://example.com",
-            "title": "Home - Example Company",
-            "content": {
-              "title": "Welcome to Example Company",
-              "headings": {
-                "h1": [
-                  "Welcome"
-                ],
-                "h2": [],
-                "h3": []
-              },
-              "paragraphs": [
-                "Welcome content"
-              ],
-              "lists": [],
-              "buttons": [],
-              "images": [],
-              "seo": {
-                "description": "Welcome page"
-              }
-            },
-            "wordCount": 100
-          }
-        }
-      },
-      "depth": {
-        "overall": {
-          "averageDepth": 1.2,
-          "maxDepth": 3,
-          "minDepth": 1,
-          "medianDepth": 1
-        },
-        "navigation": {
-          "primaryNavDepth": 1,
-          "secondaryNavDepth": 0,
-          "breadcrumbDepth": 0
-        },
-        "content": {
-          "averageContentDepth": 2.5,
-          "contentVariability": 0.8
-        },
-        "userJourney": {
-          "averagePathLength": 2.3,
-          "conversionFunnelDepth": 3,
-          "dropOffPoints": []
-        }
-      },
-      "quality": {
-        "structure": {
-          "score": 85,
-          "issues": [],
-          "recommendations": [
-            "Consider adding breadcrumb navigation"
-          ]
-        },
-        "navigation": {
-          "score": 90,
-          "usability": 88,
-          "discoverability": 92
-        },
-        "content": {
-          "score": 82,
-          "organization": 85,
-          "accessibility": 80
-        },
-        "seo": {
-          "score": 88,
-          "internalLinking": 85,
-          "contentDepth": 90
-        }
-      }
-    },
-    "seo": {
-      "title": "Example Company - Digital Solutions",
-      "description": "Leading provider of digital solutions for businesses worldwide.",
-      "keywords": [
-        "digital solutions",
-        "technology",
-        "business"
-      ],
-      "canonical": "https://example.com",
-      "language": "en",
-      "openGraph": {
-        "title": "Example Company",
-        "description": "Digital solutions for modern businesses",
-        "image": "/og-image.jpg",
-        "url": "https://example.com"
-      },
-      "twitter": {
-        "card": "summary_large_image",
-        "title": "Example Company",
-        "description": "Digital solutions for modern businesses",
-        "image": "/twitter-image.jpg"
-      },
-      "structuredData": [
-        {
-          "type": "Organization",
-          "data": {
-            "name": "Example Company",
-            "url": "https://example.com",
-            "logo": "/logo.svg"
-          }
-        }
-      ]
-    },
-    "messaging": {
-      "keyMessages": [
-        {
-          "message": "We deliver exceptional digital solutions",
-          "audience": "business owners",
-          "context": "homepage hero",
-          "proofPoints": [
-            "10+ years experience",
-            "500+ projects completed"
-          ]
-        }
-      ],
-      "valuePropositions": [
-        {
-          "headline": "Transform Your Business",
-          "subheadline": "With cutting-edge digital solutions",
-          "benefits": [
-            "Increased efficiency",
-            "Better customer experience",
-            "Competitive advantage"
-          ],
-          "socialProof": "Trusted by 500+ companies"
-        }
-      ],
-      "objectionHandling": {
-        "too expensive": "Our solutions provide ROI within 6 months",
-        "not sure": "We offer free consultations and pilot projects"
-      },
-      "callsToAction": [
-        {
-          "primary": "Get Started Today",
-          "secondary": "Schedule a Demo",
-          "context": "homepage"
-        }
-      ]
-    }
-  },
-  "architecture": {
-    "structure": {
-      "primaryNavigation": [
-        {
-          "label": "Home",
-          "href": "/",
-          "children": []
-        },
-        {
-          "label": "Services",
-          "href": "/services",
-          "children": []
-        },
-        {
-          "label": "About",
-          "href": "/about",
-          "children": []
-        },
-        {
-          "label": "Contact",
-          "href": "/contact",
-          "children": []
-        }
-      ],
-      "footerNavigation": [
-        {
-          "label": "Privacy Policy",
-          "href": "/privacy"
-        },
-        {
-          "label": "Terms of Service",
-          "href": "/terms"
-        }
-      ],
-      "breadcrumbs": [],
-      "sitemap": {
-        "https://example.com": {
-          "url": "https://example.com",
-          "title": "Home - Example Company",
-          "content": {
-            "title": "Welcome to Example Company",
-            "headings": {
-              "h1": [
-                "Welcome"
-              ],
-              "h2": [],
-              "h3": []
-            },
-            "paragraphs": [
-              "Welcome content"
-            ],
-            "lists": [],
-            "buttons": [],
-            "images": [],
-            "seo": {
-              "description": "Welcome page"
-            }
-          },
-          "wordCount": 100
-        }
-      }
-    },
-    "depth": {
-      "overall": {
-        "averageDepth": 1.2,
-        "maxDepth": 3,
-        "minDepth": 1,
-        "medianDepth": 1
-      },
-      "navigation": {
-        "primaryNavDepth": 1,
-        "secondaryNavDepth": 0,
-        "breadcrumbDepth": 0
-      },
-      "content": {
-        "averageContentDepth": 2.5,
-        "contentVariability": 0.8
-      },
-      "userJourney": {
-        "averagePathLength": 2.3,
-        "conversionFunnelDepth": 3,
-        "dropOffPoints": []
-      }
-    },
-    "quality": {
-      "structure": {
-        "score": 85,
-        "issues": [],
-        "recommendations": [
-          "Consider adding breadcrumb navigation"
-        ]
-      },
-      "navigation": {
-        "score": 90,
-        "usability": 88,
-        "discoverability": 92
-      },
-      "content": {
-        "score": 82,
-        "organization": 85,
-        "accessibility": 80
-      },
-      "seo": {
-        "score": 88,
-        "internalLinking": 85,
-        "contentDepth": 90
-      }
-    }
+    "architecture": {},
+    "seo": {},
+    "messaging": {}
   },
   "generation": {
     "framework": "nextjs",
@@ -708,65 +80,11 @@
       "images": [],
       "fonts": [],
       "icons": []
-    },
-    "build": {
-      "output": "./output",
-      "publicPath": "/",
-      "optimization": {
-        "minify": true,
-        "compress": true,
-        "preload": true
-      }
-    }
-  },
-  "validation": {
-    "accessibility": {
-      "wcagLevel": "AA",
-      "minScore": 0.95,
-      "automated": true
-    },
-    "performance": {
-      "lighthouse": {
-        "performance": 90,
-        "accessibility": 95,
-        "bestPractices": 90,
-        "seo": 90,
-        "pwa": 50
-      },
-      "metrics": {
-        "fcp": 1800,
-        "lcp": 2500,
-        "tti": 3800,
-        "tbt": 300,
-        "cls": 0.1,
-        "speedIndex": 3400
-      }
-    },
-    "seo": {
-      "score": 90,
-      "checks": [
-        "meta-tags",
-        "structured-data",
-        "canonical-urls"
-      ]
-    },
-    "responsive": {
-      "breakpoints": [
-        "375px",
-        "768px",
-        "1024px",
-        "1440px"
-      ],
-      "devices": [
-        "mobile",
-        "tablet",
-        "desktop"
-      ]
     }
   },
   "metadata": {
-    "created": "2025-08-29T01:14:51.222Z",
-    "updated": "2025-08-29T01:14:51.222Z",
+    "created": "2025-08-29T02:56:56.246Z",
+    "updated": "2025-08-29T02:56:56.246Z",
     "author": "Web Style Transfer",
     "license": "MIT"
   }

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { cn } from "@/lib/utils";
+import React, { useState } from 'react';
+import { cn } from '@/lib/utils';
 
 interface NavigationItem {
   label: string;
@@ -15,7 +15,7 @@ interface LogoProps {
 
 interface NavigationProps {
   items: NavigationItem[];
-  variant: "sidebar" | "topbar" | "mobile";
+  variant: 'sidebar' | 'topbar' | 'mobile';
   logo?: LogoProps;
   className?: string;
 }
@@ -33,13 +33,7 @@ function SkipLink() {
 }
 
 // Mobile menu button
-function MobileMenuButton({
-  isOpen,
-  onClick,
-}: {
-  isOpen: boolean;
-  onClick: () => void;
-}) {
+function MobileMenuButton({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
@@ -50,7 +44,7 @@ function MobileMenuButton({
     >
       <span className="sr-only">Open main menu</span>
       <svg
-        className={`${isOpen ? "hidden" : "block"} h-6 w-6`}
+        className={`${isOpen ? 'hidden' : 'block'} h-6 w-6`}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -65,7 +59,7 @@ function MobileMenuButton({
         />
       </svg>
       <svg
-        className={`${isOpen ? "block" : "hidden"} h-6 w-6`}
+        className={`${isOpen ? 'block' : 'hidden'} h-6 w-6`}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -103,60 +97,26 @@ function Logo({ logo }: { logo?: LogoProps }) {
 }
 
 // Desktop navigation
-function DesktopNavigation({
-  items,
-  logo,
-}: {
-  items: NavigationItem[];
-  logo?: LogoProps;
-}) {
-  return (
-    <div className="hidden md:block">
-      <div className="ml-10 flex items-baseline space-x-4">
-        {items.map((item) => (
-          <a
-            key={item.href}
-            href={item.href}
-            className={cn(
-              "px-3 py-2 rounded-md text-sm font-medium transition-colors",
-              item.current
-                ? "bg-gray-900 text-white"
-                : "text-gray-300 hover:bg-gray-700 hover:text-white"
-            )}
-            aria-current={item.current ? "page" : undefined}
-          >
-            {item.label}
-          </a>
-        ))}
-      </div>
-    </div>
-  );
-}
+
 
 // Mobile navigation
-function MobileNavigation({
-  items,
-  isOpen,
-}: {
-  items: NavigationItem[];
-  isOpen: boolean;
-}) {
+function MobileNavigation({ items, isOpen }: { items: NavigationItem[]; isOpen: boolean }) {
   if (!isOpen) return null;
 
   return (
     <div className="md:hidden" id="mobile-menu">
       <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-800">
-        {items.map((item) => (
+        {items.map(item => (
           <a
             key={item.href}
             href={item.href}
             className={cn(
-              "block px-3 py-2 rounded-md text-base font-medium transition-colors",
+              'block px-3 py-2 rounded-md text-base font-medium transition-colors',
               item.current
-                ? "bg-gray-900 text-white"
-                : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                ? 'bg-gray-900 text-white'
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white'
             )}
-            aria-current={item.current ? "page" : undefined}
+            aria-current={item.current ? 'page' : undefined}
           >
             {item.label}
           </a>
@@ -167,12 +127,7 @@ function MobileNavigation({
 }
 
 // Main Navigation Component
-export function Navigation({
-  items,
-  variant = "topbar",
-  logo,
-  className,
-}: NavigationProps) {
+export function Navigation({ items, variant = 'topbar', logo, className }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
@@ -183,44 +138,37 @@ export function Navigation({
     const handleLinkClick = () => setMobileMenuOpen(false);
 
     if (mobileMenuOpen) {
-      document.addEventListener("click", handleClickOutside);
-      const links = document.querySelectorAll("#mobile-menu a");
-      links.forEach((link) => link.addEventListener("click", handleLinkClick));
+      document.addEventListener('click', handleClickOutside);
+      const links = document.querySelectorAll('#mobile-menu a');
+      links.forEach(link => link.addEventListener('click', handleLinkClick));
 
       return () => {
-        document.removeEventListener("click", handleClickOutside);
-        links.forEach((link) =>
-          link.removeEventListener("click", handleLinkClick)
-        );
+        document.removeEventListener('click', handleClickOutside);
+        links.forEach(link => link.removeEventListener('click', handleLinkClick));
       };
     }
   }, [mobileMenuOpen]);
 
-  if (variant === "sidebar") {
+  if (variant === 'sidebar') {
     return (
-      <div
-        className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 text-white",
-          className
-        )}
-      >
+      <div className={cn('fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 text-white', className)}>
         <SkipLink />
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-center h-16 px-4 border-b border-gray-700">
             <Logo logo={logo} />
           </div>
           <nav className="flex-1 px-4 py-6 space-y-2" role="navigation">
-            {items.map((item) => (
+            {items.map(item => (
               <a
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "block px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                  'block px-3 py-2 rounded-md text-sm font-medium transition-colors',
                   item.current
-                    ? "bg-gray-800 text-white"
-                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                    ? 'bg-gray-800 text-white'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                 )}
-                aria-current={item.current ? "page" : undefined}
+                aria-current={item.current ? 'page' : undefined}
               >
                 {item.label}
               </a>
@@ -233,10 +181,7 @@ export function Navigation({
 
   // Topbar variant (default)
   return (
-    <header
-      className={cn("bg-gray-900 text-white shadow-sm", className)}
-      role="banner"
-    >
+    <header className={cn('bg-gray-900 text-white shadow-sm', className)} role="banner">
       <SkipLink />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
@@ -247,21 +192,18 @@ export function Navigation({
           </div>
 
           <div className="hidden md:block">
-            <nav
-              className="ml-10 flex items-baseline space-x-4"
-              role="navigation"
-            >
-              {items.map((item) => (
+            <nav className="ml-10 flex items-baseline space-x-4" role="navigation">
+              {items.map(item => (
                 <a
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "rounded-md px-3 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900",
+                    'rounded-md px-3 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900',
                     item.current
-                      ? "bg-gray-800 text-white"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                      ? 'bg-gray-800 text-white'
+                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                   )}
-                  aria-current={item.current ? "page" : undefined}
+                  aria-current={item.current ? 'page' : undefined}
                 >
                   {item.label}
                 </a>
@@ -270,10 +212,7 @@ export function Navigation({
           </div>
 
           <div className="md:hidden">
-            <MobileMenuButton
-              isOpen={mobileMenuOpen}
-              onClick={toggleMobileMenu}
-            />
+            <MobileMenuButton isOpen={mobileMenuOpen} onClick={toggleMobileMenu} />
           </div>
         </div>
       </div>
@@ -293,10 +232,5 @@ export function StickyNavigation(props: NavigationProps) {
 }
 
 export function TransparentNavigation(props: NavigationProps) {
-  return (
-    <Navigation
-      {...props}
-      className="bg-transparent text-white backdrop-blur-sm"
-    />
-  );
+  return <Navigation {...props} className="bg-transparent text-white backdrop-blur-sm" />;
 }

@@ -1,9 +1,4 @@
-import {
-  DesignTokens,
-  ColorSystem,
-  Typography,
-  SpacingScale,
-} from "../schemas/style.schema";
+import { DesignTokens, ColorSystem, Typography, SpacingScale } from '../schemas/style.schema';
 
 export interface QualityScore {
   overall: number; // 0-1 scale
@@ -39,9 +34,9 @@ export class QualityScorer {
 
   calculateScore(tokens: DesignTokens, patterns: any[]): QualityScore {
     const scores = {
-      colorConsistency: this.scoreColorConsistency(tokens.color),
+      colorConsistency: this.scoreColorConsistency(tokens.colors),
       typographyHierarchy: this.scoreTypographyHierarchy(tokens.typography),
-      spacingRegularity: this.scoreSpacingRegularity(tokens.spacing),
+      spacingRegularity: this.scoreSpacingRegularity(tokens.spacing?.scale),
       accessibilityCompliance: this.scoreAccessibilityCompliance(tokens),
       patternConsistency: this.scorePatternConsistency(patterns),
       performanceOptimization: this.scorePerformanceOptimization(tokens),
@@ -58,23 +53,19 @@ export class QualityScorer {
     };
   }
 
-  private scoreColorConsistency(colors: ColorSystem): number {
+  private scoreColorConsistency(colors: ColorSystem | undefined): number {
     if (!colors) return 0;
 
     let score = 0.5; // Base score
 
     // Check for semantic color usage
-    const hasSemanticColors =
-      colors.primary && colors.secondary && colors.accent;
+    const hasSemanticColors = colors.primary && colors.secondary && colors.accent;
     if (hasSemanticColors) score += 0.2;
 
     // Check for consistent neutral scale
     const neutralColors = Object.keys(colors).filter(
-      (key) =>
-        key.includes("gray") ||
-        key.includes("neutral") ||
-        key.includes("50") ||
-        key.includes("100")
+      key =>
+        key.includes('gray') || key.includes('neutral') || key.includes('50') || key.includes('100')
     );
     if (neutralColors.length >= 5) score += 0.15;
 
@@ -86,14 +77,13 @@ export class QualityScorer {
     return Math.max(0, Math.min(1, score));
   }
 
-  private scoreTypographyHierarchy(typography: Typography): number {
+  private scoreTypographyHierarchy(typography: Typography | undefined): number {
     if (!typography) return 0;
 
     let score = 0.5;
 
     // Check for modular scale
-    const hasScale =
-      typography.scale && Object.keys(typography.scale).length >= 3;
+    const hasScale = typography.scale && Object.keys(typography.scale).length >= 3;
     if (hasScale) score += 0.2;
 
     // Check for font family consistency
@@ -108,7 +98,7 @@ export class QualityScorer {
     return Math.max(0, Math.min(1, score));
   }
 
-  private scoreSpacingRegularity(spacing: SpacingScale): number {
+  private scoreSpacingRegularity(spacing: SpacingScale | undefined): number {
     if (!spacing) return 0;
 
     let score = 0.5;
@@ -119,7 +109,7 @@ export class QualityScorer {
     if (isConsistent) score += 0.2;
 
     // Check for 8px base unit preference
-    const has8pxBase = values.some((v) => typeof v === "number" && v % 8 === 0);
+    const has8pxBase = values.some(v => typeof v === 'number' && v % 8 === 0);
     if (has8pxBase) score += 0.15;
 
     // Check for reasonable number of values
@@ -134,17 +124,17 @@ export class QualityScorer {
     let score = 0.5;
 
     // Check for sufficient color contrast (placeholder - would need actual contrast calculation)
-    const hasGoodContrast = tokens.color?.primary && tokens.color?.background;
+    const hasGoodContrast = tokens['color']?.primary && tokens['color']?.background;
     if (hasGoodContrast) score += 0.2;
 
     // Check for readable font sizes
     const hasReadableSizes =
-      tokens.typography?.scale?.body &&
-      parseFloat(String(tokens.typography.scale.body.size || "16px")) >= 14;
+      tokens['typography']?.scale?.['body'] &&
+      parseFloat(String(tokens['typography'].scale['body'].size || '16px')) >= 14;
     if (hasReadableSizes) score += 0.15;
 
     // Check for focus indicators (placeholder)
-    const hasFocusTokens = tokens.color?.focus;
+    const hasFocusTokens = tokens['color']?.focus;
     if (hasFocusTokens) score += 0.15;
 
     return Math.max(0, Math.min(1, score));
@@ -156,19 +146,17 @@ export class QualityScorer {
     let score = 0.5;
 
     // Check for consistent pattern usage
-    const patternTypes = new Set(patterns.map((p) => p.type));
+    const patternTypes = new Set(patterns.map(p => p.type));
     const hasVariety = patternTypes.size >= 3;
     if (hasVariety) score += 0.15;
 
     // Check for high-confidence patterns
-    const highConfidencePatterns = patterns.filter((p) => p.confidence > 0.8);
+    const highConfidencePatterns = patterns.filter(p => p.confidence > 0.8);
     const hasHighConfidence = highConfidencePatterns.length > 0;
     if (hasHighConfidence) score += 0.2;
 
     // Check for semantic patterns
-    const hasSemanticPatterns = patterns.some((p) =>
-      ["navigation", "hero", "form"].includes(p.type)
-    );
+    const hasSemanticPatterns = patterns.some(p => ['navigation', 'hero', 'form'].includes(p.type));
     if (hasSemanticPatterns) score += 0.15;
 
     return Math.max(0, Math.min(1, score));
@@ -177,18 +165,16 @@ export class QualityScorer {
   private scorePerformanceOptimization(tokens: DesignTokens): number {
     let score = 0.5;
 
-    // Check for optimized font loading
-    const hasFontOptimization = tokens.typography?.loading === "optimized";
-    if (hasFontOptimization) score += 0.15;
+    // Check for optimized font loading - removed as 'loading' property doesn't exist on Typography type
+    // const hasFontOptimization = tokens.typography?.loading === "optimized";
+    // if (hasFontOptimization) score += 0.15;
 
     // Check for minimal color palette
-    const colorCount = tokens.color ? Object.keys(tokens.color).length : 0;
+    const colorCount = tokens['colors'] ? Object.keys(tokens['colors']).length : 0;
     if (colorCount <= 12) score += 0.15;
 
     // Check for efficient spacing system
-    const spacingCount = tokens.spacing
-      ? Object.keys(tokens.spacing).length
-      : 0;
+    const spacingCount = tokens.spacing ? Object.keys(tokens.spacing).length : 0;
     if (spacingCount <= 10) score += 0.2;
 
     return Math.max(0, Math.min(1, score));
@@ -198,21 +184,21 @@ export class QualityScorer {
     let score = 0.5;
 
     // Check for modern design tokens
-    const hasModernTokens = tokens.borderRadius || tokens.shadow;
+    const hasModernTokens = tokens.borderRadius || tokens['shadow'];
     if (hasModernTokens) score += 0.15;
 
     // Check for CSS Grid/Flexbox support
-    const hasLayoutTokens = tokens.grid || tokens.flex;
+    const hasLayoutTokens = tokens.grid || tokens['flex'];
     if (hasLayoutTokens) score += 0.15;
 
     // Check for dark mode support
-    const hasDarkMode = tokens.color?.dark || tokens.color?.onDark;
+    const hasDarkMode = tokens.colors?.['dark'] || tokens.colors?.['onDark'];
     if (hasDarkMode) score += 0.2;
 
     return Math.max(0, Math.min(1, score));
   }
 
-  private calculateWeightedScore(scores: QualityScore["breakdown"]): number {
+  private calculateWeightedScore(scores: QualityScore['breakdown']): number {
     let weightedSum = 0;
     let totalWeight = 0;
 
@@ -225,48 +211,40 @@ export class QualityScorer {
     return weightedSum / totalWeight;
   }
 
-  private generateRecommendations(scores: QualityScore["breakdown"]): string[] {
+  private generateRecommendations(scores: QualityScore['breakdown']): string[] {
     const recommendations: string[] = [];
 
     if (scores.colorConsistency < this.S_TIER_THRESHOLDS.acceptable) {
-      recommendations.push(
-        "Establish a more consistent color system with semantic color tokens"
-      );
+      recommendations.push('Establish a more consistent color system with semantic color tokens');
     }
 
     if (scores.typographyHierarchy < this.S_TIER_THRESHOLDS.acceptable) {
-      recommendations.push(
-        "Improve typography hierarchy with a clear modular scale"
-      );
+      recommendations.push('Improve typography hierarchy with a clear modular scale');
     }
 
     if (scores.spacingRegularity < this.S_TIER_THRESHOLDS.acceptable) {
-      recommendations.push(
-        "Implement a more consistent spacing scale (preferably 8px-based)"
-      );
+      recommendations.push('Implement a more consistent spacing scale (preferably 8px-based)');
     }
 
     if (scores.accessibilityCompliance < this.S_TIER_THRESHOLDS.acceptable) {
       recommendations.push(
-        "Improve accessibility compliance - ensure proper contrast ratios and focus indicators"
+        'Improve accessibility compliance - ensure proper contrast ratios and focus indicators'
       );
     }
 
     if (scores.patternConsistency < this.S_TIER_THRESHOLDS.acceptable) {
-      recommendations.push(
-        "Standardize UI patterns and ensure consistent component usage"
-      );
+      recommendations.push('Standardize UI patterns and ensure consistent component usage');
     }
 
     if (scores.performanceOptimization < this.S_TIER_THRESHOLDS.acceptable) {
       recommendations.push(
-        "Optimize for performance - reduce color palette and spacing scale complexity"
+        'Optimize for performance - reduce color palette and spacing scale complexity'
       );
     }
 
     if (scores.modernityScore < this.S_TIER_THRESHOLDS.acceptable) {
       recommendations.push(
-        "Modernize design tokens - add border radius, shadows, and layout tokens"
+        'Modernize design tokens - add border radius, shadows, and layout tokens'
       );
     }
 
@@ -277,20 +255,16 @@ export class QualityScorer {
     if (sizes.length < 2) return false;
 
     const numericSizes = sizes
-      .map((s) => (typeof s === "string" ? parseFloat(s) : s))
-      .filter((n) => !isNaN(n));
+      .map(s => (typeof s === 'string' ? parseFloat(s) : s))
+      .filter(n => !isNaN(n));
     if (numericSizes.length < 2) return false;
 
     // Check if sizes are in reasonable order (larger to smaller or vice versa)
     const sorted = [...numericSizes].sort((a, b) => b - a);
-    const isDescending = numericSizes.every(
-      (size, index) => size === sorted[index]
-    );
+    const isDescending = numericSizes.every((size, index) => size === sorted[index]);
 
     const reverseSorted = [...numericSizes].sort((a, b) => a - b);
-    const isAscending = numericSizes.every(
-      (size, index) => size === reverseSorted[index]
-    );
+    const isAscending = numericSizes.every((size, index) => size === reverseSorted[index]);
 
     return isDescending || isAscending;
   }
@@ -299,8 +273,8 @@ export class QualityScorer {
     if (values.length < 3) return true;
 
     const numericValues = values
-      .map((v) => (typeof v === "string" ? parseFloat(v) : v))
-      .filter((n) => !isNaN(n));
+      .map(v => (typeof v === 'string' ? parseFloat(v) : v))
+      .filter(n => !isNaN(n));
     if (numericValues.length < 3) return false;
 
     // Check if values follow a consistent pattern (arithmetic or geometric progression)
@@ -311,9 +285,7 @@ export class QualityScorer {
 
     // Check if differences are similar (arithmetic progression)
     const avgDiff = diffs.reduce((sum, diff) => sum + diff, 0) / diffs.length;
-    const isArithmetic = diffs.every(
-      (diff) => Math.abs(diff - avgDiff) < avgDiff * 0.5
-    );
+    const isArithmetic = diffs.every(diff => Math.abs(diff - avgDiff) < avgDiff * 0.5);
 
     // Check for geometric progression (ratios)
     const ratios = [];
@@ -324,11 +296,8 @@ export class QualityScorer {
     }
 
     if (ratios.length > 0) {
-      const avgRatio =
-        ratios.reduce((sum, ratio) => sum + ratio, 0) / ratios.length;
-      const isGeometric = ratios.every(
-        (ratio) => Math.abs(ratio - avgRatio) < avgRatio * 0.2
-      );
+      const avgRatio = ratios.reduce((sum, ratio) => sum + ratio, 0) / ratios.length;
+      const isGeometric = ratios.every(ratio => Math.abs(ratio - avgRatio) < avgRatio * 0.2);
       if (isGeometric) return true;
     }
 

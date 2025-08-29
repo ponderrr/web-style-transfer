@@ -61,8 +61,6 @@ export function PageTransition({
   allowSkip = true,
   onEnter,
   onEntered,
-  onExit,
-  onExited,
   className,
 }: PageTransitionProps) {
   const [isAnimating, setIsAnimating] = useState(false);
@@ -133,7 +131,7 @@ export function PageTransition({
           opacity: isAnimating ? 0 : 1,
         };
 
-      case 'slide':
+      case 'slide': {
         const slideTransform = {
           left: isAnimating ? 'translateX(-100%)' : 'translateX(0)',
           right: isAnimating ? 'translateX(100%)' : 'translateX(0)',
@@ -146,6 +144,7 @@ export function PageTransition({
           transform: slideTransform,
           opacity: isAnimating ? 0 : 1,
         };
+      }
 
       case 'scale':
         return {
@@ -154,7 +153,7 @@ export function PageTransition({
           opacity: isAnimating ? 0 : 1,
         };
 
-      case 'wipe':
+      case 'wipe': {
         const wipeTransform = {
           left: isAnimating ? 'translateX(-100%)' : 'translateX(0)',
           right: isAnimating ? 'translateX(100%)' : 'translateX(0)',
@@ -172,6 +171,7 @@ export function PageTransition({
             down: 'center bottom',
           }[direction],
         };
+      }
 
       default:
         return {

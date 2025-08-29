@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib-utils';
 
 interface Suggestion {
@@ -330,14 +330,12 @@ export function SearchForm({
   suggestions = [],
   showSuggestions = true,
   filters = [],
-  results,
   onSearch,
   onSuggestionSelect,
   onFilterChange,
   className,
   compact = false,
   ariaLabel = 'Search',
-  announceResults = true,
 }: SearchFormProps) {
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -487,8 +485,6 @@ export function SearchWithResults({
   onResultClick,
   ...props
 }: SearchWithResultsProps) {
-  const [liveResults, setLiveResults] = useState<SearchResult[]>([]);
-
   // Announce results for screen readers
   useEffect(() => {
     if (results.length > 0 && props.announceResults) {

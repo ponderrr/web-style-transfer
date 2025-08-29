@@ -1,5 +1,5 @@
-import { Page } from "playwright";
-import { SpacingScale, SpacingSystem } from "../../schemas/style.schema";
+import { Page } from 'playwright';
+import { SpacingScale, SpacingSystem } from '../../schemas/style.schema';
 
 export interface SpacingAnalysis {
   scale: SpacingScale;
@@ -21,32 +21,32 @@ export class SpacingDetector {
   async detectSpacingSystem(page: Page): Promise<SpacingAnalysis> {
     // Extract all spacing-related CSS values from the page
     const spacingData = await page.evaluate(() => {
-      const elements = document.querySelectorAll("*");
+      const elements = document.querySelectorAll('*');
       const spacingValues = new Set<number>();
 
-      elements.forEach((el) => {
+      elements.forEach(el => {
         const style = window.getComputedStyle(el);
 
         // Extract margin and padding values
         const properties = [
-          "margin-top",
-          "margin-right",
-          "margin-bottom",
-          "margin-left",
-          "padding-top",
-          "padding-right",
-          "padding-bottom",
-          "padding-left",
-          "gap",
-          "row-gap",
-          "column-gap",
-          "top",
-          "right",
-          "bottom",
-          "left",
+          'margin-top',
+          'margin-right',
+          'margin-bottom',
+          'margin-left',
+          'padding-top',
+          'padding-right',
+          'padding-bottom',
+          'padding-left',
+          'gap',
+          'row-gap',
+          'column-gap',
+          'top',
+          'right',
+          'bottom',
+          'left',
         ];
 
-        properties.forEach((prop) => {
+        properties.forEach(prop => {
           const value = style.getPropertyValue(prop);
           const numericValue = this.extractNumericValue(value);
           if (numericValue > 0 && numericValue <= 200) {
@@ -63,7 +63,7 @@ export class SpacingDetector {
   }
 
   private extractNumericValue(cssValue: string): number {
-    if (!cssValue || cssValue === "auto" || cssValue === "none") return 0;
+    if (!cssValue || cssValue === 'auto' || cssValue === 'none') return 0;
 
     const match = cssValue.match(/(\d+(\.\d+)?)px/);
     return match && match[1] ? parseFloat(match[1]) : 0;
@@ -95,14 +95,14 @@ export class SpacingDetector {
     if (values.length === 0) return 8; // Default to 8px
 
     // Score each possible base unit
-    const scores = this.COMMON_BASE_UNITS.map((base) => ({
+    const scores = this.COMMON_BASE_UNITS.map(base => ({
       base,
       score: this.scoreBaseUnit(base, values),
     }));
 
     // Return the highest scoring base unit
     scores.sort((a, b) => b.score - a.score);
-    return scores.length > 0 ? scores[0].base : 8; // Default to 8px if no scores
+    return scores.length > 0 && scores[0] ? scores[0].base : 8; // Default to 8px if no scores
   }
 
   private scoreBaseUnit(base: number, values: number[]): number {
@@ -143,18 +143,15 @@ export class SpacingDetector {
     }
 
     // Add common fractional values
-    scale["0.5"] = `${baseUnit / 2}px`;
-    scale["1.5"] = `${baseUnit * 1.5}px`;
-    scale["2.5"] = `${baseUnit * 2.5}px`;
-    scale["3.5"] = `${baseUnit * 3.5}px`;
+    scale['0.5'] = `${baseUnit / 2}px`;
+    scale['1.5'] = `${baseUnit * 1.5}px`;
+    scale['2.5'] = `${baseUnit * 2.5}px`;
+    scale['3.5'] = `${baseUnit * 3.5}px`;
 
     return scale;
   }
 
-  private createSpacingSystem(
-    values: number[],
-    baseUnit: number
-  ): SpacingSystem {
+  private createSpacingSystem(values: number[], baseUnit: number): SpacingSystem {
     // Group values by their relationship to base unit
     const grouped = this.groupValuesByBase(values, baseUnit);
 
@@ -166,37 +163,34 @@ export class SpacingDetector {
     };
   }
 
-  private groupValuesByBase(
-    values: number[],
-    base: number
-  ): Record<string, number[]> {
+  private groupValuesByBase(values: number[], base: number): Record<string, number[]> {
     const grouped: Record<string, number[]> = {
       perfect: [],
       close: [],
       other: [],
     };
 
-    values.forEach((value) => {
+    values.forEach(value => {
       if (value % base === 0) {
-        grouped.perfect!.push(value);
+        (grouped['perfect'] as number[]).push(value);
       } else if (Math.abs(value - Math.round(value / base) * base) <= 1) {
-        grouped.close!.push(value);
+        (grouped['close'] as number[]).push(value);
       } else {
-        grouped.other!.push(value);
+        (grouped['other'] as number[]).push(value);
       }
     });
 
     return grouped;
   }
 
-  private detectGridSystem(values: number[]): SpacingAnalysis["grid"] {
-    const grid: SpacingAnalysis["grid"] = {};
+  private detectGridSystem(values: number[]): SpacingAnalysis['grid'] {
+    const grid: SpacingAnalysis['grid'] = {};
 
     // Look for common grid values
     const sortedValues = [...values].sort((a, b) => a - b);
 
     // Detect potential gutter values (smaller, repeating values)
-    const potentialGutters = sortedValues.filter((v) => v <= 32 && v >= 8);
+    const potentialGutters = sortedValues.filter(v => v <= 32 && v >= 8);
     if (potentialGutters.length > 0) {
       // Find the most common gutter value
       const gutterCounts = potentialGutters.reduce(
@@ -207,19 +201,15 @@ export class SpacingDetector {
         {} as Record<number, number>
       );
 
-      const mostCommonGutter = Object.entries(gutterCounts).sort(
-        ([, a], [, b]) => b - a
-      )[0];
+      const mostCommonGutter = Object.entries(gutterCounts).sort(([, a], [, b]) => b - a)[0];
 
-      if (mostCommonGutter) {
+      if (mostCommonGutter && mostCommonGutter[0]) {
         grid.gutter = `${mostCommonGutter[0]}px`;
       }
     }
 
     // Detect container widths (larger values, likely to be max-widths)
-    const potentialContainers = sortedValues.filter(
-      (v) => v >= 600 && v <= 1600
-    );
+    const potentialContainers = sortedValues.filter(v => v >= 600 && v <= 1600);
     if (potentialContainers.length > 0) {
       // Use the largest as container width
       grid.container = `${Math.max(...potentialContainers)}px`;
@@ -231,13 +221,13 @@ export class SpacingDetector {
       md: 768,
       lg: 1024,
       xl: 1280,
-      "2xl": 1536,
+      '2xl': 1536,
     };
 
     const detectedBreakpoints: Record<string, string> = {};
     Object.entries(commonBreakpoints).forEach(([name, width]) => {
       // Check if any detected value is close to this breakpoint
-      const closeValue = values.find((v) => Math.abs(v - width) <= 20);
+      const closeValue = values.find(v => Math.abs(v - width) <= 20);
       if (closeValue) {
         detectedBreakpoints[name] = `${closeValue}px`;
       }
@@ -264,7 +254,7 @@ export class SpacingDetector {
     const commonGrids = [2, 3, 4, 6, 12];
 
     for (const columns of commonGrids) {
-      const columnSpacing = sortedValues.find((v) => {
+      const columnSpacing = sortedValues.find(v => {
         // Look for spacing that could accommodate this many columns
         return v >= columns * 100 && v <= columns * 300; // Rough estimate
       });
@@ -277,19 +267,16 @@ export class SpacingDetector {
     return undefined;
   }
 
-  private generateSpacingRecommendations(
-    values: number[],
-    baseUnit: number
-  ): string[] {
+  private generateSpacingRecommendations(values: number[], baseUnit: number): string[] {
     const recommendations: string[] = [];
 
     if (values.length > 20) {
       recommendations.push(
-        "Consider consolidating your spacing scale - you have many different spacing values"
+        'Consider consolidating your spacing scale - you have many different spacing values'
       );
     }
 
-    const perfectMatches = values.filter((v) => v % baseUnit === 0).length;
+    const perfectMatches = values.filter(v => v % baseUnit === 0).length;
     const perfectPercentage = (perfectMatches / values.length) * 100;
 
     if (perfectPercentage < 50) {
@@ -300,15 +287,13 @@ export class SpacingDetector {
 
     if (baseUnit !== 8) {
       recommendations.push(
-        "Consider using 8px as base unit for better consistency with design systems"
+        'Consider using 8px as base unit for better consistency with design systems'
       );
     }
 
-    const largeSpacing = values.filter((v) => v > 100).length;
+    const largeSpacing = values.filter(v => v > 100).length;
     if (largeSpacing > values.length * 0.3) {
-      recommendations.push(
-        "Many large spacing values detected - consider if all are necessary"
-      );
+      recommendations.push('Many large spacing values detected - consider if all are necessary');
     }
 
     return recommendations;

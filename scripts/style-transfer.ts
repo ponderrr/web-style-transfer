@@ -212,9 +212,10 @@ async function createNextJsPages(spec: any, outputDir: string): Promise<void> {
   // Create homepage
   const homePage = `
 import Head from 'next/head'
-import { Hero } from '../components/Hero'
-import { Navigation } from '../components/Navigation'
-import { Footer } from '../components/Footer'
+// TODO: Import components from correct path when available
+// import { Hero } from '../src/templates/components/Hero.template'
+// import { Navigation } from '../src/templates/components/Navigation.template'
+// import { Footer } from '../src/templates/components/FooterNavigation.template'
 
 export default function Home() {
   return (

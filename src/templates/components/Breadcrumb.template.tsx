@@ -104,7 +104,7 @@ export function Breadcrumb({
                     'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
                     itemClassName
                   )}
-                  onClick={e => {
+                  onClick={_e => {
                     onItemClick?.(item, index);
                   }}
                   aria-label={`Navigate to ${item.label}`}

@@ -124,8 +124,8 @@ export default function RootLayout({
 
 ```javascript
 // vite.config.js
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
@@ -133,8 +133,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ["react", "react-dom"],
-          ui: ["lucide-react", "clsx"],
+          vendor: ['react', 'react-dom'],
+          ui: ['lucide-react', 'clsx'],
         },
       },
     },
@@ -147,13 +147,13 @@ export default defineConfig({
 ```javascript
 // nuxt.config.ts
 export default defineNuxtConfig({
-  css: ["~/assets/css/main.css"],
-  modules: ["@nuxt/image-edge"],
+  css: ['~/assets/css/main.css'],
+  modules: ['@nuxt/image-edge'],
   image: {
-    domains: ["example.com"],
+    domains: ['example.com'],
   },
   nitro: {
-    preset: "vercel-edge",
+    preset: 'vercel-edge',
   },
 });
 ```

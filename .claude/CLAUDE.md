@@ -199,28 +199,24 @@ When building pages:
 Before any component is approved:
 
 - [ ] **Visual Polish**
-
   - Consistent spacing (8px grid)
   - Clear typography hierarchy
   - Appropriate color usage
   - Smooth animations (<300ms)
 
 - [ ] **Accessibility**
-
   - Keyboard navigable
   - Screen reader friendly
   - 4.5:1 color contrast minimum
   - Focus states visible
 
 - [ ] **Responsiveness**
-
   - Mobile (375px) optimized
   - Tablet (768px) adapted
   - Desktop (1440px) refined
   - No horizontal scroll
 
 - [ ] **Performance**
-
   - Lazy loaded images
   - Optimized bundle size
   - Efficient re-renders

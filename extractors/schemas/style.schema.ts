@@ -236,16 +236,45 @@ export interface UIPattern {
   selector: string;
   element?: any; // Playwright ElementHandle
   properties: {
-    layout?: 'grid' | 'flex' | 'block';
-    columns?: number;
+    layout?: 'grid' | 'flex' | 'block' | 'split' | 'centered' | 'vertical';
+    columns?: number | string;
     spacing?: string;
     responsive?: boolean;
+    // Hero-specific properties
+    hasHeading?: boolean;
+    hasSubheading?: boolean;
+    hasCTA?: boolean;
+    hasImage?: boolean;
+    height?: number;
+    // Card-specific properties
+    count?: number;
+    gap?: string;
+    hasImages?: boolean;
+    hasActions?: boolean;
+    // Form-specific properties
+    fieldCount?: number;
+    hasLabels?: boolean;
+    hasValidation?: boolean;
+    hasHelperText?: boolean;
+    submitButtons?: number;
+    // Table-specific properties
+    rows?: number;
+    hasHeaders?: boolean;
+    hasSorting?: boolean;
+    hasFiltering?: boolean;
+    hasPagination?: boolean;
   };
   accessibility: {
-    hasAriaLabels: boolean;
-    hasRoles: boolean;
-    keyboardNavigable: boolean;
-    semanticHTML: boolean;
+    hasAriaLabels?: boolean;
+    hasRoles?: boolean;
+    keyboardNavigable?: boolean;
+    semanticHTML?: boolean;
+    // Additional accessibility properties
+    headingLevel?: number;
+    altTexts?: boolean;
+    hasHeadings?: boolean;
+    hasCaption?: boolean;
+    scopeAttributes?: boolean;
   };
   content: {
     headings: string[];

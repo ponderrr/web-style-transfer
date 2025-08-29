@@ -85,23 +85,23 @@ interface ButtonProps {
   loading?: boolean;
 
   // Variants
-  variant?: "primary" | "secondary" | "ghost" | "danger";
-  size?: "sm" | "md" | "lg" | "xl";
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
 
   // States
   disabled?: boolean;
 
   // Actions
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  type?: "button" | "submit" | "reset";
+  type?: 'button' | 'submit' | 'reset';
 
   // Styling
   className?: string;
   style?: React.CSSProperties;
 
   // Accessibility
-  "aria-label"?: string;
-  "aria-describedby"?: string;
+  'aria-label'?: string;
+  'aria-describedby'?: string;
 }
 ```
 
@@ -221,12 +221,12 @@ export type { ButtonProps };
 // Handle keyboard events
 const handleKeyDown = (event: React.KeyboardEvent) => {
   switch (event.key) {
-    case "Enter":
-    case " ":
+    case 'Enter':
+    case ' ':
       event.preventDefault();
       onClick?.(event as any);
       break;
-    case "Escape":
+    case 'Escape':
       // Handle escape for modals/dropdowns
       onEscape?.();
       break;
@@ -256,11 +256,11 @@ const focusTrap = useFocusTrap(containerRef, {
 ```typescript
 // Dynamic ARIA attributes
 const ariaProps = {
-  "aria-expanded": isOpen,
-  "aria-controls": isOpen ? menuId : undefined,
-  "aria-haspopup": "menu",
-  "aria-label": ariaLabel,
-  "aria-describedby": descriptionId,
+  'aria-expanded': isOpen,
+  'aria-controls': isOpen ? menuId : undefined,
+  'aria-haspopup': 'menu',
+  'aria-label': ariaLabel,
+  'aria-describedby': descriptionId,
 };
 ```
 
@@ -272,8 +272,8 @@ const ariaProps = {
 // Memoization for expensive computations
 const memoizedStyles = useMemo(
   () => ({
-    backgroundColor: variant === "primary" ? primaryColor : secondaryColor,
-    fontSize: size === "lg" ? "1.125rem" : "1rem",
+    backgroundColor: variant === 'primary' ? primaryColor : secondaryColor,
+    fontSize: size === 'lg' ? '1.125rem' : '1rem',
   }),
   [variant, size, primaryColor, secondaryColor]
 );
@@ -289,11 +289,11 @@ const MemoizedComponent = React.memo(Component, (prevProps, nextProps) => {
 
 ```typescript
 // Dynamic imports for code splitting
-const LazyComponent = lazy(() => import("./LazyComponent"));
+const LazyComponent = lazy(() => import('./LazyComponent'));
 
 // Preload critical components
 const preloadComponent = () => {
-  import("./CriticalComponent");
+  import('./CriticalComponent');
 };
 ```
 
@@ -303,10 +303,10 @@ const preloadComponent = () => {
 
 ```typescript
 const responsiveClasses = {
-  sm: "text-sm md:text-base",
-  md: "text-base md:text-lg",
-  lg: "text-lg md:text-xl",
-  xl: "text-xl md:text-2xl",
+  sm: 'text-sm md:text-base',
+  md: 'text-base md:text-lg',
+  lg: 'text-lg md:text-xl',
+  xl: 'text-xl md:text-2xl',
 };
 ```
 
@@ -390,15 +390,15 @@ test('Button looks correct', async () => {
 
 <script setup lang="ts">
 interface Props {
-  variant?: "primary" | "secondary" | "ghost";
-  size?: "sm" | "md" | "lg";
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   disabled?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  variant: "primary",
-  size: "md",
+  variant: 'primary',
+  size: 'md',
   loading: false,
   disabled: false,
 });

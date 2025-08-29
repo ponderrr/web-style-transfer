@@ -1,37 +1,5 @@
-import { Page, ElementHandle } from "playwright";
-
-export interface UIPattern {
-  type:
-    | "navigation"
-    | "hero"
-    | "cards"
-    | "form"
-    | "table"
-    | "pricing"
-    | "footer";
-  variant: string;
-  confidence: number;
-  selector: string;
-  element: ElementHandle;
-  properties: {
-    layout?: "grid" | "flex" | "block";
-    columns?: number;
-    spacing?: string;
-    responsive?: boolean;
-  };
-  accessibility: {
-    hasAriaLabels: boolean;
-    hasRoles: boolean;
-    keyboardNavigable: boolean;
-    semanticHTML: boolean;
-  };
-  content: {
-    headings: string[];
-    text: string;
-    links: string[];
-    images: string[];
-  };
-}
+import { Page, ElementHandle } from 'playwright';
+import { UIPattern } from '../schemas/style.schema';
 
 export class PatternDetector {
   private readonly MIN_CONFIDENCE = 0.7;
@@ -52,15 +20,13 @@ export class PatternDetector {
       ]);
 
       // Flatten and filter by confidence
-      allPatterns.forEach((patternArray) => {
+      allPatterns.forEach(patternArray => {
         patterns.push(...patternArray);
       });
 
-      return patterns.filter(
-        (pattern) => pattern.confidence >= this.MIN_CONFIDENCE
-      );
+      return patterns.filter(pattern => pattern.confidence >= this.MIN_CONFIDENCE);
     } catch (error) {
-      console.error("❌ Failed to detect UI patterns:", error);
+      console.error('❌ Failed to detect UI patterns:', error);
       // Return empty array instead of throwing to allow extraction to continue
       return [];
     }
@@ -72,19 +38,15 @@ export class PatternDetector {
     // Check for sidebar navigation
     const sidebar = await page.$('[class*="sidebar"], nav[class*="side"]');
     if (sidebar) {
-      const confidence = await this.calculateConfidence(
-        sidebar,
-        ["a", "button"],
-        3
-      );
+      const confidence = await this.calculateConfidence(sidebar, ['a', 'button'], 3);
       if (confidence >= this.MIN_CONFIDENCE) {
         patterns.push({
-          type: "navigation",
-          variant: "sidebar",
+          type: 'navigation',
+          variant: 'sidebar',
           confidence,
           selector: '[class*="sidebar"]',
           element: sidebar,
-          properties: { layout: "block" },
+          properties: { layout: 'block' },
           accessibility: await this.checkAccessibility(sidebar),
           content: await this.extractContent(sidebar),
         });
@@ -102,7 +64,7 @@ export class PatternDetector {
       '[class*="hero"]',
       '[class*="banner"]',
       'header[class*="hero"]',
-      "section:first-of-type",
+      'section:first-of-type',
       '[class*="landing"]',
     ];
 
@@ -111,19 +73,19 @@ export class PatternDetector {
       if (hero) {
         const confidence = await this.calculateConfidence(
           hero,
-          ["h1", "h2", "[class*='title']"],
+          ['h1', 'h2', "[class*='title']"],
           1
         );
 
         if (confidence >= this.MIN_CONFIDENCE) {
           patterns.push({
-            type: "hero",
-            variant: "standard",
+            type: 'hero',
+            variant: 'standard',
             confidence,
             selector,
             element: hero,
             properties: {
-              layout: "block",
+              layout: 'block',
               responsive: true,
             },
             accessibility: await this.checkAccessibility(hero),
@@ -140,11 +102,11 @@ export class PatternDetector {
   private async detectCardPatterns(page: Page): Promise<UIPattern[]> {
     const patterns: UIPattern[] = [];
 
-    // Check for card layouts
+    // Check for card-like elements
     const cardSelectors = [
-      '[class*="card"]',
+      '.card, [class*="card"]',
+      'article',
       '[class*="product"]',
-      "article",
       '[class*="item"]',
     ];
 
@@ -153,21 +115,19 @@ export class PatternDetector {
       if (cards.length >= 3) {
         // Need at least 3 cards for a pattern
         const firstCard = cards[0];
-        const confidence = await this.calculateConfidence(
-          firstCard,
-          ["h3", "h4", "img", "a"],
-          1
-        );
+        if (!firstCard) continue; // Skip if firstCard is undefined
+
+        const confidence = await this.calculateConfidence(firstCard, ['h3', 'h4', 'img', 'a'], 1);
 
         if (confidence >= this.MIN_CONFIDENCE) {
           patterns.push({
-            type: "cards",
-            variant: "grid",
+            type: 'cards',
+            variant: 'grid',
             confidence,
             selector,
             element: firstCard,
             properties: {
-              layout: "grid",
+              layout: 'grid',
               columns: Math.min(cards.length, 4),
               responsive: true,
             },
@@ -190,19 +150,19 @@ export class PatternDetector {
     for (const form of forms) {
       const confidence = await this.calculateConfidence(
         form,
-        ["input", "textarea", "select", "button"],
+        ['input', 'textarea', 'select', 'button'],
         2
       );
 
       if (confidence >= this.MIN_CONFIDENCE) {
         patterns.push({
-          type: "form",
-          variant: "standard",
+          type: 'form',
+          variant: 'standard',
           confidence,
-          selector: "form",
+          selector: 'form',
           element: form,
           properties: {
-            layout: "block",
+            layout: 'block',
             responsive: true,
           },
           accessibility: await this.checkAccessibility(form),
@@ -221,21 +181,17 @@ export class PatternDetector {
     // Check for tables
     const tables = await page.$$('table, [class*="table"], [role="table"]');
     for (const table of tables) {
-      const confidence = await this.calculateConfidence(
-        table,
-        ["th", "td", "tr"],
-        3
-      );
+      const confidence = await this.calculateConfidence(table, ['th', 'td', 'tr'], 3);
 
       if (confidence >= this.MIN_CONFIDENCE) {
         patterns.push({
-          type: "table",
-          variant: "data",
+          type: 'table',
+          variant: 'data',
           confidence,
-          selector: "table",
+          selector: 'table',
           element: table,
           properties: {
-            layout: "block",
+            layout: 'block',
             responsive: true,
           },
           accessibility: await this.checkAccessibility(table),
@@ -264,19 +220,19 @@ export class PatternDetector {
       if (pricing) {
         const confidence = await this.calculateConfidence(
           pricing,
-          ["[class*='price']", "[class*='plan']", "button"],
+          ["[class*='price']", "[class*='plan']", 'button'],
           2
         );
 
         if (confidence >= this.MIN_CONFIDENCE) {
           patterns.push({
-            type: "pricing",
-            variant: "cards",
+            type: 'pricing',
+            variant: 'cards',
             confidence,
             selector,
             element: pricing,
             properties: {
-              layout: "grid",
+              layout: 'grid',
               columns: 3,
               responsive: true,
             },
@@ -296,30 +252,26 @@ export class PatternDetector {
 
     // Check for footer
     const footerSelectors = [
-      "footer",
+      'footer',
       '[class*="footer"]',
       'div[class*="bottom"]',
-      "section:last-of-type",
+      'section:last-of-type',
     ];
 
     for (const selector of footerSelectors) {
       const footer = await page.$(selector);
       if (footer) {
-        const confidence = await this.calculateConfidence(
-          footer,
-          ["a", "p", "div"],
-          3
-        );
+        const confidence = await this.calculateConfidence(footer, ['a', 'p', 'div'], 3);
 
         if (confidence >= this.MIN_CONFIDENCE) {
           patterns.push({
-            type: "footer",
-            variant: "standard",
+            type: 'footer',
+            variant: 'standard',
             confidence,
             selector,
             element: footer,
             properties: {
-              layout: "block",
+              layout: 'block',
               responsive: true,
             },
             accessibility: await this.checkAccessibility(footer),
@@ -338,44 +290,31 @@ export class PatternDetector {
     selectors: string[],
     minCount: number
   ): Promise<number> {
-    const count = await element.$$eval(
-      selectors.join(", "),
-      (els) => els.length
-    );
+    const count = await element.$$eval(selectors.join(', '), els => els.length);
     return Math.min(count / minCount, 1);
   }
 
-  private async checkAccessibility(
-    element: ElementHandle
-  ): Promise<UIPattern["accessibility"]> {
+  private async checkAccessibility(element: ElementHandle): Promise<UIPattern['accessibility']> {
     return await element.evaluate((el: Element) => ({
-      hasAriaLabels:
-        Array.from(el.querySelectorAll("[aria-label], [aria-labelledby]"))
-          .length > 0,
-      hasRoles: Array.from(el.querySelectorAll("[role]")).length > 0,
-      keyboardNavigable:
-        Array.from(el.querySelectorAll("a, button, input, [tabindex]")).length >
-        0,
-      semanticHTML:
-        el.tagName === "NAV" ||
-        Array.from(el.querySelectorAll("nav")).length > 0,
+      hasAriaLabels: Array.from(el.querySelectorAll('[aria-label], [aria-labelledby]')).length > 0,
+      hasRoles: Array.from(el.querySelectorAll('[role]')).length > 0,
+      keyboardNavigable: Array.from(el.querySelectorAll('a, button, input, [tabindex]')).length > 0,
+      semanticHTML: el.tagName === 'NAV' || Array.from(el.querySelectorAll('nav')).length > 0,
     }));
   }
 
-  private async extractContent(
-    element: ElementHandle
-  ): Promise<UIPattern["content"]> {
+  private async extractContent(element: ElementHandle): Promise<UIPattern['content']> {
     return await element.evaluate((el: Element) => ({
-      headings: Array.from(el.querySelectorAll("h1, h2, h3"))
+      headings: Array.from(el.querySelectorAll('h1, h2, h3'))
         .map((h: Element) => h.textContent?.trim())
         .filter(Boolean) as string[],
-      text: el.textContent?.trim() || "",
-      links: Array.from(el.querySelectorAll("a"))
+      text: el.textContent?.trim() || '',
+      links: Array.from(el.querySelectorAll('a'))
         .map((a: Element) => a.textContent?.trim())
         .filter(Boolean) as string[],
-      images: Array.from(el.querySelectorAll("img")).map((img: Element) => {
+      images: Array.from(el.querySelectorAll('img')).map((img: Element) => {
         const imgElement = img as HTMLImageElement;
-        return imgElement.alt || imgElement.src || "";
+        return imgElement.alt || imgElement.src || '';
       }),
     }));
   }

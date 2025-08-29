@@ -1,5 +1,5 @@
-import React, { useState, useId } from "react";
-import { cn } from "@/lib/utils";
+import React, { useState, useId } from 'react';
+import { cn } from '@/lib/utils';
 
 interface BaseFieldProps {
   label: string;
@@ -12,7 +12,7 @@ interface BaseFieldProps {
 }
 
 interface TextFieldProps extends BaseFieldProps {
-  type?: "text" | "email" | "password" | "tel" | "url" | "search";
+  type?: 'text' | 'email' | 'password' | 'tel' | 'url' | 'search';
   placeholder?: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -32,7 +32,7 @@ interface TextAreaProps extends BaseFieldProps {
   rows?: number;
   minLength?: number;
   maxLength?: number;
-  resize?: "none" | "vertical" | "horizontal" | "both";
+  resize?: 'none' | 'vertical' | 'horizontal' | 'both';
 }
 
 interface SelectOption {
@@ -66,7 +66,7 @@ interface RadioGroupProps extends BaseFieldProps {
   options: RadioOption[];
   value?: string;
   onChange?: (value: string) => void;
-  direction?: "vertical" | "horizontal";
+  direction?: 'vertical' | 'horizontal';
 }
 
 interface FormProps {
@@ -75,12 +75,9 @@ interface FormProps {
   className?: string;
   loading?: boolean;
   disabled?: boolean;
-  method?: "post" | "get";
+  method?: 'post' | 'get';
   action?: string;
-  encType?:
-    | "application/x-www-form-urlencoded"
-    | "multipart/form-data"
-    | "text/plain";
+  encType?: 'application/x-www-form-urlencoded' | 'multipart/form-data' | 'text/plain';
 }
 
 // Form context for managing form state
@@ -100,7 +97,7 @@ const FormContext = React.createContext<FormContextValue | null>(null);
 function useFormContext() {
   const context = React.useContext(FormContext);
   if (!context) {
-    throw new Error("Form components must be used within a Form");
+    throw new Error('Form components must be used within a Form');
   }
   return context;
 }
@@ -108,7 +105,6 @@ function useFormContext() {
 // Form field wrapper component
 function FieldWrapper({
   label,
-  name,
   required,
   error,
   hint,
@@ -116,7 +112,7 @@ function FieldWrapper({
   children,
   className,
   fieldId,
-}: BaseFieldProps & {
+}: Omit<BaseFieldProps, 'name'> & {
   children: React.ReactNode;
   fieldId: string;
 }) {
@@ -124,13 +120,13 @@ function FieldWrapper({
   const hasHint = !!hint;
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn('space-y-2', className)}>
       {/* Label */}
       <label
         htmlFor={fieldId}
         className={cn(
-          "block text-sm font-medium",
-          disabled ? "text-gray-400" : "text-gray-700",
+          'block text-sm font-medium',
+          disabled ? 'text-gray-400' : 'text-gray-700',
           required && "after:content-['*'] after:ml-1 after:text-red-500"
         )}
       >
@@ -149,12 +145,7 @@ function FieldWrapper({
 
       {/* Error */}
       {hasError && (
-        <p
-          className="text-sm text-red-600"
-          id={`${fieldId}-error`}
-          role="alert"
-          aria-live="polite"
-        >
+        <p className="text-sm text-red-600" id={`${fieldId}-error`} role="alert" aria-live="polite">
           {error}
         </p>
       )}
@@ -166,7 +157,7 @@ function FieldWrapper({
 export function TextField({
   label,
   name,
-  type = "text",
+  type = 'text',
   placeholder,
   value,
   onChange,
@@ -182,11 +173,10 @@ export function TextField({
   autoFocus,
   className,
 }: TextFieldProps) {
-  const { formData, errors, touched, setFieldValue, setFieldTouched } =
-    useFormContext();
+  const { formData, errors, touched, setFieldValue, setFieldTouched } = useFormContext();
   const fieldId = useId();
 
-  const fieldValue = value !== undefined ? value : formData[name] || "";
+  const fieldValue = value !== undefined ? value : formData[name] || '';
   const fieldError = error || (touched[name] ? errors[name] : undefined);
   const fieldDisabled = disabled;
 
@@ -227,17 +217,15 @@ export function TextField({
         pattern={pattern}
         autoComplete={autoComplete}
         autoFocus={autoFocus}
-        aria-describedby={
-          fieldError ? `${fieldId}-error` : hint ? `${fieldId}-hint` : undefined
-        }
+        aria-describedby={fieldError ? `${fieldId}-error` : hint ? `${fieldId}-hint` : undefined}
         aria-invalid={!!fieldError}
         className={cn(
-          "block w-full rounded-md border px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 sm:text-sm",
+          'block w-full rounded-md border px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 sm:text-sm',
           fieldError
-            ? "border-red-300 focus:border-red-500 focus:ring-red-500"
-            : "border-gray-300 focus:border-blue-500 focus:ring-blue-500",
-          fieldDisabled && "bg-gray-50 text-gray-500 cursor-not-allowed",
-          "min-h-[44px]" // Ensure touch target meets 44px minimum
+            ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+            : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500',
+          fieldDisabled && 'bg-gray-50 text-gray-500 cursor-not-allowed',
+          'min-h-[44px]' // Ensure touch target meets 44px minimum
         )}
       />
     </FieldWrapper>
@@ -259,14 +247,13 @@ export function TextArea({
   rows = 4,
   minLength,
   maxLength,
-  resize = "vertical",
+  resize = 'vertical',
   className,
 }: TextAreaProps) {
-  const { formData, errors, touched, setFieldValue, setFieldTouched } =
-    useFormContext();
+  const { formData, errors, touched, setFieldValue, setFieldTouched } = useFormContext();
   const fieldId = useId();
 
-  const fieldValue = value !== undefined ? value : formData[name] || "";
+  const fieldValue = value !== undefined ? value : formData[name] || '';
   const fieldError = error || (touched[name] ? errors[name] : undefined);
   const fieldDisabled = disabled;
 
@@ -282,10 +269,10 @@ export function TextArea({
   };
 
   const resizeClass = {
-    none: "resize-none",
-    vertical: "resize-y",
-    horizontal: "resize-x",
-    both: "resize",
+    none: 'resize-none',
+    vertical: 'resize-y',
+    horizontal: 'resize-x',
+    both: 'resize',
   };
 
   return (
@@ -311,18 +298,16 @@ export function TextArea({
         rows={rows}
         minLength={minLength}
         maxLength={maxLength}
-        aria-describedby={
-          fieldError ? `${fieldId}-error` : hint ? `${fieldId}-hint` : undefined
-        }
+        aria-describedby={fieldError ? `${fieldId}-error` : hint ? `${fieldId}-hint` : undefined}
         aria-invalid={!!fieldError}
         className={cn(
-          "block w-full rounded-md border px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 sm:text-sm",
+          'block w-full rounded-md border px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 sm:text-sm',
           resizeClass[resize],
           fieldError
-            ? "border-red-300 focus:border-red-500 focus:ring-red-500"
-            : "border-gray-300 focus:border-blue-500 focus:ring-blue-500",
-          fieldDisabled && "bg-gray-50 text-gray-500 cursor-not-allowed",
-          "min-h-[44px]" // Ensure touch target meets 44px minimum
+            ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+            : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500',
+          fieldDisabled && 'bg-gray-50 text-gray-500 cursor-not-allowed',
+          'min-h-[44px]' // Ensure touch target meets 44px minimum
         )}
       />
     </FieldWrapper>
@@ -345,18 +330,16 @@ export function Select({
   multiple = false,
   className,
 }: SelectFieldProps) {
-  const { formData, errors, touched, setFieldValue, setFieldTouched } =
-    useFormContext();
+  const { formData, errors, touched, setFieldValue, setFieldTouched } = useFormContext();
   const fieldId = useId();
 
-  const fieldValue =
-    value !== undefined ? value : formData[name] || (multiple ? [] : "");
+  const fieldValue = value !== undefined ? value : formData[name] || (multiple ? [] : '');
   const fieldError = error || (touched[name] ? errors[name] : undefined);
   const fieldDisabled = disabled;
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = multiple
-      ? Array.from(e.target.selectedOptions, (option) => option.value)
+      ? Array.from(e.target.selectedOptions, option => option.value)
       : e.target.value;
     setFieldValue(name, newValue);
     onChange?.(newValue as string);
@@ -387,17 +370,15 @@ export function Select({
         required={required}
         disabled={fieldDisabled}
         multiple={multiple}
-        aria-describedby={
-          fieldError ? `${fieldId}-error` : hint ? `${fieldId}-hint` : undefined
-        }
+        aria-describedby={fieldError ? `${fieldId}-error` : hint ? `${fieldId}-hint` : undefined}
         aria-invalid={!!fieldError}
         className={cn(
-          "block w-full rounded-md border px-3 py-2 text-gray-900 shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 sm:text-sm",
+          'block w-full rounded-md border px-3 py-2 text-gray-900 shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 sm:text-sm',
           fieldError
-            ? "border-red-300 focus:border-red-500 focus:ring-red-500"
-            : "border-gray-300 focus:border-blue-500 focus:ring-blue-500",
-          fieldDisabled && "bg-gray-50 text-gray-500 cursor-not-allowed",
-          "min-h-[44px]" // Ensure touch target meets 44px minimum
+            ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+            : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500',
+          fieldDisabled && 'bg-gray-50 text-gray-500 cursor-not-allowed',
+          'min-h-[44px]' // Ensure touch target meets 44px minimum
         )}
       >
         {placeholder && (
@@ -405,12 +386,8 @@ export function Select({
             {placeholder}
           </option>
         )}
-        {options.map((option) => (
-          <option
-            key={option.value}
-            value={option.value}
-            disabled={option.disabled}
-          >
+        {options.map(option => (
+          <option key={option.value} value={option.value} disabled={option.disabled}>
             {option.label}
           </option>
         ))}
@@ -432,12 +409,10 @@ export function Checkbox({
   indeterminate,
   className,
 }: CheckboxProps) {
-  const { formData, errors, touched, setFieldValue, setFieldTouched } =
-    useFormContext();
+  const { formData, errors, touched, setFieldValue, setFieldTouched } = useFormContext();
   const fieldId = useId();
 
-  const fieldChecked =
-    checked !== undefined ? checked : formData[name] || false;
+  const fieldChecked = checked !== undefined ? checked : formData[name] || false;
   const fieldError = error || (touched[name] ? errors[name] : undefined);
   const fieldDisabled = disabled;
 
@@ -452,7 +427,7 @@ export function Checkbox({
   };
 
   return (
-    <div className={cn("flex items-start space-x-3", className)}>
+    <div className={cn('flex items-start space-x-3', className)}>
       <div className="flex items-center h-6">
         <input
           id={fieldId}
@@ -463,24 +438,17 @@ export function Checkbox({
           onBlur={handleBlur}
           required={required}
           disabled={fieldDisabled}
-          aria-describedby={
-            fieldError
-              ? `${fieldId}-error`
-              : hint
-                ? `${fieldId}-hint`
-                : undefined
-          }
+          aria-describedby={fieldError ? `${fieldId}-error` : hint ? `${fieldId}-hint` : undefined}
           aria-invalid={!!fieldError}
-          ref={(el) => {
+          ref={el => {
             if (el && indeterminate !== undefined) {
               el.indeterminate = indeterminate;
             }
           }}
           className={cn(
-            "h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-2 focus:ring-offset-0",
-            fieldError &&
-              "border-red-300 focus:border-red-500 focus:ring-red-500",
-            fieldDisabled && "bg-gray-50 text-gray-500 cursor-not-allowed"
+            'h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-2 focus:ring-offset-0',
+            fieldError && 'border-red-300 focus:border-red-500 focus:ring-red-500',
+            fieldDisabled && 'bg-gray-50 text-gray-500 cursor-not-allowed'
           )}
         />
       </div>
@@ -488,8 +456,8 @@ export function Checkbox({
         <label
           htmlFor={fieldId}
           className={cn(
-            "text-sm font-medium",
-            fieldDisabled ? "text-gray-400" : "text-gray-700",
+            'text-sm font-medium',
+            fieldDisabled ? 'text-gray-400' : 'text-gray-700',
             required && "after:content-['*'] after:ml-1 after:text-red-500"
           )}
         >
@@ -526,14 +494,13 @@ export function RadioGroup({
   disabled,
   error,
   hint,
-  direction = "vertical",
+  direction = 'vertical',
   className,
 }: RadioGroupProps) {
-  const { formData, errors, touched, setFieldValue, setFieldTouched } =
-    useFormContext();
+  const { formData, errors, touched, setFieldValue, setFieldTouched } = useFormContext();
   const groupId = useId();
 
-  const fieldValue = value !== undefined ? value : formData[name] || "";
+  const fieldValue = value !== undefined ? value : formData[name] || '';
   const fieldError = error || (touched[name] ? errors[name] : undefined);
   const fieldDisabled = disabled;
 
@@ -544,11 +511,11 @@ export function RadioGroup({
   };
 
   return (
-    <fieldset className={cn("space-y-4", className)}>
+    <fieldset className={cn('space-y-4', className)}>
       <legend
         className={cn(
-          "text-sm font-medium",
-          fieldDisabled ? "text-gray-400" : "text-gray-700",
+          'text-sm font-medium',
+          fieldDisabled ? 'text-gray-400' : 'text-gray-700',
           required && "after:content-['*'] after:ml-1 after:text-red-500"
         )}
       >
@@ -556,17 +523,12 @@ export function RadioGroup({
       </legend>
 
       <div
-        className={cn(
-          "space-y-3",
-          direction === "horizontal" && "flex flex-wrap gap-6"
-        )}
+        className={cn('space-y-3', direction === 'horizontal' && 'flex flex-wrap gap-6')}
         role="radiogroup"
-        aria-describedby={
-          fieldError ? `${groupId}-error` : hint ? `${groupId}-hint` : undefined
-        }
+        aria-describedby={fieldError ? `${groupId}-error` : hint ? `${groupId}-hint` : undefined}
         aria-invalid={!!fieldError}
       >
-        {options.map((option) => {
+        {options.map(option => {
           const optionId = `${groupId}-${option.value}`;
           const isChecked = fieldValue === option.value;
           const isOptionDisabled = fieldDisabled || option.disabled;
@@ -583,19 +545,17 @@ export function RadioGroup({
                 required={required}
                 disabled={isOptionDisabled}
                 className={cn(
-                  "h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-2 focus:ring-offset-0",
-                  fieldError &&
-                    "border-red-300 focus:border-red-500 focus:ring-red-500",
-                  isOptionDisabled &&
-                    "bg-gray-50 text-gray-500 cursor-not-allowed"
+                  'h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-2 focus:ring-offset-0',
+                  fieldError && 'border-red-300 focus:border-red-500 focus:ring-red-500',
+                  isOptionDisabled && 'bg-gray-50 text-gray-500 cursor-not-allowed'
                 )}
               />
               <label
                 htmlFor={optionId}
                 className={cn(
-                  "ml-3 block text-sm",
-                  isOptionDisabled ? "text-gray-400" : "text-gray-700",
-                  "min-h-[44px] flex items-center cursor-pointer"
+                  'ml-3 block text-sm',
+                  isOptionDisabled ? 'text-gray-400' : 'text-gray-700',
+                  'min-h-[44px] flex items-center cursor-pointer'
                 )}
               >
                 {option.label}
@@ -612,12 +572,7 @@ export function RadioGroup({
       )}
 
       {fieldError && (
-        <p
-          className="text-sm text-red-600"
-          id={`${groupId}-error`}
-          role="alert"
-          aria-live="polite"
-        >
+        <p className="text-sm text-red-600" id={`${groupId}-error`} role="alert" aria-live="polite">
           {fieldError}
         </p>
       )}
@@ -644,7 +599,7 @@ export function SubmitButton({
       type="submit"
       disabled={disabled || isSubmitting || loading}
       className={cn(
-        "inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none min-h-[44px]",
+        'inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none min-h-[44px]',
         className
       )}
     >
@@ -687,7 +642,7 @@ export function Form({
   className,
   loading = false,
   disabled = false,
-  method = "post",
+  method = 'post',
   action,
   encType,
 }: FormProps) {
@@ -697,15 +652,15 @@ export function Form({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const setFieldValue = (name: string, value: any) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const setFieldError = (name: string, error: string) => {
-    setErrors((prev) => ({ ...prev, [name]: error }));
+    setErrors(prev => ({ ...prev, [name]: error }));
   };
 
   const setFieldTouched = (name: string, touchedValue: boolean) => {
-    setTouched((prev) => ({ ...prev, [name]: touchedValue }));
+    setTouched(prev => ({ ...prev, [name]: touchedValue }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -715,7 +670,7 @@ export function Form({
     try {
       await onSubmit(formData);
     } catch (error) {
-      console.error("Form submission error:", error);
+      console.error('Form submission error:', error);
     } finally {
       setIsSubmitting(false);
     }
@@ -736,16 +691,14 @@ export function Form({
     <FormContext.Provider value={contextValue}>
       <form
         onSubmit={handleSubmit}
-        className={cn("space-y-6", className)}
+        className={cn('space-y-6', className)}
         method={method}
         action={action}
         encType={encType}
         noValidate
         aria-label="Form"
       >
-        <fieldset disabled={disabled || isSubmitting || loading}>
-          {children}
-        </fieldset>
+        <fieldset disabled={disabled || isSubmitting || loading}>{children}</fieldset>
       </form>
     </FormContext.Provider>
   );
@@ -764,15 +717,11 @@ export function FormSection({
   className?: string;
 }) {
   return (
-    <section className={cn("space-y-6", className)}>
+    <section className={cn('space-y-6', className)}>
       {(title || description) && (
         <div>
-          {title && (
-            <h3 className="text-lg font-medium text-gray-900">{title}</h3>
-          )}
-          {description && (
-            <p className="mt-1 text-sm text-gray-600">{description}</p>
-          )}
+          {title && <h3 className="text-lg font-medium text-gray-900">{title}</h3>}
+          {description && <p className="mt-1 text-sm text-gray-600">{description}</p>}
         </div>
       )}
       <div className="space-y-6">{children}</div>
@@ -791,7 +740,7 @@ export function FormActions({
   return (
     <div
       className={cn(
-        "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 space-y-3 space-y-reverse sm:space-y-0",
+        'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 space-y-3 space-y-reverse sm:space-y-0',
         className
       )}
     >
@@ -802,14 +751,8 @@ export function FormActions({
 
 // Export form utilities
 export function useFormField(name: string) {
-  const {
-    formData,
-    errors,
-    touched,
-    setFieldValue,
-    setFieldError,
-    setFieldTouched,
-  } = useFormContext();
+  const { formData, errors, touched, setFieldValue, setFieldError, setFieldTouched } =
+    useFormContext();
 
   return {
     value: formData[name],

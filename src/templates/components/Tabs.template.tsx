@@ -35,7 +35,6 @@ function TabTrigger({
   isActive,
   isDisabled,
   orientation,
-  activation,
   variant,
   onClick,
   onKeyDown,
@@ -45,7 +44,6 @@ function TabTrigger({
   isActive: boolean;
   isDisabled: boolean;
   orientation: 'horizontal' | 'vertical';
-  activation: 'onClick' | 'onHover';
   variant: 'default' | 'pills' | 'underline';
   onClick: () => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
@@ -259,12 +257,6 @@ export function Tabs({
   // Handle mouse events based on activation type
   const handleMouseEvent = (tabId: string) => {
     if (activation === 'onClick') {
-      handleTabActivation(tabId);
-    }
-  };
-
-  const handleMouseEnter = (tabId: string) => {
-    if (activation === 'onHover') {
       handleTabActivation(tabId);
     }
   };

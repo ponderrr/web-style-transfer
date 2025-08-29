@@ -254,18 +254,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       overflow: 'hidden',
     };
 
-    // Hover styles
-    const hoverStyles: React.CSSProperties = {
-      backgroundColor: variantStyles.hover.background,
-      color: variantStyles.hover.color,
-      transform: variantStyles.hover.transform,
-    };
 
-    // Focus styles
-    const focusStyles: React.CSSProperties = {
-      outline: variantStyles.focus.outline,
-      outlineOffset: variantStyles.focus.outlineOffset,
-    };
 
     return (
       <button

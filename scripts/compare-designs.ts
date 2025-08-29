@@ -12,7 +12,11 @@ program
   .description('Compare multiple design extraction results')
   .version('1.0.0')
   .argument('<extraction-paths...>', 'Paths to extraction results JSON files (minimum 2)')
-  .option('-o, --output <path>', 'Output comparison report path', './comparison/design-comparison.json')
+  .option(
+    '-o, --output <path>',
+    'Output comparison report path',
+    './comparison/design-comparison.json'
+  )
   .option('-v, --verbose', 'Enable verbose output')
   .action(async (extractionPaths: string[], options: any) => {
     try {
@@ -53,20 +57,21 @@ program
 
       // Display summary
       console.log(chalk.bold('📊 Design Comparison Summary:'));
-      comparison.designs.forEach((design, index) => {
+      comparison.designs.forEach((design: any, index: number) => {
         const score = design.qualityScore?.overall || 0;
         const color = score >= 0.8 ? chalk.green : score >= 0.6 ? chalk.yellow : chalk.red;
-        console.log(color(`   Design ${index + 1}: ${score.toFixed(2)} - ${design.url || design.path}`));
+        console.log(
+          color(`   Design ${index + 1}: ${score.toFixed(2)} - ${design.url || design.path}`)
+        );
       });
 
       if (comparison.recommendations.length > 0) {
         console.log('');
         console.log(chalk.bold('💡 Recommendations:'));
-        comparison.recommendations.slice(0, 5).forEach(rec => {
+        comparison.recommendations.slice(0, 5).forEach((rec: string) => {
           console.log(chalk.yellow(`   • ${rec}`));
         });
       }
-
     } catch (error) {
       console.error(chalk.red('❌ Comparison failed:'), error);
       process.exit(1);
@@ -81,14 +86,14 @@ async function compareDesigns(extractions: any[]): Promise<any> {
       url: data.url,
       qualityScore: data.qualityScore,
       patternCount: data.patterns?.length || 0,
-      tokenCount: countTokens(data.tokens)
+      tokenCount: countTokens(data.tokens),
     })),
     comparison: {
       qualityComparison: compareQualityScores(extractions),
       patternComparison: comparePatterns(extractions),
-      tokenComparison: compareTokens(extractions)
+      tokenComparison: compareTokens(extractions),
     },
-    recommendations: generateComparisonRecommendations(extractions)
+    recommendations: generateComparisonRecommendations(extractions),
   };
 
   return comparison;
@@ -113,17 +118,18 @@ function compareQualityScores(extractions: any[]): any {
     best,
     worst,
     average,
-    range: best - worst
+    range: best - worst,
   };
 }
 
 function comparePatterns(extractions: any[]): any {
   const patternStats = extractions.map(({ data }) => ({
     count: data.patterns?.length || 0,
-    types: data.patterns?.reduce((acc: any, pattern: any) => {
-      acc[pattern.type] = (acc[pattern.type] || 0) + 1;
-      return acc;
-    }, {}) || {}
+    types:
+      data.patterns?.reduce((acc: any, pattern: any) => {
+        acc[pattern.type] = (acc[pattern.type] || 0) + 1;
+        return acc;
+      }, {}) || {},
   }));
 
   const uniqueTypes = new Set();
@@ -134,7 +140,7 @@ function comparePatterns(extractions: any[]): any {
   return {
     stats: patternStats,
     uniquePatternTypes: Array.from(uniqueTypes),
-    mostCommonPatterns: findMostCommonPatterns(patternStats)
+    mostCommonPatterns: findMostCommonPatterns(patternStats),
   };
 }
 
@@ -143,7 +149,7 @@ function compareTokens(extractions: any[]): any {
     total: countTokens(data.tokens),
     colors: Object.keys(data.tokens?.colors || {}).length,
     typography: Object.keys(data.tokens?.typography || {}).length,
-    spacing: Object.keys(data.tokens?.spacing || {}).length
+    spacing: Object.keys(data.tokens?.spacing || {}).length,
   }));
 
   return {
@@ -152,8 +158,8 @@ function compareTokens(extractions: any[]): any {
       total: tokenStats.reduce((sum, stat) => sum + stat.total, 0) / tokenStats.length,
       colors: tokenStats.reduce((sum, stat) => sum + stat.colors, 0) / tokenStats.length,
       typography: tokenStats.reduce((sum, stat) => sum + stat.typography, 0) / tokenStats.length,
-      spacing: tokenStats.reduce((sum, stat) => sum + stat.spacing, 0) / tokenStats.length
-    }
+      spacing: tokenStats.reduce((sum, stat) => sum + stat.spacing, 0) / tokenStats.length,
+    },
   };
 }
 
@@ -167,7 +173,7 @@ function findMostCommonPatterns(patternStats: any[]): any {
   });
 
   return Object.entries(patternCounts)
-    .sort(([,a], [,b]) => (b as number) - (a as number))
+    .sort(([, a], [, b]) => (b as number) - (a as number))
     .slice(0, 5);
 }
 
@@ -179,12 +185,18 @@ function generateComparisonRecommendations(extractions: any[]): string[] {
   const worstScore = Math.min(...qualityScores);
 
   if (bestScore - worstScore > 0.3) {
-    recommendations.push('Significant quality difference detected - consider using the highest quality design as primary reference');
+    recommendations.push(
+      'Significant quality difference detected - consider using the highest quality design as primary reference'
+    );
   }
 
-  const avgPatterns = extractions.reduce((sum, { data }) => sum + (data.patterns?.length || 0), 0) / extractions.length;
+  const avgPatterns =
+    extractions.reduce((sum, { data }) => sum + (data.patterns?.length || 0), 0) /
+    extractions.length;
   if (avgPatterns < 5) {
-    recommendations.push('Low pattern detection across designs - consider manual component identification');
+    recommendations.push(
+      'Low pattern detection across designs - consider manual component identification'
+    );
   }
 
   const patternTypes = new Set();

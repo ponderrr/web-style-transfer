@@ -28,6 +28,39 @@ export class BrandExtractor {
   private _respectRobots: boolean = true;
   private _rateLimit: number = 1000; // ms between requests
 
+  // Property getters/setters
+  get baseURL(): string | undefined {
+    return this._baseURL;
+  }
+
+  set baseURL(value: string | undefined) {
+    this._baseURL = value;
+  }
+
+  get maxDepth(): number {
+    return this._maxDepth;
+  }
+
+  set maxDepth(value: number) {
+    this._maxDepth = value;
+  }
+
+  get respectRobots(): boolean {
+    return this._respectRobots;
+  }
+
+  set respectRobots(value: boolean) {
+    this._respectRobots = value;
+  }
+
+  get rateLimit(): number {
+    return this._rateLimit;
+  }
+
+  set rateLimit(value: number) {
+    this._rateLimit = value;
+  }
+
   // DOM sampling utilities
   private colorNormalizer: ColorNormalizer;
   private typographyAnalyzer: TypographyAnalyzer;
@@ -41,18 +74,6 @@ export class BrandExtractor {
     authoritative: ['expert', 'leading', 'trusted', 'proven', 'guaranteed'],
     innovative: ['cutting-edge', 'revolutionary', 'next-generation', 'transform', 'pioneer'],
     minimalist: ['simple', 'clean', 'essential', 'pure', 'focused'],
-  };
-
-  // Content pattern detection
-  private readonly _CONTENT_PATTERNS = {
-    hero: ['h1', '.hero-title', '.headline', '[class*="hero"]'],
-    features: ['.features', '.benefits', '[class*="feature"]', '.capabilities'],
-    pricing: ['.pricing', '.plans', '.tiers', '[class*="price"]'],
-    testimonials: ['.testimonial', '.review', '.quote', '[class*="testimonial"]'],
-    faq: ['.faq', '.questions', '[class*="faq"]', 'details'],
-    cta: ['button', '.cta', '[class*="call-to-action"]', 'a.btn'],
-    team: ['.team', '.about-us', '.people', '[class*="team"]'],
-    contact: ['.contact', 'form', '[class*="contact"]'],
   };
 
   constructor(
@@ -113,7 +134,7 @@ export class BrandExtractor {
     }
 
     const startTime = Date.now();
-    const baseUrl = new URL(url).origin;
+    const _baseUrl = new URL(url).origin;
 
     try {
       // Extract from main page
@@ -124,19 +145,16 @@ export class BrandExtractor {
       const brandIdentity = await this.extractBrandIdentity(mainPage);
 
       // Extract navigation structure for IA
-      const informationArchitecture = await this.extractIA(mainPage, baseUrl);
+      const informationArchitecture = await this.extractIA(mainPage, _baseUrl);
 
       // Crawl and extract content from key pages
-      const contentInventory = await this.crawlAndExtractContent(baseUrl, informationArchitecture);
+      const contentInventory = await this.crawlAndExtractContent(_baseUrl, informationArchitecture);
 
       // Analyze voice and tone
       const voiceTone = this.analyzeVoiceTone(contentInventory);
 
       // Extract SEO metadata
       const seoMetadata = await this.extractSEOMetadata(mainPage);
-
-      // Detect conversion patterns
-      const conversionPatterns = await this.detectConversionPatterns(mainPage);
 
       await mainPage.close();
 
@@ -150,9 +168,16 @@ export class BrandExtractor {
         informationArchitecture,
         contentInventory,
         seoMetadata: seoMetadata as any,
-        conversionPatterns,
+        recommendations: [],
+        qualityScore: {
+          brandClarity: 0,
+          contentQuality: 0,
+          informationArchitecture: 0,
+          seoOptimization: 0,
+          messagingConsistency: 0,
+          overall: 0,
+        },
         metadata: {
-          pagesAnalyzed: this.visitedUrls.size,
           extractionDuration: Date.now() - startTime,
           pagesCrawled: this.visitedUrls.size,
           contentTypesDetected: ['landing'],
@@ -184,7 +209,7 @@ export class BrandExtractor {
       identity.name =
         document.querySelector('meta[property="og:site_name"]')?.getAttribute('content') ||
         document.querySelector('.logo')?.textContent?.trim() ||
-        (document.title || '').split(/[-|–]/)[0].trim();
+        ((document.title || 'Untitled').split(/[-|–]/)[0] || 'Untitled').trim();
 
       // Extract tagline
       const taglineSelectors = [
@@ -207,16 +232,20 @@ export class BrandExtractor {
       // Extract logo
       const logo = document.querySelector('.logo img, [class*="logo"] img, header img');
       if (logo) {
+        const logoImg = logo as HTMLImageElement;
         identity.logo = {
-          src: (logo as HTMLImageElement).src,
-          alt: (logo as HTMLImageElement).alt,
+          src: logoImg.src || '',
+          alt: logoImg.alt || '',
         };
       }
 
       // Extract theme color with enhanced analysis
-      identity.themeColor = document
+      const themeColor = document
         .querySelector('meta[name="theme-color"]')
         ?.getAttribute('content');
+      if (themeColor) {
+        identity.themeColor = themeColor;
+      }
 
       // Extract social links
       const socialLinks: any = {};
@@ -318,9 +347,43 @@ export class BrandExtractor {
     const sitemap = this.buildSitemap(navigation);
 
     return {
-      navigation,
-      sitemap,
+      structure: {
+        primaryNavigation: navigation.primary || [],
+        footerNavigation: navigation.footer || [],
+        sitemap,
+      },
       depth: this.calculateIADepth(sitemap),
+      quality: {
+        structure: { score: 0, issues: [], recommendations: [] },
+        navigation: { score: 0, usability: 0, discoverability: 0 },
+        content: { score: 0, organization: 0, accessibility: 0 },
+        seo: { score: 0, internalLinking: 0, contentDepth: 0 },
+      },
+      userFlows: [],
+      contentClusters: [],
+      internalLinking: {
+        opportunities: [],
+        orphanPages: [],
+        brokenLinks: [],
+        linkingDepth: {
+          averageLinksPerPage: 0,
+          maxLinksPerPage: 0,
+          linkingPatterns: {},
+        },
+      },
+      accessibility: {
+        navigation: {
+          keyboardAccessible: false,
+          skipLinks: false,
+          focusManagement: false,
+          ariaLabels: false,
+        },
+        content: {
+          headingHierarchy: false,
+          semanticStructure: false,
+          altTextCoverage: 0,
+        },
+      },
     };
   }
 
@@ -386,44 +449,53 @@ export class BrandExtractor {
   }
 
   private async crawlAndExtractContent(
-    baseUrl: string,
+    _baseUrl: string,
     ia: InformationArchitecture
   ): Promise<ContentInventory> {
     const contentInventory: ContentInventory = {
       pages: [],
       contentTypes: {},
       totalWordCount: 0,
+      topics: [],
+      keywords: [],
+      readability: {
+        averageWordsPerPage: 0,
+        averageSentencesPerParagraph: 0,
+        averageSyllablesPerWord: 0,
+        fleschKincaidGrade: 0,
+      },
     };
 
     // Limit crawling to key pages
     const keyPages = ia.structure.primaryNavigation.slice(0, 10);
 
     for (const navItem of keyPages) {
-      if (this.visitedUrls.has(navItem.url)) continue;
+      const pageUrl = navItem.href || '';
+      if (!pageUrl || this.visitedUrls.has(pageUrl)) continue;
       if (this.visitedUrls.size >= this.maxPages) break;
 
       try {
         const page = await this.context!.newPage();
-        await page.goto(navItem.url, {
+        await page.goto(pageUrl, {
           waitUntil: 'networkidle',
           timeout: 15000,
         });
 
         const pageContent = await this.extractPageContent(page);
         contentInventory.pages.push({
-          url: navItem.url,
+          url: pageUrl,
           title: pageContent.title,
           content: pageContent,
           wordCount: this.countWords(pageContent),
         });
 
-        this.visitedUrls.add(navItem.url);
+        this.visitedUrls.add(pageUrl);
         await page.close();
 
         // Rate limiting
         await new Promise(resolve => setTimeout(resolve, 500));
       } catch (error) {
-        console.warn(`Failed to extract content from ${navItem.url}:`, error);
+        console.warn(`Failed to extract content from ${pageUrl}:`, error);
       }
     }
 
@@ -679,79 +751,6 @@ export class BrandExtractor {
     });
   }
 
-  private async detectConversionPatterns(page: Page): Promise<any> {
-    return await page.evaluate(() => {
-      const patterns: any = {
-        ctas: [],
-        forms: [],
-        pricing: null,
-        testimonials: [],
-      };
-
-      // Detect CTAs
-      document.querySelectorAll('button, .btn, [class*="button"], [class*="cta"]').forEach(el => {
-        const text = el.textContent?.trim();
-        if (
-          text &&
-          (text.toLowerCase().includes('start') ||
-            text.toLowerCase().includes('try') ||
-            text.toLowerCase().includes('get') ||
-            text.toLowerCase().includes('sign') ||
-            text.toLowerCase().includes('buy'))
-        ) {
-          patterns.ctas.push({
-            text,
-            type: el.classList.contains('primary') ? 'primary' : 'secondary',
-            location: el.closest('section')?.className || 'unknown',
-          });
-        }
-      });
-
-      // Detect forms
-      document.querySelectorAll('form').forEach(form => {
-        const inputs = form.querySelectorAll('input, textarea, select').length;
-        const submitButton = form.querySelector('button[type="submit"], input[type="submit"]');
-
-        patterns.forms.push({
-          fields: inputs,
-          submitText: submitButton?.textContent?.trim(),
-          purpose: form.id || form.className || 'unknown',
-        });
-      });
-
-      // Detect pricing
-      const pricingSection = document.querySelector(
-        '.pricing, [class*="pricing"], [class*="plans"]'
-      );
-      if (pricingSection) {
-        const tiers = pricingSection.querySelectorAll(
-          '.tier, .plan, [class*="tier"], [class*="plan"]'
-        );
-        patterns.pricing = {
-          tiers: tiers.length,
-          hasFree: !!pricingSection.textContent?.toLowerCase().includes('free'),
-          hasEnterprise: !!pricingSection.textContent?.toLowerCase().includes('enterprise'),
-        };
-      }
-
-      // Detect testimonials
-      const testimonials = document.querySelectorAll(
-        '.testimonial, [class*="testimonial"], .review, blockquote'
-      );
-      testimonials.forEach(testimonial => {
-        const text = testimonial.textContent?.trim();
-        if (text && text.length > 50) {
-          patterns.testimonials.push({
-            text: text.substring(0, 200),
-            hasAuthor: !!testimonial.querySelector('.author, cite, [class*="author"]'),
-          });
-        }
-      });
-
-      return patterns;
-    });
-  }
-
   private async checkRobotsTxt(url: string): Promise<boolean> {
     try {
       const urlObj = new URL(url);
@@ -766,18 +765,21 @@ export class BrandExtractor {
       const robotsTxt = await response.text();
 
       // Simple robots.txt parser
-      const lines = robotsTxt.split('\n');
+      const lines = (robotsTxt || '').split('\n');
       let currentUserAgent = '';
       const disallowed: string[] = [];
 
       for (const line of lines) {
         const trimmed = line.trim();
         if (trimmed.startsWith('User-agent:')) {
-          currentUserAgent = trimmed.split(':')[1].trim();
+          const userAgent = trimmed.split(':')[1];
+          if (userAgent) {
+            currentUserAgent = userAgent.trim();
+          }
         } else if (trimmed.startsWith('Disallow:') && currentUserAgent === '*') {
-          const path = trimmed.split(':')[1].trim();
-          if (path) {
-            disallowed.push(path);
+          const path = trimmed.split(':')[1];
+          if (path && path.trim()) {
+            disallowed.push(path.trim());
           }
         }
       }
@@ -796,10 +798,6 @@ export class BrandExtractor {
       console.warn(`⚠️ Could not check robots.txt for ${url}:`, error);
       return true;
     }
-  }
-
-  private async _delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   async cleanup(): Promise<void> {

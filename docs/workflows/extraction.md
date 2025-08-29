@@ -1,17 +1,20 @@
 # Style Extraction Workflow
 
 ## Overview
+
 The style extraction workflow analyzes existing websites and extracts their visual design systems, including colors, typography, spacing, and component patterns. This process transforms unstructured web content into structured design tokens and patterns.
 
 ## Prerequisites
 
 ### System Requirements
+
 - **Node.js**: Version 18.0.0 or higher
 - **Playwright**: Latest version with browser support
 - **Network Access**: Ability to access target websites
 - **Storage**: Minimum 500MB free space for extracted assets
 
 ### Input Validation
+
 ```typescript
 interface ExtractionInput {
   url: string;
@@ -36,16 +39,19 @@ function validateExtractionUrl(url: string): boolean {
 ## Step-by-Step Process
 
 ### Step 1: Target Analysis
+
 **Duration**: 30-60 seconds
 **Purpose**: Initial assessment of the target website
 
 1. **URL Validation**
+
    ```bash
    # Validate target URL format and accessibility
    curl -I --max-time 10 https://example.com
    ```
 
 2. **Robots.txt Compliance**
+
    ```typescript
    // Check robots.txt before extraction
    const robotsTxt = await fetchRobotsTxt(url);
@@ -63,38 +69,38 @@ function validateExtractionUrl(url: string): boolean {
    - Estimate page count and complexity
 
 ### Step 2: Page Loading & Rendering
+
 **Duration**: 10-30 seconds per page
 **Purpose**: Load pages with full CSS and JavaScript execution
 
 1. **Browser Launch**
+
    ```typescript
    const browser = await chromium.launch({
      headless: true,
-     args: [
-       '--no-sandbox',
-       '--disable-setuid-sandbox',
-       '--disable-dev-shm-usage'
-     ]
+     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
    });
    ```
 
 2. **Page Navigation**
+
    ```typescript
    const page = await browser.newPage();
    await page.setViewportSize({ width: 1440, height: 900 });
 
    // Set user agent to avoid bot detection
    await page.setExtraHTTPHeaders({
-     'User-Agent': 'WebStyleTransfer/1.0'
+     'User-Agent': 'WebStyleTransfer/1.0',
    });
 
    await page.goto(url, {
      waitUntil: 'networkidle',
-     timeout: 30000
+     timeout: 30000,
    });
    ```
 
 3. **Content Stabilization**
+
    ```typescript
    // Wait for dynamic content to load
    await page.waitForLoadState('domcontentloaded');
@@ -105,15 +111,15 @@ function validateExtractionUrl(url: string): boolean {
    ```
 
 ### Step 3: Visual Analysis
+
 **Duration**: 20-45 seconds per page
 **Purpose**: Extract visual design elements and patterns
 
 1. **Color Extraction**
+
    ```typescript
    // Extract color palette from CSS and inline styles
-   const colors = await page.$$eval('[style], style, link[rel="stylesheet"]',
-     extractColorTokens
-   );
+   const colors = await page.$$eval('[style], style, link[rel="stylesheet"]', extractColorTokens);
 
    // Analyze color usage frequency
    const colorUsage = analyzeColorFrequency(colors);
@@ -121,11 +127,10 @@ function validateExtractionUrl(url: string): boolean {
    ```
 
 2. **Typography Analysis**
+
    ```typescript
    // Extract font families and sizes
-   const typography = await page.$$eval('*',
-     extractTypographyTokens
-   );
+   const typography = await page.$$eval('*', extractTypographyTokens);
 
    // Build font scale hierarchy
    const fontScale = buildTypographyScale(typography);
@@ -133,17 +138,17 @@ function validateExtractionUrl(url: string): boolean {
    ```
 
 3. **Spacing Detection**
+
    ```typescript
    // Measure spacing patterns
-   const spacing = await page.$$eval('*',
-     extractSpacingPatterns
-   );
+   const spacing = await page.$$eval('*', extractSpacingPatterns);
 
    // Normalize to 8px grid system
    const normalizedSpacing = normalizeToGrid(spacing, 8);
    ```
 
 4. **Component Pattern Recognition**
+
    ```typescript
    // Identify common UI patterns
    const patterns = await detectUIPatterns(page);
@@ -153,15 +158,17 @@ function validateExtractionUrl(url: string): boolean {
    ```
 
 ### Step 4: Quality Assessment
+
 **Duration**: 15-30 seconds per page
 **Purpose**: Evaluate extraction quality and completeness
 
 1. **Design Quality Scoring**
+
    ```typescript
    interface QualityMetrics {
-     colorConsistency: number;    // 0-1 scale
+     colorConsistency: number; // 0-1 scale
      typographyHierarchy: number; // 0-1 scale
-     spacingRegularity: number;   // 0-1 scale
+     spacingRegularity: number; // 0-1 scale
      accessibilityCompliance: number; // 0-1 scale
      patternCompleteness: number; // 0-1 scale
    }
@@ -170,6 +177,7 @@ function validateExtractionUrl(url: string): boolean {
    ```
 
 2. **Accessibility Audit**
+
    ```typescript
    // Run automated accessibility checks
    const accessibilityResults = await runAxeAudit(page);
@@ -187,16 +195,19 @@ function validateExtractionUrl(url: string): boolean {
        loadTime: perf.loadEventEnd - perf.loadEventStart,
        domContentLoaded: perf.domContentLoadedEventEnd - perf.domContentLoadedEventStart,
        firstPaint: performance.getEntriesByName('first-paint')[0]?.startTime,
-       largestContentfulPaint: performance.getEntriesByName('largest-contentful-paint')[0]?.startTime
+       largestContentfulPaint: performance.getEntriesByName('largest-contentful-paint')[0]
+         ?.startTime,
      };
    });
    ```
 
 ### Step 5: Data Processing & Storage
+
 **Duration**: 10-20 seconds per page
 **Purpose**: Process and store extracted design data
 
 1. **Token Normalization**
+
    ```typescript
    // Convert extracted data to DTCG format
    const designTokens = normalizeToDTCGFormat(extractedData);
@@ -206,16 +217,18 @@ function validateExtractionUrl(url: string): boolean {
    ```
 
 2. **Asset Extraction**
+
    ```typescript
    // Extract and optimize images
    const images = await extractImages(page);
    const optimizedImages = await optimizeImages(images, {
      quality: 80,
-     formats: ['webp', 'jpg', 'png']
+     formats: ['webp', 'jpg', 'png'],
    });
    ```
 
 3. **Data Serialization**
+
    ```typescript
    // Save extraction results
    const extractionResult = {
@@ -229,8 +242,8 @@ function validateExtractionUrl(url: string): boolean {
      metadata: {
        extractionDuration: Date.now() - startTime,
        playwrightVersion: playwright.version(),
-       extractorVersion: '1.0.0'
-     }
+       extractorVersion: '1.0.0',
+     },
    };
 
    await saveExtractionResult(extractionResult);
@@ -239,6 +252,7 @@ function validateExtractionUrl(url: string): boolean {
 ## Output Structure
 
 ### Directory Structure
+
 ```
 extraction-results/
 ├── [domain]_[timestamp]/
@@ -262,6 +276,7 @@ extraction-results/
 ### Data Format Standards
 
 #### Design Tokens (DTCG Format)
+
 ```json
 {
   "color": {
@@ -287,6 +302,7 @@ extraction-results/
 ```
 
 #### Quality Report
+
 ```json
 {
   "overall": 0.87,
@@ -309,6 +325,7 @@ extraction-results/
 ### Common Issues & Solutions
 
 1. **Timeout Errors**
+
    ```typescript
    try {
      await page.goto(url, { timeout: 30000 });
@@ -321,6 +338,7 @@ extraction-results/
    ```
 
 2. **Anti-Bot Detection**
+
    ```typescript
    // Use realistic user agent and behavior
    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
@@ -330,17 +348,17 @@ extraction-results/
    ```
 
 3. **Dynamic Content Loading**
+
    ```typescript
    // Wait for specific elements or conditions
-   await page.waitForFunction(
-     () => document.querySelector('.main-content') !== null
-   );
+   await page.waitForFunction(() => document.querySelector('.main-content') !== null);
 
    // Handle infinite scroll
    await scrollToBottom(page);
    ```
 
 ### Fallback Strategies
+
 - Use cached results for previously extracted sites
 - Implement progressive extraction (basic styles first, then advanced patterns)
 - Provide manual override options for complex sites
@@ -348,26 +366,28 @@ extraction-results/
 ## Performance Optimization
 
 ### Parallel Processing
+
 ```typescript
 // Extract multiple pages concurrently
-const extractionPromises = urls.map(url =>
-  extractStyles(url, config)
-);
+const extractionPromises = urls.map(url => extractStyles(url, config));
 
 const results = await Promise.allSettled(extractionPromises);
 ```
 
 ### Resource Management
+
 - Limit concurrent browser instances
 - Implement connection pooling
 - Cache frequently accessed resources
 - Clean up browser instances after use
 
 ### Memory Management
+
 ```typescript
 // Monitor memory usage
 const memoryUsage = process.memoryUsage();
-if (memoryUsage.heapUsed > 500 * 1024 * 1024) { // 500MB
+if (memoryUsage.heapUsed > 500 * 1024 * 1024) {
+  // 500MB
   // Trigger garbage collection or restart process
 }
 ```
@@ -375,6 +395,7 @@ if (memoryUsage.heapUsed > 500 * 1024 * 1024) { // 500MB
 ## Monitoring & Logging
 
 ### Progress Tracking
+
 ```typescript
 interface ExtractionProgress {
   total: number;
@@ -385,12 +406,13 @@ interface ExtractionProgress {
 }
 
 const progress = new ProgressTracker(totalUrls);
-progress.on('progress', (data) => {
+progress.on('progress', data => {
   console.log(`${data.completed}/${data.total} pages extracted`);
 });
 ```
 
 ### Error Reporting
+
 ```typescript
 interface ExtractionError {
   url: string;
@@ -410,12 +432,14 @@ await logExtractionError(extractionError);
 ## Quality Assurance
 
 ### Automated Validation
+
 - Validate extracted tokens against DTCG schema
 - Check color contrast ratios automatically
 - Verify responsive breakpoint coverage
 - Test accessibility compliance
 
 ### Manual Review Process
+
 1. Review extracted design tokens for accuracy
 2. Validate color palette completeness
 3. Check typography hierarchy consistency

@@ -97,15 +97,15 @@ Generate detailed accessibility reports with:
 
 ```javascript
 // Keyboard navigation testing
-await page.keyboard.press("Tab");
-await page.keyboard.press("Enter");
-await page.keyboard.press("Space");
-await page.keyboard.press("ArrowUp");
-await page.keyboard.press("ArrowDown");
+await page.keyboard.press('Tab');
+await page.keyboard.press('Enter');
+await page.keyboard.press('Space');
+await page.keyboard.press('ArrowUp');
+await page.keyboard.press('ArrowDown');
 
 // Focus indicator verification
-const focusedElement = await page.$(":focus");
-const focusStyles = await page.evaluate((el) => {
+const focusedElement = await page.$(':focus');
+const focusStyles = await page.evaluate(el => {
   const computed = getComputedStyle(el);
   return {
     outline: computed.outline,
@@ -116,8 +116,8 @@ const focusStyles = await page.evaluate((el) => {
 
 // Color contrast measurement
 const contrastRatio = await page.evaluate(() => {
-  const elements = document.querySelectorAll("*");
-  return elements.map((el) => {
+  const elements = document.querySelectorAll('*');
+  return elements.map(el => {
     const style = getComputedStyle(el);
     const bg = style.backgroundColor;
     const color = style.color;

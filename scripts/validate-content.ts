@@ -73,7 +73,9 @@ function validateContentCoverage(): ValidationResult {
       contentSpec = JSON.parse(contentData);
     }
   } catch (error) {
-    console.warn(`Warning: Could not read content spec: ${error.message}`);
+    console.warn(
+      `Warning: Could not read content spec: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
   }
 
   const result: ValidationResult = {
@@ -114,7 +116,7 @@ function validateContentCoverage(): ValidationResult {
         });
       } else {
         // Check if required props are present
-        for (const [propKey, propValue] of Object.entries(component.props)) {
+        for (const [propKey] of Object.entries(component.props)) {
           if (!(propKey in componentContent)) {
             hasCompleteContent = false;
             missingSections.push({
@@ -134,11 +136,11 @@ function validateContentCoverage(): ValidationResult {
       missingMeta.push('title', 'description', 'og:title', 'og:description', 'og:image');
     } else {
       const meta = pageContent.meta;
-      if (!meta.title) missingMeta.push('title');
-      if (!meta.description) missingMeta.push('description');
-      if (!meta.og?.title) missingMeta.push('og:title');
-      if (!meta.og?.description) missingMeta.push('og:description');
-      if (!meta.og?.image) missingMeta.push('og:image');
+      if (!meta['title']) missingMeta.push('title');
+      if (!meta['description']) missingMeta.push('description');
+      if (!meta.og?.['title']) missingMeta.push('og:title');
+      if (!meta.og?.['description']) missingMeta.push('og:description');
+      if (!meta.og?.['image']) missingMeta.push('og:image');
 
       if (missingMeta.length > 0) {
         hasCompleteMeta = false;
@@ -171,7 +173,7 @@ function validateContentCoverage(): ValidationResult {
 
   // Check for unused content (simplified check)
   if (contentSpec.pages) {
-    for (const [pagePath, pageContent] of Object.entries(contentSpec.pages)) {
+    for (const [pagePath] of Object.entries(contentSpec.pages)) {
       const buildPage = buildSpec.generation.pages.find(p => p.path === pagePath);
       if (!buildPage) {
         result.unusedContentKeys.push(pagePath);
@@ -241,12 +243,12 @@ function printValidationReport(result: ValidationResult): void {
 }
 
 // Main execution
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   try {
     const result = validateContentCoverage();
 
     // Write JSON report
-    const fs = require('fs');
+    const fs = await import('fs');
     fs.writeFileSync(
       join(process.cwd(), 'reports', 'content.json'),
       JSON.stringify(result, null, 2)
@@ -263,8 +265,8 @@ if (require.main === module) {
         ? 0
         : 1;
     process.exit(exitCode);
-  } catch (error) {
-    console.error('Validation failed:', error.message);
+  } catch (error: unknown) {
+    console.error('Validation failed:', error instanceof Error ? error.message : 'Unknown error');
     process.exit(1);
   }
 }

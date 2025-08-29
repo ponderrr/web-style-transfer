@@ -14,8 +14,16 @@ program
   .description('Test website performance metrics against Core Web Vitals')
   .version('1.0.0')
   .argument('<url>', 'Target website URL to test')
-  .option('-o, --output <path>', 'Output performance report path', './validation/performance-report.json')
-  .option('-b, --budget <path>', 'Performance budget JSON file', './validation/performance-budget.json')
+  .option(
+    '-o, --output <path>',
+    'Output performance report path',
+    './validation/performance-report.json'
+  )
+  .option(
+    '-b, --budget <path>',
+    'Performance budget JSON file',
+    './validation/performance-budget.json'
+  )
   .option('-v, --verbose', 'Enable verbose output')
   .option('--lighthouse', 'Run full Lighthouse audit')
   .option('--mobile', 'Test mobile performance')
@@ -49,20 +57,24 @@ program
           timeToInteractive: 3800,
           totalBlockingTime: 300,
           cumulativeLayoutShift: 0.1,
-          speedIndex: 3400
-        }
+          speedIndex: 3400,
+        },
       };
 
       const performanceBudget = budget || defaultBudget;
 
       // Run performance tests
-      const results = await this.runPerformanceTests(url, options);
+      const results = await runPerformanceTests(url, options);
+
+      if (!results || results.length === 0) {
+        throw new Error('Performance testing failed to return results');
+      }
 
       // Calculate averages
-      const averages = this.calculateAverages(results);
+      const averages = calculateAverages(results);
 
       // Compare against budget
-      const comparison = this.compareToBudget(averages, performanceBudget);
+      const comparison = compareToBudget(averages, performanceBudget);
 
       // Ensure output directory exists
       const outputDir = path.dirname(options.output);
@@ -77,7 +89,7 @@ program
         averages,
         budget: performanceBudget,
         comparison,
-        individualRuns: results
+        individualRuns: results,
       };
 
       await fs.writeFile(options.output, JSON.stringify(report, null, 2));
@@ -91,25 +103,81 @@ program
       console.log(chalk.bold('📊 Core Web Vitals (Averages):'));
 
       const vitals = [
-        { name: 'First Contentful Paint', key: 'fcp', value: averages.fcp, unit: 'ms', good: 1800, poor: 3000 },
-        { name: 'Largest Contentful Paint', key: 'lcp', value: averages.lcp, unit: 'ms', good: 2500, poor: 4000 },
-        { name: 'Time to Interactive', key: 'tti', value: averages.tti, unit: 'ms', good: 3800, poor: 7300 },
-        { name: 'Total Blocking Time', key: 'tbt', value: averages.tbt, unit: 'ms', good: 300, poor: 600 },
-        { name: 'Cumulative Layout Shift', key: 'cls', value: averages.cls, unit: '', good: 0.1, poor: 0.25 },
-        { name: 'Speed Index', key: 'speedIndex', value: averages.speedIndex, unit: 'ms', good: 3400, poor: 5800 }
+        {
+          name: 'First Contentful Paint',
+          key: 'fcp',
+          value: averages.fcp,
+          unit: 'ms',
+          good: 1800,
+          poor: 3000,
+        },
+        {
+          name: 'Largest Contentful Paint',
+          key: 'lcp',
+          value: averages.lcp,
+          unit: 'ms',
+          good: 2500,
+          poor: 4000,
+        },
+        {
+          name: 'Time to Interactive',
+          key: 'tti',
+          value: averages.tti,
+          unit: 'ms',
+          good: 3800,
+          poor: 7300,
+        },
+        {
+          name: 'Total Blocking Time',
+          key: 'tbt',
+          value: averages.tbt,
+          unit: 'ms',
+          good: 300,
+          poor: 600,
+        },
+        {
+          name: 'Cumulative Layout Shift',
+          key: 'cls',
+          value: averages.cls,
+          unit: '',
+          good: 0.1,
+          poor: 0.25,
+        },
+        {
+          name: 'Speed Index',
+          key: 'speedIndex',
+          value: averages.speedIndex,
+          unit: 'ms',
+          good: 3400,
+          poor: 5800,
+        },
       ];
 
       vitals.forEach(vital => {
-        const value = vital.unit ? `${vital.value.toFixed(0)}${vital.unit}` : vital.value.toFixed(3);
-        const status = vital.value <= vital.good ? 'good' :
-                      vital.value <= vital.poor ? 'needs-improvement' : 'poor';
+        const value = vital.unit
+          ? `${vital.value.toFixed(0)}${vital.unit}`
+          : vital.value.toFixed(3);
+        const status =
+          vital.value <= vital.good
+            ? 'good'
+            : vital.value <= vital.poor
+              ? 'needs-improvement'
+              : 'poor';
 
-        const color = status === 'good' ? chalk.green :
-                     status === 'needs-improvement' ? chalk.yellow : chalk.red;
+        const color =
+          status === 'good'
+            ? chalk.green
+            : status === 'needs-improvement'
+              ? chalk.yellow
+              : chalk.red;
 
         const budgetStatus = comparison[vital.key];
-        const budgetColor = budgetStatus === 'pass' ? chalk.green :
-                           budgetStatus === 'warning' ? chalk.yellow : chalk.red;
+        const budgetColor =
+          budgetStatus === 'pass'
+            ? chalk.green
+            : budgetStatus === 'warning'
+              ? chalk.yellow
+              : chalk.red;
 
         console.log(color(`${vital.name}: ${value}`));
         if (budgetStatus) {
@@ -143,7 +211,6 @@ program
         console.log(chalk.yellow(`   Warnings: ${warnings}`));
         console.log(chalk.red(`   Failed: ${failed}`));
       }
-
     } catch (error) {
       console.error(chalk.red('❌ Performance testing failed:'), error);
       process.exit(1);
@@ -159,14 +226,14 @@ async function runPerformanceTests(url: string, options: any): Promise<any[]> {
 
     const browser = await chromium.launch();
     const context = await browser.newContext({
-      viewport: options.mobile ? { width: 375, height: 667 } : { width: 1440, height: 900 }
+      viewport: options.mobile ? { width: 375, height: 667 } : { width: 1440, height: 900 },
     });
     const page = await context.newPage();
 
     try {
       // Start performance monitoring
-      const metrics = await page.evaluateOnNewDocument(() => {
-        const observer = new PerformanceObserver((list) => {
+      await page.evaluate(() => {
+        const observer = new PerformanceObserver(list => {
           for (const entry of list.getEntries()) {
             if (entry.entryType === 'largest-contentful-paint') {
               (window as any).lcp = entry.startTime;
@@ -177,7 +244,7 @@ async function runPerformanceTests(url: string, options: any): Promise<any[]> {
 
         // Measure CLS
         let clsValue = 0;
-        new PerformanceObserver((list) => {
+        new PerformanceObserver(list => {
           for (const entry of list.getEntries()) {
             if (!(entry as any).hadRecentInput) {
               clsValue += (entry as any).value;
@@ -207,12 +274,11 @@ async function runPerformanceTests(url: string, options: any): Promise<any[]> {
           cls: (window as any).cls || 0,
           speedIndex: perf.loadEventEnd - perf.fetchStart,
           resources: resources.length,
-          totalSize: resources.reduce((sum, r: any) => sum + (r.transferSize || 0), 0)
+          totalSize: resources.reduce((sum, r: any) => sum + (r.transferSize || 0), 0),
         };
       });
 
       results.push(performanceMetrics);
-
     } finally {
       await browser.close();
     }
@@ -239,7 +305,7 @@ function compareToBudget(averages: any, budget: any): any {
   Object.entries(budget.metrics).forEach(([key, threshold]) => {
     const value = averages[key];
     if (value !== undefined) {
-      if (value <= threshold) {
+      if (value <= (threshold as number)) {
         comparison[key] = 'pass';
       } else if (value <= (threshold as number) * 1.2) {
         comparison[key] = 'warning';
@@ -253,12 +319,15 @@ function compareToBudget(averages: any, budget: any): any {
 }
 
 // Add help examples
-program.addHelpText('after', `
+program.addHelpText(
+  'after',
+  `
 Examples:
   $ validate-performance https://example.com
   $ validate-performance https://example.com --mobile --runs 5
   $ validate-performance https://example.com --budget ./config/performance-budget.json
   $ validate-performance https://example.com --lighthouse --verbose
-`);
+`
+);
 
 program.parse();

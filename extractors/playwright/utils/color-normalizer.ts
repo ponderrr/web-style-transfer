@@ -37,10 +37,12 @@ export class ColorNormalizer {
 
   normalizeColors(colors: string[]): NormalizedColorSystem {
     // Convert all colors to HSL
-    const hslColors = colors.map(color => ({
-      original: color,
-      hsl: this.hexToHsl(color) || this.rgbToHsl(color) || this.namedToHsl(color)
-    })).filter(c => c.hsl) as Array<{ original: string; hsl: HSLColor }>;
+    const hslColors = colors
+      .map(color => ({
+        original: color,
+        hsl: this.hexToHsl(color) || this.rgbToHsl(color) || this.namedToHsl(color),
+      }))
+      .filter(c => c.hsl) as Array<{ original: string; hsl: HSLColor }>;
 
     // Group similar colors
     const groups = this.groupSimilarColors(hslColors);
@@ -61,7 +63,7 @@ export class ColorNormalizer {
       tokens,
       palette: groups,
       semantic,
-      darkMode: this.generateDarkModePalette(tokens)
+      darkMode: this.generateDarkModePalette(tokens),
     };
   }
 
@@ -70,8 +72,13 @@ export class ColorNormalizer {
     const cleanHex = hex.replace('#', '');
 
     // Handle 3-digit hex
-    const fullHex = cleanHex.length === 3 ?
-      cleanHex.split('').map(c => c + c).join('') : cleanHex;
+    const fullHex =
+      cleanHex.length === 3
+        ? cleanHex
+            .split('')
+            .map(c => c + c)
+            .join('')
+        : cleanHex;
 
     if (fullHex.length !== 6) return null;
 
@@ -96,14 +103,14 @@ export class ColorNormalizer {
   private namedToHsl(name: string): HSLColor | null {
     // Simple named color mapping - would need comprehensive color name database
     const namedColors: Record<string, string> = {
-      'white': '#FFFFFF',
-      'black': '#000000',
-      'red': '#FF0000',
-      'green': '#008000',
-      'blue': '#0000FF',
-      'yellow': '#FFFF00',
-      'purple': '#800080',
-      'orange': '#FFA500'
+      white: '#FFFFFF',
+      black: '#000000',
+      red: '#FF0000',
+      green: '#008000',
+      blue: '#0000FF',
+      yellow: '#FFFF00',
+      purple: '#800080',
+      orange: '#FFA500',
     };
 
     const hex = namedColors[name.toLowerCase()];
@@ -113,7 +120,8 @@ export class ColorNormalizer {
   private rgbToHslValues(r: number, g: number, b: number): HSLColor {
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
-    let h, s, l = (max + min) / 2;
+    let h, s;
+    const l = (max + min) / 2;
 
     if (max === min) {
       h = s = 0; // achromatic
@@ -122,10 +130,17 @@ export class ColorNormalizer {
       s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
 
       switch (max) {
-        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-        case g: h = (b - r) / d + 2; break;
-        case b: h = (r - g) / d + 4; break;
-        default: h = 0;
+        case r:
+          h = (g - b) / d + (g < b ? 6 : 0);
+          break;
+        case g:
+          h = (b - r) / d + 2;
+          break;
+        case b:
+          h = (r - g) / d + 4;
+          break;
+        default:
+          h = 0;
       }
       h /= 6;
     }
@@ -133,7 +148,7 @@ export class ColorNormalizer {
     return {
       h: Math.round(h * 360),
       s: Math.round(s * 100),
-      l: Math.round(l * 100)
+      l: Math.round(l * 100),
     };
   }
 
@@ -157,7 +172,7 @@ export class ColorNormalizer {
       if (!addedToGroup) {
         groups.push({
           colors: [color.original],
-          averageColor: color.original
+          averageColor: color.original,
         });
       }
     }
@@ -175,9 +190,11 @@ export class ColorNormalizer {
     const sDiff = Math.abs(hsl1.s - hsl2.s);
     const lDiff = Math.abs(hsl1.l - hsl2.l);
 
-    return hDiff <= this.SIMILARITY_THRESHOLD &&
-           sDiff <= this.SIMILARITY_THRESHOLD &&
-           lDiff <= this.SIMILARITY_THRESHOLD;
+    return (
+      hDiff <= this.SIMILARITY_THRESHOLD &&
+      sDiff <= this.SIMILARITY_THRESHOLD &&
+      lDiff <= this.SIMILARITY_THRESHOLD
+    );
   }
 
   private identifySemanticRoles(groups: ColorGroup[]): ColorGroup[] {
@@ -185,14 +202,22 @@ export class ColorNormalizer {
     return groups.map(group => {
       if (!group.colors || group.colors.length === 0) return group;
 
-      const hsl = this.hexToHsl(group.colors[0]);
+      const firstColor = group.colors[0];
+      if (!firstColor) return group;
+
+      const hsl = this.hexToHsl(firstColor);
       if (!hsl) return group;
 
       // High saturation, medium lightness = primary/accent
       if (hsl.s > 60 && hsl.l > 30 && hsl.l < 70) {
-        group.semanticRole = hsl.h < 30 || hsl.h > 330 ? 'primary' :
-                           hsl.h > 90 && hsl.h < 150 ? 'success' :
-                           hsl.h > 30 && hsl.h < 90 ? 'warning' : 'accent';
+        group.semanticRole =
+          hsl.h < 30 || hsl.h > 330
+            ? 'primary'
+            : hsl.h > 90 && hsl.h < 150
+              ? 'success'
+              : hsl.h > 30 && hsl.h < 90
+                ? 'warning'
+                : 'accent';
       }
       // Low saturation, various lightness = neutral
       else if (hsl.s < 20) {
@@ -215,10 +240,17 @@ export class ColorNormalizer {
     // Find neutral colors or generate from grays
     const neutralGroups = groups.filter(g => g.semanticRole === 'neutral');
 
-    if (neutralGroups.length > 0 && neutralGroups[0].colors && neutralGroups[0].colors.length > 0) {
+    if (
+      neutralGroups.length > 0 &&
+      neutralGroups[0] &&
+      neutralGroups[0].colors &&
+      neutralGroups[0].colors.length > 0
+    ) {
       // Use existing neutrals to generate scale
       const baseNeutral = neutralGroups[0].colors[0];
-      return this.generateNeutralVariants(baseNeutral);
+      if (baseNeutral) {
+        return this.generateNeutralVariants(baseNeutral);
+      }
     }
 
     // Generate default neutral scale
@@ -233,11 +265,11 @@ export class ColorNormalizer {
 
     // Generate 11-step scale (50-950)
     for (let i = 0; i < this.NEUTRAL_SCALE_STEPS; i++) {
-      const lightness = 95 - (i * 9); // 95% to 5% lightness
+      const lightness = 95 - i * 9; // 95% to 5% lightness
       const variantHsl: HSLColor = {
         h: hsl.h,
         s: Math.max(5, hsl.s * 0.3), // Reduce saturation
-        l: lightness
+        l: lightness,
       };
 
       const rgb = this.hslToRgb(variantHsl);
@@ -251,7 +283,7 @@ export class ColorNormalizer {
     const variants: string[] = [];
 
     for (let i = 0; i < this.NEUTRAL_SCALE_STEPS; i++) {
-      const lightness = 95 - (i * 9);
+      const lightness = 95 - i * 9;
       const hsl: HSLColor = { h: 0, s: 0, l: lightness };
       const rgb = this.hslToRgb(hsl);
       variants.push(this.rgbToHex(rgb.r, rgb.g, rgb.b));
@@ -273,41 +305,52 @@ export class ColorNormalizer {
       const hue2rgb = (p: number, q: number, t: number) => {
         if (t < 0) t += 1;
         if (t > 1) t -= 1;
-        if (t < 1/6) return p + (q - p) * 6 * t;
-        if (t < 1/2) return q;
-        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        if (t < 1 / 6) return p + (q - p) * 6 * t;
+        if (t < 1 / 2) return q;
+        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
         return p;
       };
 
       const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
       const p = 2 * l - q;
 
-      r = hue2rgb(p, q, h + 1/3);
+      r = hue2rgb(p, q, h + 1 / 3);
       g = hue2rgb(p, q, h);
-      b = hue2rgb(p, q, h - 1/3);
+      b = hue2rgb(p, q, h - 1 / 3);
     }
 
     return {
       r: Math.round(r * 255),
       g: Math.round(g * 255),
-      b: Math.round(b * 255)
+      b: Math.round(b * 255),
     };
   }
 
   private rgbToHex(r: number, g: number, b: number): string {
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+    return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
   }
 
-  private createColorTokens(groups: ColorGroup[], neutralScale: string[]): Record<string, ColorToken> {
+  private createColorTokens(
+    groups: ColorGroup[],
+    neutralScale: string[]
+  ): Record<string, ColorToken> {
     const tokens: Record<string, ColorToken> = {};
 
     // Add semantic colors
-    groups.forEach((group, index) => {
-      if (group.semanticRole && group.semanticRole !== 'neutral' && group.colors && group.colors.length > 0) {
-        tokens[group.semanticRole] = {
-          $value: group.colors[0],
-          $type: 'color'
-        };
+    groups.forEach(group => {
+      if (
+        group.semanticRole &&
+        group.semanticRole !== 'neutral' &&
+        group.colors &&
+        group.colors.length > 0
+      ) {
+        const firstColor = group.colors[0];
+        if (firstColor) {
+          tokens[group.semanticRole] = {
+            $value: firstColor,
+            $type: 'color',
+          };
+        }
       }
     });
 
@@ -316,22 +359,34 @@ export class ColorNormalizer {
       const step = (index + 1) * 100; // 100, 200, 300, ..., 1100
       tokens[`neutral-${step}`] = {
         $value: color,
-        $type: 'color'
+        $type: 'color',
       };
     });
 
     // Add background and text colors
     if (neutralScale.length > 0) {
-      tokens["background"] = { $value: neutralScale[0], $type: 'color' };
+      const firstColor = neutralScale[0];
+      if (firstColor) {
+        tokens['background'] = { $value: firstColor, $type: 'color' };
+      }
     }
     if (neutralScale.length > 1) {
-      tokens['background-secondary'] = { $value: neutralScale[1], $type: 'color' };
+      const secondColor = neutralScale[1];
+      if (secondColor) {
+        tokens['background-secondary'] = { $value: secondColor, $type: 'color' };
+      }
     }
     if (neutralScale.length > 0) {
-      tokens["text"] = { $value: neutralScale[neutralScale.length - 1], $type: 'color' };
+      const lastColor = neutralScale[neutralScale.length - 1];
+      if (lastColor) {
+        tokens['text'] = { $value: lastColor, $type: 'color' };
+      }
     }
     if (neutralScale.length > 1) {
-      tokens['text-secondary'] = { $value: neutralScale[neutralScale.length - 2], $type: 'color' };
+      const secondLastColor = neutralScale[neutralScale.length - 2];
+      if (secondLastColor) {
+        tokens['text-secondary'] = { $value: secondLastColor, $type: 'color' };
+      }
     }
 
     return tokens;
@@ -349,13 +404,14 @@ export class ColorNormalizer {
       accent: accentGroup?.colors[0] || '#10B981',
       neutral: neutralGroups
         .filter(g => g.colors && g.colors.length > 0)
-        .map(g => g.colors[0]),
+        .map(g => g.colors[0])
+        .filter((color): color is string => color !== undefined),
       semantic: {
         success: groups.find(g => g.semanticRole === 'success')?.colors[0] || '#10B981',
         warning: groups.find(g => g.semanticRole === 'warning')?.colors[0] || '#F59E0B',
         error: '#EF4444',
-        info: '#3B82F6'
-      }
+        info: '#3B82F6',
+      },
     };
   }
 
@@ -366,7 +422,7 @@ export class ColorNormalizer {
       if (token.$type === 'color') {
         darkTokens[key] = {
           $value: this.generateDarkVariant(token.$value),
-          $type: 'color'
+          $type: 'color',
         };
       }
     }
@@ -382,7 +438,7 @@ export class ColorNormalizer {
     const darkHsl: HSLColor = {
       h: hsl.h,
       s: hsl.s,
-      l: Math.min(95, hsl.l + 20)
+      l: Math.min(95, hsl.l + 20),
     };
 
     const rgb = this.hslToRgb(darkHsl);

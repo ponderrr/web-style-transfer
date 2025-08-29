@@ -76,7 +76,6 @@ function Card({
   card,
   variant = 'default',
   size = 'md',
-  layout = 'grid',
   onCardClick,
   onActionClick,
   className,
@@ -84,7 +83,6 @@ function Card({
   card: CardData;
   variant: 'default' | 'elevated' | 'outlined' | 'filled';
   size: 'sm' | 'md' | 'lg';
-  layout: 'grid' | 'masonry' | 'flex';
   onCardClick?: (card: CardData) => void;
   onActionClick?: (action: CardAction, card: CardData) => void;
   className?: string;

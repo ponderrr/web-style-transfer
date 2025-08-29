@@ -1,24 +1,83 @@
 # Web Style Transfer
 
-S-Tier website extraction and regeneration system that analyzes websites, extracts their design systems, and generates high-quality, production-ready websites.
+A powerful system that extracts design tokens and brand content from any website, composes them into comprehensive specifications, and builds production-ready static site scaffolds.
 
-## Features
+## Overview
 
-- **Website Analysis**: Extract design systems, color palettes, typography, and layout patterns
-- **Brand Extraction**: Identify brand identity elements including logos, colors, and visual style
-- **Style Transfer**: Apply extracted styles to new content and generate websites
-- **Accessibility Validation**: Ensure generated websites meet WCAG standards
-- **Performance Optimization**: Generate performant, optimized websites
-- **Multi-Source Transfer**: Combine styles from multiple websites for unique designs
+**Web Style Transfer** enables you to:
 
-## Quick Start
+- **Extract** design systems, color palettes, typography, and layout patterns from any website
+- **Compose** extracted elements into cohesive design specifications
+- **Build** static site scaffolds with modern, accessible components
+- **Validate** output against WCAG standards, performance budgets, and design principles
+
+### Technologies
+
+- **TypeScript** - Type-safe development with strict configuration
+- **Playwright** - Browser automation for website analysis
+- **JSON/YAML** - Flexible data schemas for design tokens
+- **Schema Validation** - Zod-based validation for data integrity
+- **Modern Web Stack** - Next.js, React, Tailwind CSS
+
+### Architecture
+
+The system operates through specialized agents:
+
+- **Design Reviewer** - Analyzes visual hierarchy and design patterns
+- **Accessibility Auditor** - Ensures WCAG compliance
+- **Builder Orchestrator** - Generates component templates and site structure
+
+## Repository Structure
+
+```
+web-style-transfer/
+├── config/                 # Build and composition configuration
+├── docs/                  # Documentation and workflow guides
+│   ├── CLAUDE.md         # Agent system documentation
+│   ├── design.md         # Design system principles
+│   ├── patterns.md       # UI pattern library
+│   └── workflows/        # Step-by-step guides
+│       ├── extraction.md  # Style extraction workflow
+│       ├── composition.md # Specification composition
+│       └── building.md    # Site generation process
+├── extractors/            # Playwright-based extraction scripts
+│   ├── playwright/       # Browser automation utilities
+│   │   ├── accessibility-checker.ts
+│   │   ├── brand-extractor.ts
+│   │   ├── pattern-detector.ts
+│   │   ├── quality-scorer.ts
+│   │   ├── style-extractor.ts
+│   │   └── utils/        # Parsing and analysis utilities
+│   └── schemas/          # Data validation schemas
+├── scripts/               # CLI scripts for core operations
+│   ├── extract-style.ts  # Style extraction
+│   ├── extract-brand.ts  # Brand identity extraction
+│   ├── compose-spec.ts   # Specification composition
+│   ├── build-site.ts     # Site generation
+│   └── validate-*.ts     # Various validation scripts
+├── specs/                 # Generated specifications and tokens
+│   ├── tokens/           # Design tokens (colors, typography, spacing)
+│   ├── content/          # Site content structure
+│   ├── patterns/         # UI and interaction patterns
+│   └── composed/         # Final build specifications
+├── src/                   # Source code and templates
+│   ├── lib/              # Utility functions
+│   └── templates/        # Component templates
+├── validation/            # Rulesets and validation configs
+│   ├── wcag-rules.json   # Accessibility standards
+│   ├── performance-budget.json # Performance targets
+│   └── design-lint-rules.json # Design system rules
+└── tests/                 # Test files
+```
+
+## Installation
 
 ### Prerequisites
 
-- Node.js >= 18.0.0
-- npm >= 9.0.0
+- **Node.js** >= 18.0.0
+- **npm** >= 9.0.0
 
-### Installation
+### Setup
 
 ```bash
 # Clone the repository
@@ -28,164 +87,166 @@ cd web-style-transfer
 # Install dependencies
 npm install
 
-# Run the full pipeline
-npm run pipeline
+# Verify installation
+npm run check
 ```
 
 ## Usage
 
-### Core Commands
+### Core Workflow
 
 ```bash
-# Extract style from a website
-npm run extract:style
+# 1. Extract style from a website
+npm run extract:style -- --url https://example.com
 
-# Extract brand identity
-npm run extract:brand
+# 2. Extract brand identity
+npm run extract:brand -- --url https://example.com
 
-# Compose specifications
+# 3. Compose specifications
 npm run compose
 
-# Build the website
+# 4. Build the website
 npm run build:site
 
+# 5. Validate output
+npm run validate:all
+```
+
+### Quick Start
+
+```bash
+# Run the complete pipeline
+npm run pipeline
+
+# Or use the example workflow
+npm run example:extract
+npm run example:build
+```
+
+### Individual Commands
+
+#### Extraction
+
+```bash
+# Extract design system
+npm run extract:style -- --url https://example.com --output custom-output.json
+
+# Extract brand identity
+npm run extract:brand -- --url https://example.com --output brand-data.json
+```
+
+#### Composition
+
+```bash
+# Compose with default settings
+npm run compose
+
+# Compose using extracted data
+npm run compose:extract
+```
+
+#### Building
+
+```bash
+# Build site from composed spec
+npm run build:site
+
+# Build individual components
+npm run build:components
+```
+
+#### Validation
+
+```bash
 # Run all validations
 npm run validate:all
+
+# Individual validation types
+npm run validate:design      # Design system validation
+npm run validate:a11y        # Accessibility (WCAG)
+npm run validate:performance # Performance metrics
+npm run validate:tokens      # Design token validation
+npm run validate:content     # Content structure
+npm run validate:output      # Final output validation
 ```
 
 ### Development
 
 ```bash
-# Start development server
-npm run dev
+# Type checking
+npm run check
 
-# Run linting
+# Linting
 npm run lint
-
-# Fix linting issues
 npm run lint:fix
 
-# Format code
+# Code formatting
 npm run format
 
-# Type checking
-npm run type-check
-```
-
-### Style Transfer
-
-```bash
-# Single source transfer
-npm run transfer
-
-# Multi-source transfer
-npm run transfer:multi
-```
-
-## Project Structure
-
-```
-├── config/                 # Configuration files
-├── extractors/            # Website analysis and extraction
-│   ├── playwright/       # Browser automation
-│   └── schemas/          # Data schemas
-├── scripts/               # CLI scripts
-├── specs/                # Generated specifications
-├── src/                  # Source code
-│   ├── lib/             # Utility libraries
-│   └── templates/       # Component templates
-├── tests/                # Test files
-└── validation/           # Validation rules and configs
+# Playwright tests
+npm run test:playwright
 ```
 
 ## Configuration
 
-### TypeScript Configuration
+### TypeScript
 
-The project uses strict TypeScript with comprehensive path mappings:
+- **Module Resolution**: `"moduleResolution": "Bundler"`
+- **ESM Support**: `"type": "module"` in package.json
+- **Strict Mode**: All strict type checking enabled
+- **Path Mappings**: Clean imports with `@/*` aliases
 
-- `strict: true` - All strict type checking enabled
-- Path mappings for clean imports (`@/components/*`, `@/lib/*`, etc.)
-- Source maps and declaration files enabled
+### Output Directories
 
-### ESLint Configuration
+- **Extracted Data**: `/extract` (gitignored)
+- **Specifications**: `/specs/composed`
+- **Reports**: `/reports` (gitignored)
 
-Extends Next.js core web vitals with TypeScript support:
+## Development Guidelines
 
-- TypeScript recommended rules
-- React hooks rules
-- Prettier integration
-- Custom rules for code quality
-
-### Prettier Configuration
-
-- 2 space indentation
-- Single quotes
-- Semicolons required
-- 100 character line width
-
-## API Reference
-
-### Extraction Scripts
-
-#### `extract-style.ts`
-
-Extracts comprehensive style information from websites including:
-
-- Color palettes and themes
-- Typography systems
-- Spacing and layout patterns
-- Component styles
-
-#### `extract-brand.ts`
-
-Identifies brand identity elements:
-
-- Logo detection and extraction
-- Brand color identification
-- Visual style analysis
-
-#### `compose-spec.ts`
-
-Combines extracted data into cohesive design specifications.
-
-### Validation Scripts
-
-#### `validate-design.ts`
-
-Design system validation against best practices.
-
-#### `validate-accessibility.ts`
-
-WCAG compliance checking using axe-playwright.
-
-#### `validate-performance.ts`
-
-Performance metrics validation using Lighthouse.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and validation
-5. Submit a pull request
-
-### Development Setup
+### Before Committing
 
 ```bash
-# Install dependencies
-npm install
-
-# Run type checking
-npm run type-check
-
-# Run linting
-npm run lint
-
-# Format code
-npm run format
+# Always run these checks
+npm run check          # TypeScript compilation
+npm run lint           # ESLint validation
+npm run format         # Prettier formatting
 ```
+
+### Branch Naming
+
+- **Features**: `feature/descriptive-name`
+- **Fixes**: `fix/issue-description`
+- **Documentation**: `docs/topic`
+
+### Pull Request Process
+
+1. Create feature branch from `main`
+2. Make changes following the style guide
+3. Run validation checks
+4. Submit PR with clear description
+5. Ensure CI passes before merging
+
+### Generated Files
+
+**Do NOT commit**:
+
+- `/extract/` - Generated extraction outputs
+- `/reports/` - Validation and analysis reports
+- `/specs/tokens/`, `/specs/content/` - Intermediate specs
+
+**DO commit**:
+
+- `/specs/composed/` - Final build specifications
+- Configuration files
+- Source code and templates
+
+## Documentation
+
+- **[CLAUDE.md](docs/CLAUDE.md)** - Agent system and commands
+- **[Design.md](docs/design.md)** - Design system principles
+- **[Patterns.md](docs/patterns.md)** - UI pattern library
+- **[Workflows](docs/workflows/)** - Step-by-step guides
 
 ## Testing
 
@@ -195,24 +256,52 @@ npm run test:playwright
 
 # Run with UI
 npx playwright test --ui
+
+# Run specific test file
+npx playwright test extractors/playwright/style-extractor.spec.ts
 ```
 
-## Configuration Files
+## Troubleshooting
 
-- `tsconfig.json` - TypeScript configuration
-- `.eslintrc.json` - ESLint configuration
-- `.prettierrc` - Prettier configuration
-- `playwright.config.ts` - Playwright test configuration
-- `package.json` - Project dependencies and scripts
+### Common Issues
+
+1. **TypeScript Errors**: Run `npm run check` to identify issues
+2. **Playwright Issues**: Clear cache with `npm run clean:cache`
+3. **Build Failures**: Verify all dependencies with `npm install`
+
+### Performance
+
+- Use `--headless` flag for faster extraction
+- Limit concurrent extractions to avoid rate limiting
+- Clear browser cache between runs
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### Development Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Set up Playwright browsers
+npx playwright install
+
+# Run validation
+npm run validate:all
+```
 
 ## License
 
-MIT License - see LICENSE file for details.
+MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Support
 
-For questions and support:
+- **Issues**: [GitHub Issues](https://github.com/yourusername/web-style-transfer/issues)
+- **Documentation**: Check the `docs/` directory
+- **Workflows**: See `docs/workflows/` for detailed guides
 
-- Open an issue on GitHub
-- Check the documentation in the `docs/` directory
-- Review the workflow guides in `docs/workflows/`
+## Acknowledgments
+
+Built with modern web technologies and best practices for design system extraction and website generation.

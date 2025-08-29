@@ -12,11 +12,17 @@ const program = new Command();
 
 program
   .name('multi-source-transfer')
-  .description('Transfer design from multiple sources to content from another - advanced style transfer')
+  .description(
+    'Transfer design from multiple sources to content from another - advanced style transfer'
+  )
   .version('1.0.0')
   .argument('<style-sources>', 'Comma-separated list of style source URLs')
   .argument('<content-url>', 'Content source URL')
-  .option('-o, --output <path>', 'Output directory for generated site', './output/multi-source-transfer')
+  .option(
+    '-o, --output <path>',
+    'Output directory for generated site',
+    './output/multi-source-transfer'
+  )
   .option('-n, --name <name>', 'Project name', 'multi-source-transfer')
   .option('--style-weights <weights>', 'Comma-separated style weights (0-1)', '0.5,0.3,0.2')
   .option('--content-weight <weight>', 'Content influence weight (0-1)', '1.0')
@@ -60,24 +66,33 @@ program
 
         console.log(chalk.gray(`   Extracting from ${url} (weight: ${weight})...`));
         const styleExtractor = new StyleExtractor();
+        if (!url) {
+          console.warn(chalk.yellow(`   ⚠️ Skipping undefined URL`));
+          continue;
+        }
         const result = await styleExtractor.extract(url);
         styleResults.push({ result, weight, url });
 
         if (options.verbose) {
-          console.log(chalk.green(`     ✅ Style extracted - Quality: ${result.qualityScore.overall.toFixed(2)}`));
+          console.log(
+            chalk.green(
+              `     ✅ Style extracted - Quality: ${result.qualityScore.overall.toFixed(2)}`
+            )
+          );
         }
       }
 
       // Phase 2: Extract content
       console.log(chalk.bold('Phase 2: Extracting content...'));
       const brandExtractor = new BrandExtractor();
-      const contentResult = await brandExtractor.extract(contentUrl, {
-        maxPages: 50,
-        verbose: options.verbose
-      });
+      const contentResult = await brandExtractor.extract(contentUrl);
 
       if (options.verbose) {
-        console.log(chalk.green(`   ✅ Content extracted - ${contentResult.pages?.length || 0} pages analyzed`));
+        console.log(
+          chalk.green(
+            `   ✅ Content extracted - ${contentResult.pages?.length || 0} pages analyzed`
+          )
+        );
       }
 
       // Phase 3: Blend styles
@@ -105,11 +120,18 @@ program
         console.log('');
         console.log(chalk.bold('📊 Blend Summary:'));
         styleResults.forEach(({ url, weight, result }, index) => {
-          console.log(chalk.gray(`   Source ${index + 1}: ${url} (${(weight * 100).toFixed(0)}%) - Quality: ${result.qualityScore.overall.toFixed(2)}`));
+          console.log(
+            chalk.gray(
+              `   Source ${index + 1}: ${url} (${(weight * 100).toFixed(0)}%) - Quality: ${result.qualityScore.overall.toFixed(2)}`
+            )
+          );
         });
-        console.log(chalk.gray(`   Content: ${contentUrl} (${(parseFloat(options.contentWeight) * 100).toFixed(0)}%)`));
+        console.log(
+          chalk.gray(
+            `   Content: ${contentUrl} (${(parseFloat(options.contentWeight) * 100).toFixed(0)}%)`
+          )
+        );
       }
-
     } catch (error) {
       console.error(chalk.red('❌ Multi-source transfer failed:'), error);
       process.exit(1);
@@ -124,19 +146,19 @@ async function blendStyles(styleResults: any[], contentResult: any, options: any
       styleSources: styleResults.map(({ url, weight }) => ({ url, weight })),
       contentSource: contentResult.url,
       generated: new Date().toISOString(),
-      blendType: 'multi-source-weighted'
+      blendType: 'multi-source-weighted',
     },
     design: {
       blendedTokens: blendDesignTokens(styleResults),
       quality: blendQualityScores(styleResults),
-      patterns: blendPatterns(styleResults)
+      patterns: blendPatterns(styleResults),
     },
     content: contentResult,
     composition: {
       styleWeights: styleResults.map(({ weight }) => weight),
       contentWeight: parseFloat(options.contentWeight),
-      blendMethod: 'weighted-average'
-    }
+      blendMethod: 'weighted-average',
+    },
   };
 
   return blendedSpec;
@@ -144,13 +166,6 @@ async function blendStyles(styleResults: any[], contentResult: any, options: any
 
 function blendDesignTokens(styleResults: any[]): any {
   // Blend design tokens from multiple sources based on weights
-  const blendedTokens = {
-    colors: {},
-    typography: {},
-    spacing: {},
-    borderRadius: {},
-    effects: {}
-  };
 
   // Simple blending - take the highest weighted source for each token type
   const sortedResults = styleResults.sort((a, b) => b.weight - a.weight);
@@ -178,9 +193,9 @@ function blendQualityScores(styleResults: any[]): any {
       accessibilityCompliance: calculateWeightedAverage(styleResults, 'accessibilityCompliance'),
       patternConsistency: calculateWeightedAverage(styleResults, 'patternConsistency'),
       performanceOptimization: calculateWeightedAverage(styleResults, 'performanceOptimization'),
-      modernityScore: calculateWeightedAverage(styleResults, 'modernityScore')
+      modernityScore: calculateWeightedAverage(styleResults, 'modernityScore'),
     },
-    recommendations: generateBlendRecommendations(styleResults)
+    recommendations: generateBlendRecommendations(styleResults),
   };
 }
 
@@ -202,7 +217,10 @@ function blendPatterns(styleResults: any[]): any[] {
 
   styleResults.forEach(({ result }) => {
     result.patterns.forEach((pattern: any) => {
-      if (!allPatterns.has(pattern.type) || pattern.confidence > allPatterns.get(pattern.type).confidence) {
+      if (
+        !allPatterns.has(pattern.type) ||
+        pattern.confidence > allPatterns.get(pattern.type).confidence
+      ) {
         allPatterns.set(pattern.type, pattern);
       }
     });
@@ -229,27 +247,24 @@ async function generateBlendedWebsite(spec: any, options: any): Promise<void> {
   // Create Next.js project structure
   const packageJson = {
     name: options.name,
-    version: "1.0.0",
+    version: '1.0.0',
     private: true,
     scripts: {
-      dev: "next dev",
-      build: "next build",
-      start: "next start"
+      dev: 'next dev',
+      build: 'next build',
+      start: 'next start',
     },
     dependencies: {
-      next: "^14.0.0",
-      react: "^18.0.0",
-      "react-dom": "^18.0.0",
-      tailwindcss: "^3.0.0"
-    }
+      next: '^14.0.0',
+      react: '^18.0.0',
+      'react-dom': '^18.0.0',
+      tailwindcss: '^3.0.0',
+    },
   };
 
   await fs.mkdir(path.join(outputDir, 'src', 'pages'), { recursive: true });
 
-  await fs.writeFile(
-    path.join(outputDir, 'package.json'),
-    JSON.stringify(packageJson, null, 2)
-  );
+  await fs.writeFile(path.join(outputDir, 'package.json'), JSON.stringify(packageJson, null, 2));
 
   // Create blended homepage
   const homePage = `
@@ -284,9 +299,12 @@ export default function Home() {
 
 This website was generated by blending styles from multiple sources:
 
-${spec.project.styleSources.map((source: any, index: number) =>
-  `## Source ${index + 1}: ${source.url} (${(source.weight * 100).toFixed(0)}% weight)`
-).join('\n')}
+${spec.project.styleSources
+  .map(
+    (source: any, index: number) =>
+      `## Source ${index + 1}: ${source.url} (${(source.weight * 100).toFixed(0)}% weight)`
+  )
+  .join('\n')}
 
 ## Content Source
 - **URL**: ${spec.project.contentSource}

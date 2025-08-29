@@ -15,7 +15,11 @@ program
   .description('Run WCAG 2.1 AA accessibility tests on a website')
   .version('1.0.0')
   .argument('<url>', 'Target website URL to test')
-  .option('-o, --output <path>', 'Output accessibility report path', './validation/accessibility-report.json')
+  .option(
+    '-o, --output <path>',
+    'Output accessibility report path',
+    './validation/accessibility-report.json'
+  )
   .option('-l, --level <level>', 'WCAG conformance level (A, AA, AAA)', 'AA')
   .option('-v, --verbose', 'Enable verbose output')
   .option('--screenshot', 'Capture screenshots of violations')
@@ -41,7 +45,7 @@ program
       console.log(chalk.gray('🚀 Launching browser...'));
       const browser = await chromium.launch();
       const context = await browser.newContext({
-        viewport: { width, height }
+        viewport: { width, height },
       });
       const page = await context.newPage();
 
@@ -50,7 +54,7 @@ program
         console.log(chalk.gray('📄 Loading page...'));
         await page.goto(url, {
           waitUntil: 'networkidle',
-          timeout: 30000
+          timeout: 30000,
         });
 
         // Run accessibility checks
@@ -68,7 +72,7 @@ program
           url,
           viewport: options.viewport,
           wcagLevel: options.level,
-          report
+          report,
         };
 
         await fs.writeFile(options.output, JSON.stringify(fullReport, null, 2));
@@ -79,8 +83,8 @@ program
         console.log('');
 
         // Display score and summary
-        const scoreColor = report.score >= 95 ? chalk.green :
-                          report.score >= 90 ? chalk.yellow : chalk.red;
+        const scoreColor =
+          report.score >= 95 ? chalk.green : report.score >= 90 ? chalk.yellow : chalk.red;
 
         console.log(chalk.bold('📊 Accessibility Score:'));
         console.log(scoreColor(`${report.score}/100`));
@@ -129,9 +133,14 @@ program
             .slice(0, 10);
 
           topViolations.forEach((violation, index) => {
-            const impactColor = violation.impact === 'critical' ? chalk.red :
-                              violation.impact === 'serious' ? chalk.red :
-                              violation.impact === 'moderate' ? chalk.yellow : chalk.gray;
+            const impactColor =
+              violation.impact === 'critical'
+                ? chalk.red
+                : violation.impact === 'serious'
+                  ? chalk.red
+                  : violation.impact === 'moderate'
+                    ? chalk.yellow
+                    : chalk.gray;
 
             console.log(impactColor(`${index + 1}. ${violation.description}`));
             console.log(chalk.gray(`   Element: ${violation.element}`));
@@ -139,11 +148,9 @@ program
             console.log('');
           });
         }
-
       } finally {
         await browser.close();
       }
-
     } catch (error) {
       console.error(chalk.red('❌ Accessibility testing failed:'), error);
       process.exit(1);
@@ -151,12 +158,15 @@ program
   });
 
 // Add help examples
-program.addHelpText('after', `
+program.addHelpText(
+  'after',
+  `
 Examples:
   $ validate-accessibility https://example.com
   $ validate-accessibility https://example.com --level AAA --verbose
   $ validate-accessibility https://example.com --viewport 375x667 --screenshot
   $ validate-accessibility https://example.com --output ./reports/a11y-audit.json
-`);
+`
+);
 
 program.parse();
